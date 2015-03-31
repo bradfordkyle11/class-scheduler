@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.List;
 
 /**
@@ -26,6 +27,10 @@ public class ClassLoader {
 
     private static String savedClassesFile = "savedclasses.txt";
     private static String currentScheduleFile = "CurrentSchedule.txt";
+    private static String savedNotebooksFile = "Notebooks.txt";
+
+    private static Hashtable<Schedule, Notebook> mNotebooks;
+    private static boolean notebooksLoaded = false;
 
 
     public static ArrayList<Class> loadClasses(Context context) {
@@ -160,5 +165,45 @@ public class ClassLoader {
 
     public static List<Schedule> loadSchedules(){
         return schedules;
+    }
+
+    public static Hashtable<Schedule, Notebook> loadNotebooks(Context context){
+        if(!notebooksLoaded) {
+            try {
+                FileInputStream fis = context.openFileInput(savedNotebooksFile);
+                ObjectInputStream is = new ObjectInputStream(fis);
+                System.out.println(is.toString());
+
+                mNotebooks = (Hashtable<Schedule, Notebook>) is.readObject();
+                notebooksLoaded = true;
+                is.close();
+            } catch (FileNotFoundException e) {
+                System.out.println("FileNotFoundException: " + e.getMessage());
+            } catch (IOException e) {
+                System.out.println("IOException: " + e.getMessage());
+            } catch (ClassNotFoundException e) {
+                System.out.println("SystemNotFoundException: " + e.getMessage());
+            }
+        }
+
+        if(mNotebooks==null){
+            return new Hashtable<Schedule, Notebook>();
+        }
+
+        return mNotebooks;
+    }
+
+    public static void saveNotebooks(Context context, Hashtable<Schedule, Notebook> notebooks){
+        mNotebooks = notebooks;
+        try {
+            FileOutputStream fos = context.openFileOutput(savedNotebooksFile, Context.MODE_PRIVATE);
+            ObjectOutputStream os = new ObjectOutputStream(fos);
+            os.writeObject(notebooks);
+            os.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("FileNotFoundException: " + e.getMessage());
+        } catch (IOException e) {
+            System.out.println("IOException: " + e.getMessage());
+        }
     }
 }

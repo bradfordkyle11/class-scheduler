@@ -44,6 +44,9 @@ public class Schedule implements Serializable {
         return sections.isEmpty();
     }
 
+    //TODO: move schedule-creating algorithm to its own class
+    //TODO: improve the algorithm. Allow customization (eg. max credit hours, preferred classes)
+
     public static void createSchedulesRecursive(Class thisClass, List<Class> otherClasses, List<List<Section>> sectionLists) {
         List<Class> newOtherClasses = new ArrayList<Class>();
         Class newThisClass = new Class();

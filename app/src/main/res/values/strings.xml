@@ -71,6 +71,10 @@
     <string name="toast_set_current_schedule">Saved as current schedule</string>
     <string name="toast_class_deleted">Class deleted</string>
     <string name="toast_section_deleted">Section deleted</string>
+    <string name="title_details">Details</string>
+    <string name="title_assignments">Assignments</string>
+    <string name="title_notes">Notes</string>
+    <string name="text_other_info">Other info:</string>
 
 
     <!--Tags-->
@@ -91,5 +95,6 @@
 
     <string name="title_activity_add_class_section">AddClassSectionActivity</string>
     <string name="title_activity_edit_class_section">EditClassSectionActivity</string>
+    <string name="title_activity_my_class">MyClass</string>
 
 </resources>

@@ -24,7 +24,7 @@
         <activity
             android:name=".EditClassActivity"
             android:label="@string/title_activity_edit_class"
-            android:parentActivityName=".Home">
+            android:parentActivityName=".Home" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.kmbapps.classscheduler.Home" />
@@ -34,7 +34,14 @@
             android:label="@string/title_activity_add_class_section"
             android:parentActivityName=".Home" >
         </activity>
-
+        <activity
+            android:name=".MyClassActivity"
+            android:label="@string/title_activity_my_class"
+            android:parentActivityName=".Home" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.kmbapps.classscheduler.Home" />
+        </activity>
     </application>
 
 </manifest>

@@ -7,7 +7,7 @@
     android:orientation="horizontal"
     android:background="@drawable/selector_course_header"
     android:longClickable="true"
-    android:paddingLeft="8dip"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
     android:clickable="true"
     android:elevation="2dp"
     android:id="@+id/course">

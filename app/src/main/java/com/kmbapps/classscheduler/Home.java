@@ -159,10 +159,11 @@ public class Home extends ActionBarActivity
             case SCHEDULE_DESIGNER:
                 mTitle = getString(R.string.header_design_a_schedule);
                 return CreateScheduleFragment.newInstance("hello", "world");
-
             case MY_CLASSES:
                 mTitle = getString(R.string.title_my_classes);
-                return PlaceholderFragment.newInstance(position);
+                return MyClassesFragment.newInstance(currentSchedule);
+
+            //TODO: MyCalendar fragment
             case MY_CALENDAR:
                 mTitle = getString(R.string.title_my_calendar);
                 return PlaceholderFragment.newInstance(position);

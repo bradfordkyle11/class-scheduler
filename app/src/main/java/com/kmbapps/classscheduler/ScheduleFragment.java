@@ -18,6 +18,8 @@ import android.widget.Toast;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
 
+import java.util.Hashtable;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -123,6 +125,8 @@ public class ScheduleFragment extends Fragment {
             f.setOnClickListener(hideClassInfoListener);
             RelativeLayout sa = (RelativeLayout) view.findViewById(R.id.saturday);
             sa.setOnClickListener(hideClassInfoListener);
+
+            //TODO: set colors in the desired classes page instead of here, so that colors are consistent across all potential schedules
 
             //display the classes on the schedule
             int colorPosition = 0;
@@ -368,6 +372,14 @@ public class ScheduleFragment extends Fragment {
         ViewPager pager = (ViewPager) getView().getParent();
         Toast toast = Toast.makeText(getActivity().getApplicationContext(), getText(R.string.toast_set_current_schedule), Toast.LENGTH_SHORT);
         toast.show();
+
+        Hashtable<Schedule, Notebook> notebooks = ClassLoader.loadNotebooks(getActivity().getApplicationContext());
+
+        if(!notebooks.containsKey(schedule)){
+            notebooks.put(schedule, new Notebook(schedule.getSections()));
+            ClassLoader.saveNotebooks(getActivity().getApplicationContext(), notebooks);
+        }
+
         pager.getAdapter().notifyDataSetChanged();
 
 

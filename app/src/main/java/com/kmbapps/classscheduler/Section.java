@@ -105,7 +105,7 @@ public class Section implements Serializable {
         this.times = times;
     }
 
-    private String formatTime(){
+    public String formatTime(){
 
         String result = new String();
         for (int i = 0; i < times.size(); i++){
