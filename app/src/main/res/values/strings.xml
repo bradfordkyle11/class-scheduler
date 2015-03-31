@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Class Scheduler</string>
+    <string name="title_schedule">Current Schedule</string>
+    <string name="header_schedule">Current Schedule</string>
+    <string name="title_my_classes">My Classes</string>
+    <string name="title_my_calendar">My Calendar</string>
+    <string name="title_design_a_schedule">Design a Schedule</string>
+    <string name="header_design_a_schedule">Schedule Designer</string>
+    <string name="header_desired_classes">Desired Classes</string>
+    <string name="header_add_class">New Class</string>
+    <string name="header_edit_class">Edit Class</string>
+    <string name="header_edit_class_section">Edit Class Section</string>
+    <string name="header_add_class_section">New Class Section</string>
+    <string name="header_potential_schedule">Schedule</string>
+    <string name="title_section1">Section 1</string>
+    <string name="title_section2">Section 2</string>
+    <string name="title_section3">Section 3</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="action_example">Example action</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="sunday_abbreviation">S</string>
+    <string name="monday_abbreviation">M</string>
+    <string name="tuesday_abbreviation">T</string>
+    <string name="wednesday_abbreviation">W</string>
+    <string name="thursday_abbreviation">Th</string>
+    <string name="friday_abbreviation">F</string>
+    <string name="saturday_abbreviation">S</string>
+    <string name="create_a_schedule">Create a Schedule</string>
+    <string name="no_classes">You have no classes. Tap + to add one.</string>
+    <string name="hint_class_department">Enter class department (eg. Math)</string>
+    <string name="hint_class_name">Enter class name (eg. Algebra)</string>
+    <string name="hint_class_number">Enter class number (eg. 101)</string>
+    <string name="text_credit_hours">Credit Hours:</string>
+    <string name="button_cancel">Cancel</string>
+    <string name="button_accept">Accept</string>
+    <string name="current_page">currentPage</string>
+    <string name="action_delete">Delete</string>
+    <string name="action_save">Save</string>
+    <string name="action_edit">Edit</string>
+    <string name="title_activity_add_class">AddClassActivity</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="title_activity_edit_class">EditClassActivity</string>
+    <string name="hint_room_number">Enter room number</string>
+    <string name="text_days_and_times">Days and Times</string>
+    <string name="text_from">From: </string>
+    <string name="text_to">To: </string>
+    <string name="text_start_time">Start time</string>
+    <string name="text_end_time">End time</string>
+    <string name="text_monday">Monday</string>
+    <string name="text_tuesday">Tuesday</string>
+    <string name="text_wednesday">Wednesday</string>
+    <string name="text_thursday">Thursday</string>
+    <string name="text_friday">Friday</string>
+    <string name="hint_professor">Enter professor</string>
+    <string name="text_notes">Notes</string>
+    <string name="hint_section_number">Enter unique section number</string>
+    <string name="hint_notes">Notes</string>
+    <string name="toast_invalid_ending_time">End time must be after the start time</string>
+    <string name="toast_invalid_starting_time">Start time must be before the end time</string>
+    <string name="toast_no_start_time">You must enter a start time</string>
+    <string name="toast_no_end_time">You must enter an end time</string>
+    <string name="toast_conflicting_schedules">Schedules cannot overlap</string>
+    <string name="text_set_schedule">Set schedule</string>
+    <string name="toast_no_schedule">You must set a schedule</string>
+    <string name="text_no_class_selected">No class selected</string>
+    <string name="text_no_class_selected_info">Tap on a class to see its info.</string>
+    <string name="toast_set_current_schedule">Saved as current schedule</string>
+    <string name="toast_class_deleted">Class deleted</string>
+    <string name="toast_section_deleted">Section deleted</string>
+
+
+    <!--Tags-->
+    <item type="id" name="TAG_SECTION">0</item>
+    <item type="id" name="TAG_COLOR">1</item>
+
+    <string-array name="credit_hours_array">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+    </string-array>
+
+    <string name="title_activity_add_class_section">AddClassSectionActivity</string>
+    <string name="title_activity_edit_class_section">EditClassSectionActivity</string>
+
+</resources>

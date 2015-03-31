@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:visibility="visible"
+    android:id="@+id/scheduleClassInfoLayout">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="@dimen/class_info_color_bar_height"
+        android:id="@+id/classColorBar"
+        android:background="@color/highlight"
+        android:orientation="horizontal">
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/class_info_background"
+        android:paddingLeft="@dimen/activity_padding"
+        android:paddingRight="@dimen/activity_padding"
+        android:paddingTop="@dimen/padding_inside_view"
+        android:paddingBottom="@dimen/padding_inside_view"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:id="@+id/classTitle"
+            android:textSize="@dimen/abc_text_size_medium_material"
+            android:textStyle="italic"
+            android:text="@string/text_no_class_selected"
+            android:gravity="center"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:id="@+id/classInfo"
+            android:text="@string/text_no_class_selected_info"
+            android:paddingLeft="@dimen/padding_inside_view"
+            android:paddingRight="@dimen/padding_inside_view"/>
+        </LinearLayout>
+
+</LinearLayout>

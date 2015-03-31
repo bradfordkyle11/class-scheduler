@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minHeight="@dimen/touchable_ui_component_min"
+    android:orientation="horizontal"
+    android:id="@+id/section"
+    android:clickable="true"
+    android:background="@drawable/selector_list_item">
+
+    <TextView
+        android:id="@+id/schedule"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:textSize="@dimen/abc_text_size_small_material"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingTop="@dimen/activity_padding"
+        android:paddingBottom="@dimen/padding_inside_view"
+        android:layout_margin="@dimen/activity_padding"/>
+
+
+</LinearLayout>

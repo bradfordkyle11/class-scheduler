@@ -1,0 +1,48 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme"
+        parent="@style/Theme.AppCompat.Light">
+        <item name="android:actionBarStyle">@style/MyActionBar</item>
+        <item name="android:actionModeStyle">@style/MyActionMode</item>
+
+
+
+        <!-- Support library compatibility -->
+        <item name="actionBarStyle">@style/MyActionBar</item>
+        <item name="actionModeStyle">@style/MyActionMode</item>
+
+    </style>
+
+
+
+    <!-- ActionBar styles -->
+    <style name="MyActionBar"
+        parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
+        <item name="android:background">@color/app_primary_color</item>
+        <item name="android:titleTextStyle">@style/MyActionBarTextStyle</item>
+        <item name="android:height">@dimen/action_bar_height</item>
+
+        <!-- Support library compatibility -->
+        <item name="background">@color/app_primary_color</item>
+        <item name="titleTextStyle">@style/MyActionBarTextStyle</item>
+        <item name="height">@dimen/action_bar_height</item>
+    </style>
+
+    <!-- TODO: bug: action mode height is wrong on pre-lollipop for some reason -->
+
+    <style name="MyActionMode" parent="@style/Widget.AppCompat.ActionMode">
+        <item name="android:background">@color/highlight_accent</item>
+        <item name="android:height">?android:attr/actionBarSize</item>
+
+        <!-- Support library compatibility -->
+        <item name="background">@color/app_accent</item>
+        <item name="height">?attr/actionBarSize</item>
+    </style>
+
+    <style name="MyActionBarTextStyle" parent="style/Widget.AppCompat.AutoCompleteTextView">
+        <item name="android:textSize">@dimen/action_bar_text_size</item>
+
+        <!-- Support library compatibility -->
+    </style>
+</resources>

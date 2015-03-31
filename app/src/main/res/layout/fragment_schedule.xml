@@ -1,0 +1,193 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.kmbapps.classscheduler.ScheduleFragment"
+    android:orientation="vertical"
+    android:id="@+id/schedule_layout">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/dayHeaders">
+
+        <TextView
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:text="@string/sunday_abbreviation"
+            android:layout_weight="1"
+            android:gravity="center" />
+
+        <TextView
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:text="@string/monday_abbreviation"
+            android:layout_weight="1"
+            android:gravity="center" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/tuesday_abbreviation"
+            android:layout_weight="1"
+            android:gravity="center" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/wednesday_abbreviation"
+            android:layout_weight="1"
+            android:gravity="center" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/thursday_abbreviation"
+            android:layout_weight="1"
+            android:gravity="center" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/friday_abbreviation"
+            android:layout_weight="1"
+            android:gravity="center" />
+
+        <TextView
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:text="@string/saturday_abbreviation"
+            android:layout_weight="1"
+            android:gravity="center" />
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/dayHeaders"
+        android:id="@+id/calendarScrollView">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="720dp"
+                android:layout_weight="1"
+                android:id="@+id/sunday"
+                android:layout_marginRight="1dp"
+                android:layout_marginLeft="2dp"
+                android:background="@drawable/calendar_background">
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="720dp"
+                android:layout_weight="1"
+                android:id="@+id/monday"
+                android:layout_marginRight="1dp"
+                android:layout_marginLeft="1dp"
+                android:background="@drawable/calendar_background">
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="720dp"
+                android:layout_weight="1"
+                android:id="@+id/tuesday"
+                android:layout_marginRight="1dp"
+                android:layout_marginLeft="1dp"
+                android:background="@drawable/calendar_background">
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="720dp"
+                android:layout_weight="1"
+                android:id="@+id/wednesday"
+                android:layout_marginRight="1dp"
+                android:layout_marginLeft="1dp"
+                android:background="@drawable/calendar_background">
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="720dp"
+                android:layout_weight="1"
+                android:id="@+id/thursday"
+                android:layout_marginRight="1dp"
+                android:layout_marginLeft="1dp"
+                android:background="@drawable/calendar_background">
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="720dp"
+                android:layout_weight="1"
+                android:id="@+id/friday"
+                android:layout_marginRight="1dp"
+                android:layout_marginLeft="1dp"
+                android:background="@drawable/calendar_background">
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="720dp"
+                android:layout_weight="1"
+                android:id="@+id/saturday"
+                android:layout_marginRight="2dp"
+                android:layout_marginLeft="1dp"
+                android:background="@drawable/calendar_background">
+
+            </RelativeLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/create_a_schedule"
+        android:id="@+id/noSchedules"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:visibility="visible"/>
+
+
+
+    <include layout="@layout/class_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:visibility="gone"/>
+
+    <com.getbase.floatingactionbutton.FloatingActionButton
+        android:id="@+id/select_schedule"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignWithParentIfMissing="true"
+        android:layout_above="@id/scheduleClassInfoLayout"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="@dimen/activity_padding"
+        android:layout_marginEnd="@dimen/activity_padding"
+        android:layout_marginRight="@dimen/activity_padding"
+        android:visibility="gone"
+        fab:fab_colorNormal="@color/app_primary_color"
+        fab:fab_colorPressed="@color/app_secondary_color"
+        fab:fab_colorDisabled="@color/highlight"
+        fab:fab_icon="@drawable/ic_save_white_48dp"/>
+
+</RelativeLayout>

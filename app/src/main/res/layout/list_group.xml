@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:minHeight="@dimen/touchable_ui_component_min"
+    android:orientation="horizontal"
+    android:background="@drawable/selector_course_header"
+    android:longClickable="true"
+    android:paddingLeft="8dip"
+    android:clickable="true"
+    android:elevation="2dp"
+    android:id="@+id/course">
+
+
+    <TextView
+        android:id="@+id/classInfo"
+        android:layout_width="0dp"
+        android:layout_height="fill_parent"
+        android:textSize="14sp"
+        android:text="test"
+        android:gravity="center_vertical"
+        android:textColor="@color/black"
+        android:layout_weight=".8"/>
+
+
+    <!--<ImageButton-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="fill_parent"-->
+        <!--android:src="@drawable/ic_create_black_24dp"-->
+        <!--android:background="@drawable/selector_class_image_button"-->
+        <!--android:id="@+id/edit_class"-->
+        <!--android:focusable="false"-->
+        <!--android:onClick="editClass"-->
+        <!--android:padding="8dp"-->
+        <!--/>-->
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:minWidth="@dimen/touchable_ui_component_min"
+        android:src="@drawable/ic_add_black_24dp"
+        android:background="?attr/selectableItemBackground"
+        android:id="@+id/add_class_section"
+        android:onClick="addClassSection"
+        />
+
+</LinearLayout>
