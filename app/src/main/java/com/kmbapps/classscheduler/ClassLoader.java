@@ -206,4 +206,48 @@ public class ClassLoader {
             System.out.println("IOException: " + e.getMessage());
         }
     }
+
+    public static void updateNotebooks(Context context){
+        try {
+            FileOutputStream fos = context.openFileOutput(savedNotebooksFile, Context.MODE_PRIVATE);
+            ObjectOutputStream os = new ObjectOutputStream(fos);
+            os.writeObject(mNotebooks);
+            os.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("FileNotFoundException: " + e.getMessage());
+        } catch (IOException e) {
+            System.out.println("IOException: " + e.getMessage());
+        }
+    }
+
+    public static void updateNotebooks(Context context, List<Assignment> assignments, Section section, Schedule schedule){
+        Notebook notebook = mNotebooks.get(schedule);
+        notebook.updateAssignments(section, assignments);
+        mNotebooks.put(schedule, notebook);
+
+        try {
+            FileOutputStream fos = context.openFileOutput(savedNotebooksFile, Context.MODE_PRIVATE);
+            ObjectOutputStream os = new ObjectOutputStream(fos);
+            os.writeObject(mNotebooks);
+            os.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("FileNotFoundException: " + e.getMessage());
+        } catch (IOException e) {
+            System.out.println("IOException: " + e.getMessage());
+        }
+    }
+
+    public static void updateNotebook(Context context, Schedule schedule, Notebook notebook){
+        mNotebooks.put(schedule, notebook);
+        try {
+            FileOutputStream fos = context.openFileOutput(savedNotebooksFile, Context.MODE_PRIVATE);
+            ObjectOutputStream os = new ObjectOutputStream(fos);
+            os.writeObject(mNotebooks);
+            os.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("FileNotFoundException: " + e.getMessage());
+        } catch (IOException e) {
+            System.out.println("IOException: " + e.getMessage());
+        }
+    }
 }

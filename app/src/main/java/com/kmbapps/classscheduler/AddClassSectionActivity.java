@@ -175,7 +175,6 @@ public class AddClassSectionActivity extends ActionBarActivity {
     }
 
     public void setTime(View view) {
-        //TODO: use the values in the time selector text boxes to set the start time for the timepickerdialog
         final TextView displayDate = (TextView) view;
         int mHour = 0, mMinute = 0;
         TimePickerDialog tpd = new TimePickerDialog(this,
@@ -188,13 +187,32 @@ public class AddClassSectionActivity extends ActionBarActivity {
                     }
                 }, mHour, mMinute, false);
         if(view.getId()==R.id.startTime){
-            tpd.updateTime(DEFAULT_START_HOUR, DEFAULT_START_MINUTE);
+            String formattedTime = ((TextView) view).getText().toString();
+            if(!formattedTime.equals("")){
+                int hour = findHour(formattedTime);
+                int minute = findMinute(formattedTime);
+                tpd.updateTime(hour, minute);
+            }
+            else {
+                tpd.updateTime(DEFAULT_START_HOUR, DEFAULT_START_MINUTE);
+            }
         }
         if(view.getId()==R.id.endTime){
-            LinearLayout startAndEndTimes = (LinearLayout) view.getParent().getParent();
-            TextView startTime = (TextView) startAndEndTimes.findViewById(R.id.startTime);
-            if(!startTime.getText().toString().equals("")){
-                tpd.updateTime(findHour(startTime.getText().toString()), findMinute(startTime.getText().toString()));
+            String formattedTime = ((TextView) view).getText().toString();
+            if(!formattedTime.equals("")){
+                int hour = findHour(formattedTime);
+                int minute = findMinute(formattedTime);
+                tpd.updateTime(hour, minute);
+            }
+            else {
+                LinearLayout startAndEndTimes = (LinearLayout) view.getParent().getParent();
+                TextView startTime = (TextView) startAndEndTimes.findViewById(R.id.startTime);
+                if (!startTime.getText().toString().equals("")) {
+                    tpd.updateTime(findHour(startTime.getText().toString()), findMinute(startTime.getText().toString()));
+                }
+                else{
+                    tpd.updateTime(DEFAULT_START_HOUR, DEFAULT_START_MINUTE);
+                }
             }
         }
         tpd.show();
@@ -548,15 +566,17 @@ public class AddClassSectionActivity extends ActionBarActivity {
         String notes = et.getText().toString();
 
         if(mSection==null) {
-            mSection = new Section(times, professor, sectionNumber, notes);
+            mSection = new Section(times, professor, sectionNumber, notes, myClass);
             myClass.addSection(mSection);
         }
         else{
+            int replaceIndex = myClass.getSections().indexOf(mSection);
             mSection.setTimes(times);
             mSection.setProfessor(professor);
             mSection.setSectionNumber(sectionNumber);
             mSection.setNotes(notes);
-            myClass.getSections().set(myClass.getSections().indexOf(mSection), mSection);
+            mSection.setContainingClass(myClass);
+            myClass.getSections().set(replaceIndex, mSection);
         }
 
         ClassLoader.saveClass(this, myClass);

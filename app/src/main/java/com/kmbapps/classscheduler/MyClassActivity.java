@@ -9,29 +9,39 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
-public class MyClassActivity extends ActionBarActivity {
+public class MyClassActivity extends ActionBarActivity implements ClassAssignmentsFragment.OnAssignmentFragmentInteractionListener,
+        SortByDialogFragment.SortByDialogListener{
 
     private final static int DETAILS = 0;
     private final static int ASSIGNMENTS = 1;
     private final static int NOTES = 2;
 
     private static final String CURRENT_PAGE = "currentPage";
+    private static final String CURRENT_SECTION = "currentSection";
+    private static final String CURRENT_NOTEBOOK = "currentNotebook";
+    private static final String CURRENT_SCHEDULE = "currentSchedule";
 
     private Section mSection;
     private Notebook mNotebook;
+    private Schedule mSchedule;
 
     private MyClassPagerAdapter myClassPagerAdapter;
     private ViewPager mViewPager;
     private int mCurrentPage = 1;
+
+    private ActionMode currentActionMode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,22 +51,27 @@ public class MyClassActivity extends ActionBarActivity {
         Intent intent = getIntent();
         mSection = (Section) intent.getSerializableExtra("MySection");
         mNotebook = (Notebook) intent.getSerializableExtra("MyNotebook");
+        mSchedule = (Schedule) intent.getSerializableExtra("schedule");
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
         actionBar.setDisplayShowTitleEnabled(true);
         actionBar.setTitle(mSection.getContainingClass().getName());
 
-        if(savedInstanceState!=null){
+        if(savedInstanceState!=null&&mSection==null){
             mCurrentPage = savedInstanceState.getInt(CURRENT_PAGE);
+            mSection = (Section) savedInstanceState.getSerializable(CURRENT_SECTION);
+            mNotebook = (Notebook) savedInstanceState.getSerializable(CURRENT_NOTEBOOK);
         }
 
         myClassPagerAdapter =
                 new MyClassPagerAdapter(
                         getSupportFragmentManager());
-        mViewPager = (ViewPager) findViewById(R.id.pager);
+        mViewPager = (ViewPager) findViewById(R.id.classPager);
         mViewPager.setAdapter(myClassPagerAdapter);
+        mViewPager.setOnPageChangeListener(myOnPageChangeListener);
         mViewPager.setCurrentItem(mCurrentPage);
+
 
     }
 
@@ -64,6 +79,8 @@ public class MyClassActivity extends ActionBarActivity {
     public void onSaveInstanceState(Bundle savedInstanceState){
 
         savedInstanceState.putInt(CURRENT_PAGE, mViewPager.getCurrentItem());
+        savedInstanceState.putSerializable(CURRENT_SECTION, mSection);
+        savedInstanceState.putSerializable(CURRENT_NOTEBOOK, mNotebook);
         super.onSaveInstanceState(savedInstanceState);
 
     }
@@ -72,8 +89,7 @@ public class MyClassActivity extends ActionBarActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_my_class, menu);
-        return true;
+        return false;
     }
 
     @Override
@@ -173,6 +189,50 @@ public class MyClassActivity extends ActionBarActivity {
             super.onAttach(activity);
         }
 
-
     }
+
+    public void onAssignmentsChanged(List<Assignment> assignments){
+        ClassLoader.updateNotebooks(this, assignments, mSection, mSchedule);
+        mNotebook = ClassLoader.loadNotebooks(this).get(mSchedule);
+        myClassPagerAdapter.notifyDataSetChanged();
+    }
+
+    public void onActionModeChanged(ActionMode actionMode){
+        currentActionMode = actionMode;
+    }
+
+    public void onAssignmentsSortingKeySelected(int which){
+        //CAUTION: must update the sorting key if the order of the sorting option string array changes
+
+        mNotebook.changeSortingMethod(mSection, Notebook.ASSIGNMENTS, which);
+        ClassLoader.updateNotebook(this, mSchedule, mNotebook);
+
+        //notify the user of the update
+        String[] sortingModes = getResources().getStringArray(R.array.sort_by_dialog_array);
+        Toast toast = Toast.makeText(this, getString(R.string.toast_sort_by) + sortingModes[which].toLowerCase(), Toast.LENGTH_SHORT);
+        toast.show();
+
+
+        myClassPagerAdapter.notifyDataSetChanged();
+    }
+
+    private ViewPager.OnPageChangeListener myOnPageChangeListener = new ViewPager.OnPageChangeListener() {
+        @Override
+        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+        }
+
+        @Override
+        public void onPageSelected(int position) {
+            if (position!=mCurrentPage&&currentActionMode!=null){
+                currentActionMode.finish();
+            }
+            mCurrentPage = position;
+        }
+
+        @Override
+        public void onPageScrollStateChanged(int state) {
+
+        }
+    };
 }

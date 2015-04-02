@@ -92,9 +92,12 @@ public class ScheduleFragment extends Fragment {
         }
 
         //gray out fab if this is the current schedule
-        if(schedule.equals(ClassLoader.loadCurrentSchedule(getActivity().getApplicationContext()))){
-            FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.select_schedule);
-            fab.setEnabled(false);
+        Schedule currentSchedule = ClassLoader.loadCurrentSchedule(getActivity().getApplicationContext());
+        if(currentSchedule!=null) {
+            if (schedule.equals(currentSchedule)) {
+                FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.select_schedule);
+                fab.setEnabled(false);
+            }
         }
 
         Button noSchedule = (Button) view.findViewById(R.id.noSchedules);
@@ -368,15 +371,16 @@ public class ScheduleFragment extends Fragment {
     }
 
     public void setAsSchedule(){
-        ClassLoader.setCurrentSchedule(getActivity().getApplicationContext(), schedule);
+        Schedule currentSchedule = new Schedule(schedule.getSections());
+        ClassLoader.setCurrentSchedule(getActivity().getApplicationContext(), currentSchedule);
         ViewPager pager = (ViewPager) getView().getParent();
         Toast toast = Toast.makeText(getActivity().getApplicationContext(), getText(R.string.toast_set_current_schedule), Toast.LENGTH_SHORT);
         toast.show();
 
         Hashtable<Schedule, Notebook> notebooks = ClassLoader.loadNotebooks(getActivity().getApplicationContext());
 
-        if(!notebooks.containsKey(schedule)){
-            notebooks.put(schedule, new Notebook(schedule.getSections()));
+        if(!notebooks.containsKey(currentSchedule)){
+            notebooks.put(currentSchedule, new Notebook(currentSchedule.getSections()));
             ClassLoader.saveNotebooks(getActivity().getApplicationContext(), notebooks);
         }
 

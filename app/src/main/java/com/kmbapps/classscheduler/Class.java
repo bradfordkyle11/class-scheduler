@@ -2,6 +2,8 @@ package com.kmbapps.classscheduler;
 
 import android.content.Context;
 
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,12 +31,35 @@ public class Class implements Serializable {
 
     private static ArrayList<Class> myClasses;
 
+    @Override
+    public boolean equals(Object object){
+        if(object.getClass()!=com.kmbapps.classscheduler.Class.class){
+            return false;
+        }
+        Class c = (Class) object;
+
+        return (department.equals(c.getDepartment()))&&(number.equals(c.getNumber()))&&(name.equals(c.getName()))
+                &&(creditHours==c.getCreditHours());
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 31). // two randomly chosen prime numbers
+                // if deriving: appendSuper(super.hashCode()).
+                append(department).
+                append(number).
+                append(name).
+                append(creditHours).
+                toHashCode();
+    }
+
     Class() {
         ID = UUID.randomUUID();
         department = "";
         number = "";
         name = "";
         creditHours = 0;
+        sections = new ArrayList<Section>();
     }
 
     Class(String department, String number, String name, int creditHours) {
@@ -112,18 +137,7 @@ public class Class implements Serializable {
         ClassLoader.saveClass(context, this);
     }
 
-    @Override
-    public boolean equals(Object object){
-        if(object.getClass()!=com.kmbapps.classscheduler.Class.class){
-            return false;
-        }
-        Class c = (Class) object;
 
-        if(!c.getId().equals(ID)){
-            return false;
-        }
-        return true;
-    }
 
     public void addSection(Section s) {
         if(!sections.contains(s)){

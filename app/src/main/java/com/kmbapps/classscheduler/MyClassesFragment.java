@@ -11,6 +11,8 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.util.Hashtable;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -55,7 +57,9 @@ public class MyClassesFragment extends Fragment {
             mSchedule = (Schedule) getArguments().getSerializable(ARG_SCHEDULE);
         }
 
-        mNotebook = ClassLoader.loadNotebooks(getActivity().getApplicationContext()).get(mSchedule);
+        Hashtable<Schedule, Notebook> notebooks = ClassLoader.loadNotebooks(getActivity().getApplicationContext());
+        mNotebook = notebooks.get(mSchedule);
+
     }
 
     @Override
@@ -120,6 +124,7 @@ public class MyClassesFragment extends Fragment {
             Intent intent = new Intent(getActivity().getApplicationContext(), MyClassActivity.class);
             intent.putExtra("MySection", (Section) v.getTag());
             intent.putExtra("MyNotebook", mNotebook);
+            intent.putExtra("schedule", mSchedule);
             startActivity(intent);
         }
     };

@@ -1,5 +1,7 @@
 package com.kmbapps.classscheduler;
 
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -155,7 +157,17 @@ public class Schedule implements Serializable {
             }
         }
 
+
+
         return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 31). // two randomly chosen prime numbers
+                // if deriving: appendSuper(super.hashCode()).
+                append(sections.toArray()).
+                toHashCode();
     }
 
 }

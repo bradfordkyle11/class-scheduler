@@ -1,5 +1,7 @@
 package com.kmbapps.classscheduler;
 
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +24,30 @@ public class MyTime implements Serializable {
 
 
     MyTime(){
+    }
+
+    @Override
+    public boolean equals(Object object){
+        if(object.getClass()!=com.kmbapps.classscheduler.MyTime.class){
+            return false;
+        }
+
+        MyTime myTime = (MyTime) object;
+        return (days.equals(myTime.getDays()))&&(startHour==myTime.getStartHour())&&(startMinute==myTime.getStartMinute())
+                &&(endHour==myTime.getEndHour())&&(endMinute==myTime.getEndMinute())&&(roomNumber.equals(myTime.getRoomNumber()));
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 31). // two randomly chosen prime numbers
+                // if deriving: appendSuper(super.hashCode()).
+                append(days).
+                append(startHour).
+                append(startMinute).
+                append(endHour).
+                append(endMinute).
+                append(roomNumber).
+                toHashCode();
     }
 
     public String getRoomNumber() {
@@ -122,6 +148,8 @@ public class MyTime implements Serializable {
     }
 
 
+
+
     //returns true if the MyTimes in the arraylist don't overlap
     public static boolean noConflicts(ArrayList<MyTime> schedules){
         boolean noConflicts;
@@ -177,9 +205,9 @@ public class MyTime implements Serializable {
                 List<MyTime> schedule2 = schedules.get(j);
 
                 //don't check if they are the same
-                if(schedule1.equals(schedule2)){
-                    break;
-                }
+//                if(schedule1.equals(schedule2)){
+//                    break;
+//                }
 
                 ArrayList<MyTime> combinedSchedule = new ArrayList<MyTime>();
                 combinedSchedule.addAll(schedule1);

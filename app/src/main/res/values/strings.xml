@@ -31,9 +31,9 @@
     <string name="saturday_abbreviation">S</string>
     <string name="create_a_schedule">Create a Schedule</string>
     <string name="no_classes">You have no classes. Tap + to add one.</string>
-    <string name="hint_class_department">Enter class department (eg. Math)</string>
-    <string name="hint_class_name">Enter class name (eg. Algebra)</string>
-    <string name="hint_class_number">Enter class number (eg. 101)</string>
+    <string name="hint_class_department">Department (eg. Math)</string>
+    <string name="hint_class_name">Name (eg. Algebra)</string>
+    <string name="hint_class_number">Number (eg. 101)</string>
     <string name="text_credit_hours">Credit Hours:</string>
     <string name="button_cancel">Cancel</string>
     <string name="button_accept">Accept</string>
@@ -44,7 +44,7 @@
     <string name="title_activity_add_class">AddClassActivity</string>
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_edit_class">EditClassActivity</string>
-    <string name="hint_room_number">Enter room number</string>
+    <string name="hint_room_number">Room number</string>
     <string name="text_days_and_times">Days and Times</string>
     <string name="text_from">From: </string>
     <string name="text_to">To: </string>
@@ -55,10 +55,10 @@
     <string name="text_wednesday">Wednesday</string>
     <string name="text_thursday">Thursday</string>
     <string name="text_friday">Friday</string>
-    <string name="hint_professor">Enter professor</string>
+    <string name="hint_professor">Professor</string>
     <string name="text_notes">Notes</string>
-    <string name="hint_section_number">Enter unique section number</string>
-    <string name="hint_notes">Notes</string>
+    <string name="hint_section_number">Unique section number</string>
+    <string name="hint_notes">Other info</string>
     <string name="toast_invalid_ending_time">End time must be after the start time</string>
     <string name="toast_invalid_starting_time">Start time must be before the end time</string>
     <string name="toast_no_start_time">You must enter a start time</string>
@@ -75,6 +75,25 @@
     <string name="title_assignments">Assignments</string>
     <string name="title_notes">Notes</string>
     <string name="text_other_info">Other info:</string>
+    <string name="header_add_assignment">New Assignment</string>
+    <string name="text_assignment_type">Type: </string>
+    <string name="text_assignment_name">Name: </string>
+    <string name="text_assignment_details">Details: </string>
+    <string name="hint_assignment_type">Type (eg. Test)</string>
+    <string name="hint_assignment_name">Name (eg. Midterm 1)</string>
+    <string name="hint_assignment_details">Details (eg. Covers chapters 1-4)</string>
+    <string name="hint_assignment_due_date">Due date</string>
+    <string name="hint_assignment_due_time">Time</string>
+    <string name="toast_assignment_deleted">Assignment deleted</string>
+    <string name="toast_assignment_added">Assignment created</string>
+    <string name="toast_assignment_edited">Changes saved</string>
+    <string name="toast_assignment_no_change">No changes made</string>
+    <string name="action_sort_by">Sort by</string>
+    <string name="action_sort_by_due_date">Due date</string>
+    <string name="action_sort_by_type">Type</string>
+    <string name="dialog_sort_by">Sort by</string>
+    <string name="toast_sort_by">"Sort by: "</string>
+
 
 
     <!--Tags-->
@@ -93,8 +112,14 @@
         <item>9</item>
     </string-array>
 
+    <string-array name = "sort_by_dialog_array">
+        <item>@string/action_sort_by_due_date</item>
+        <item>@string/action_sort_by_type</item>
+    </string-array>
+
     <string name="title_activity_add_class_section">AddClassSectionActivity</string>
     <string name="title_activity_edit_class_section">EditClassSectionActivity</string>
     <string name="title_activity_my_class">MyClass</string>
+    <string name="title_activity_add_assignment">AddAssignmentActivity</string>
 
 </resources>

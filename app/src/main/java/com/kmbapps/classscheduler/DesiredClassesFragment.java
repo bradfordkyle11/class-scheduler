@@ -129,11 +129,13 @@ public class DesiredClassesFragment extends Fragment {
                             ActionBarActivity activity = (ActionBarActivity) v.getContext();
                             mActionMode = activity.startSupportActionMode(classActionModeCallback);
                             mActionMode.setTag(v);
+                            onActionModeChanged();
                             return true;
 
                         }
                         else{
                             mActionMode.finish();
+                            onActionModeChanged();
                             return true;
                         }
 
@@ -158,10 +160,12 @@ public class DesiredClassesFragment extends Fragment {
                                 ActionBarActivity activity = (ActionBarActivity) v.getContext();
                                 mActionMode = activity.startSupportActionMode(classSectionActionModeCallback);
                                 mActionMode.setTag(v);
+                                onActionModeChanged();
                                 return true;
                             }
                             else{
                                 mActionMode.finish();
+                                onActionModeChanged();
                                 return true;
                             }
 
@@ -194,6 +198,12 @@ public class DesiredClassesFragment extends Fragment {
      */
     private void prepareClassList() {
 
+    }
+
+    private void onActionModeChanged(){
+        if(mListener!=null){
+            mListener.onActionModeChanged(mActionMode);
+        }
     }
 
 
@@ -230,6 +240,8 @@ public class DesiredClassesFragment extends Fragment {
         public void onAddClassClick(View view);
 
         public void onSectionDeleted();
+
+        public void onActionModeChanged(ActionMode actionMode);
     }
 
 

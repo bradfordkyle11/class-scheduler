@@ -1,0 +1,76 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    tools:context="com.kmbapps.classscheduler.AddAssignmentActivity"
+    android:orientation="vertical"
+    android:id="@+id/addAssignmentLayout">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="@dimen/touchable_ui_component_min"
+        android:gravity="center_vertical">
+
+        <EditText
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:hint="@string/hint_assignment_type"
+            android:id="@+id/assignmentType"
+            android:textSize="@dimen/abc_text_size_small_material"/>
+
+        </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="@dimen/touchable_ui_component_min"
+        android:gravity="center_vertical">
+
+        <EditText
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:hint="@string/hint_assignment_name"
+            android:textSize="@dimen/abc_text_size_small_material"
+            android:id="@+id/assignmentName"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="@dimen/touchable_ui_component_min"
+        android:gravity="center_vertical">
+
+        <EditText
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:hint="@string/hint_assignment_details"
+            android:textSize="@dimen/abc_text_size_small_material"
+            android:id="@+id/assignmentDetails"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="@dimen/touchable_ui_component_min"
+        android:gravity="center_vertical">
+
+        <EditText
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:hint="@string/hint_assignment_due_date"
+            android:textSize="@dimen/abc_text_size_small_material"
+            android:id="@+id/assignmentDueDate"
+            android:onClick="selectDate"
+            android:focusable="false"/>
+
+    </LinearLayout>
+
+
+</LinearLayout>

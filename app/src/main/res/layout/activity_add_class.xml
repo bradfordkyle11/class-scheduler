@@ -27,7 +27,8 @@
                 android:hint="@string/hint_class_department"
                 android:textSize="@dimen/abc_text_size_small_material"
                 android:id="@+id/classDepartment"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:inputType="textCapWords"/>
         </LinearLayout>
 
         <LinearLayout
@@ -44,7 +45,8 @@
                 android:hint="@string/hint_class_number"
                 android:textSize="@dimen/abc_text_size_small_material"
                 android:id="@+id/classNumber"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:inputType="textCapWords"/>
         </LinearLayout>
 
         <LinearLayout
@@ -61,7 +63,8 @@
                 android:hint="@string/hint_class_name"
                 android:textSize="@dimen/abc_text_size_small_material"
                 android:id="@+id/className"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:inputType="textCapWords"/>
         </LinearLayout>
 
         <LinearLayout

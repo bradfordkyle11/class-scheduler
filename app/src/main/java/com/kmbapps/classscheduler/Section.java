@@ -1,6 +1,9 @@
 package com.kmbapps.classscheduler;
 
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -13,12 +16,34 @@ public class Section implements Serializable {
 
     private List<MyTime> times;
     private String professor;
-    private String room;
     private String sectionNumber;
     private String notes;
     private Class containingClass;
     final UUID ID;
     private static final long serialVersionUID = 4444446;
+
+    @Override
+    public boolean equals(Object object){
+        if(object.getClass()!=com.kmbapps.classscheduler.Section.class){
+            return false;
+        }
+        Section s = (Section) object;
+
+        return (times.equals(s.getTimes()))&&(professor.equals(s.getProfessor()))&&(sectionNumber.equals(s.getSectionNumber()))
+                &&(notes.equals(s.getNotes()))&&(containingClass.equals(s.getContainingClass()));
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 31). // two randomly chosen prime numbers
+                // if deriving: appendSuper(super.hashCode()).
+                append(times).
+                append(professor).
+                append(sectionNumber).
+                append(notes).
+                append(containingClass).
+                toHashCode();
+    }
 
     public Class getContainingClass() {
         return containingClass;
@@ -34,33 +59,23 @@ public class Section implements Serializable {
 
     Section() {
         ID = UUID.randomUUID();
-        times = null;
-        professor = null;
-        room = null;
-        sectionNumber = null;
-        notes = null;
+        times = new ArrayList<MyTime>();
+        professor = "";
+        sectionNumber = "";
+        notes = "";
+        containingClass = new Class();
     }
 
-    Section(List<MyTime> times, String professor, String sectionNumber, String notes) {
+    Section(List<MyTime> times, String professor, String sectionNumber, String notes, Class containingClass) {
         ID = UUID.randomUUID();
         this.times = times;
         this.professor = professor;
         this.sectionNumber = sectionNumber;
         this.notes = notes;
+        this.containingClass = containingClass;
     }
 
-    @Override
-    public boolean equals(Object object){
-        if(object.getClass()!=com.kmbapps.classscheduler.Section.class){
-            return false;
-        }
-        Section s = (Section) object;
 
-        if(!s.getId().equals(ID)){
-            return false;
-        }
-        return true;
-    }
 
     public String getProfessor() {
         return professor;

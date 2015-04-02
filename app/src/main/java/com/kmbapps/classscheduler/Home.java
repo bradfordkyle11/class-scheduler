@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -161,6 +162,7 @@ public class Home extends ActionBarActivity
                 return CreateScheduleFragment.newInstance("hello", "world");
             case MY_CLASSES:
                 mTitle = getString(R.string.title_my_classes);
+                currentSchedule = ClassLoader.loadCurrentSchedule(this);
                 return MyClassesFragment.newInstance(currentSchedule);
 
             //TODO: MyCalendar fragment
@@ -246,6 +248,15 @@ public class Home extends ActionBarActivity
         Intent intent = new Intent(this, EditClassActivity.class);
         intent.putExtra("MyClass", (Class) view.getTag());
         startActivity(intent);
+    }
+
+    public void onActionModeChanged(ActionMode actionMode){
+        if(getSupportFragmentManager().findFragmentById(R.id.container) instanceof CreateScheduleFragment) {
+            CreateScheduleFragment createScheduleFragment = (CreateScheduleFragment) getSupportFragmentManager().findFragmentById(R.id.container);
+            if (createScheduleFragment != null) {
+                createScheduleFragment.onActionModeChanged(actionMode);
+            }
+        }
     }
 
 

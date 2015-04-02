@@ -20,7 +20,7 @@ public class EditClassActivity extends ActionBarActivity {
         Intent intent = getIntent();
         mClass = (Class) intent.getSerializableExtra("MyClass");
 
-        setContentView(R.layout.activity_edit_class);
+        setContentView(R.layout.activity_add_class);
 
         Spinner spinner = (Spinner) findViewById(R.id.creditHours);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,

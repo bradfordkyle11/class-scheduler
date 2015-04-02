@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,6 +41,8 @@ public class CreateScheduleFragment extends Fragment{
 
     private String mParam1;
     private String mParam2;
+
+    private ActionMode currentActionMode;
 
     private OnFragmentInteractionListener mListener;
 
@@ -139,8 +142,9 @@ public class CreateScheduleFragment extends Fragment{
         mScheduleDesignerPagerAdapter =
                 new ScheduleDesignerPagerAdapter(
                         getFragmentManager());
-        mViewPager = (ViewPager) view.findViewById(R.id.pager);
+        mViewPager = (ViewPager) view.findViewById(R.id.createSchedulePager);
         mViewPager.setAdapter(mScheduleDesignerPagerAdapter);
+        mViewPager.setOnPageChangeListener(myOnPageChangeListener);
         mViewPager.setCurrentItem(mCurrentPage);
 
         //load the schedules
@@ -227,6 +231,31 @@ public class CreateScheduleFragment extends Fragment{
             mViewPager.setCurrentItem(mCurrentPage);
         }
     }
+
+    public void onActionModeChanged(ActionMode actionMode){
+        currentActionMode = actionMode;
+    }
+
+
+    private ViewPager.OnPageChangeListener myOnPageChangeListener = new ViewPager.OnPageChangeListener() {
+        @Override
+        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+        }
+
+        @Override
+        public void onPageSelected(int position) {
+            if (position!=mCurrentPage&&currentActionMode!=null){
+                currentActionMode.finish();
+            }
+            mCurrentPage = position;
+        }
+
+        @Override
+        public void onPageScrollStateChanged(int state) {
+
+        }
+    };
 
 
 }

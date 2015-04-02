@@ -42,6 +42,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.kmbapps.classscheduler.Home" />
         </activity>
+        <activity
+            android:name=".AddAssignmentActivity"
+            android:label="@string/title_activity_add_assignment"
+            android:parentActivityName=".MyClassActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.kmbapps.classscheduler.Home" />
+        </activity>
     </application>
 
 </manifest>
