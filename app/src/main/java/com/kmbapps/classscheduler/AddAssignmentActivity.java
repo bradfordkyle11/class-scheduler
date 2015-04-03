@@ -106,7 +106,7 @@ public class AddAssignmentActivity extends ActionBarActivity {
 
 
 
-        Assignment assignment = new Assignment(dueDate, type, name, details, 0);
+        Assignment assignment = new Assignment(dueDate, type, name, details, "");
 
         Intent intent = new Intent();
         intent.putExtra("newAssignment", assignment);

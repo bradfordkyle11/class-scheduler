@@ -22,11 +22,11 @@ import java.util.List;
 
 
 public class MyClassActivity extends ActionBarActivity implements ClassAssignmentsFragment.OnAssignmentFragmentInteractionListener,
-        SortByDialogFragment.SortByDialogListener{
+        SortByDialogFragment.SortByDialogListener, ClassGradesFragment.OnGradesFragmentInteractionListener{
 
     private final static int DETAILS = 0;
     private final static int ASSIGNMENTS = 1;
-    private final static int NOTES = 2;
+    private final static int GRADES = 2;
 
     private static final String CURRENT_PAGE = "currentPage";
     private static final String CURRENT_SECTION = "currentSection";
@@ -50,8 +50,8 @@ public class MyClassActivity extends ActionBarActivity implements ClassAssignmen
 
         Intent intent = getIntent();
         mSection = (Section) intent.getSerializableExtra("MySection");
-        mNotebook = (Notebook) intent.getSerializableExtra("MyNotebook");
         mSchedule = (Schedule) intent.getSerializableExtra("schedule");
+        mNotebook = ClassLoader.loadNotebooks(this).get(mSchedule);
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
@@ -123,8 +123,8 @@ public class MyClassActivity extends ActionBarActivity implements ClassAssignmen
                     return ClassDetailsFragment.newInstance(mSection);
                 case ASSIGNMENTS:
                     return ClassAssignmentsFragment.newInstance((ArrayList) mNotebook.getAssignments(mSection));
-                case NOTES:
-                    return PlaceholderFragment.newInstance(NOTES);
+                case GRADES:
+                    return ClassGradesFragment.newInstance((ArrayList) mNotebook.getGrades(mSection));
                 default:
                     return null;
             }
@@ -147,8 +147,8 @@ public class MyClassActivity extends ActionBarActivity implements ClassAssignmen
                     return getString(R.string.title_details);
                 case ASSIGNMENTS:
                     return getString(R.string.title_assignments);
-                case NOTES:
-                    return getString(R.string.title_notes);
+                case GRADES:
+                    return getString(R.string.title_grades);
                 default:
                     return "";
             }
@@ -192,13 +192,28 @@ public class MyClassActivity extends ActionBarActivity implements ClassAssignmen
     }
 
     public void onAssignmentsChanged(List<Assignment> assignments){
-        ClassLoader.updateNotebooks(this, assignments, mSection, mSchedule);
         mNotebook = ClassLoader.loadNotebooks(this).get(mSchedule);
         myClassPagerAdapter.notifyDataSetChanged();
     }
 
     public void onActionModeChanged(ActionMode actionMode){
         currentActionMode = actionMode;
+    }
+
+    public void onAssignmentCompleted(Assignment assignment){
+        mNotebook = ClassLoader.loadNotebooks(this).get(mSchedule);
+
+        //add the grade to the notebook
+        mNotebook.getGrades().get(mSection).add(assignment);
+        ClassLoader.updateNotebooks(this);
+
+
+        myClassPagerAdapter.notifyDataSetChanged();
+    }
+
+    public void onGradesChanged(){
+        mNotebook = ClassLoader.loadNotebooks(this).get(mSchedule);
+        myClassPagerAdapter.notifyDataSetChanged();
     }
 
     public void onAssignmentsSortingKeySelected(int which){

@@ -15,11 +15,11 @@ public class Assignment implements Serializable, Comparable{
     private String type;
     private String name;
     private String details;
-    private int grade;
+    private String grade;
 
     private int sortingMode = COMPARE_DUE_DATE;
 
-    public Assignment(Calendar dueDate, String type, String name, String details, int grade){
+    public Assignment(Calendar dueDate, String type, String name, String details, String grade){
         this.dueDate = dueDate;
         this.type = type;
         this.name = name;
@@ -66,6 +66,9 @@ public class Assignment implements Serializable, Comparable{
                 else if(dueDate!=null&&a.getDueDate()==null){
                     return BEFORE;
                 }
+                else if(dueDate==null&&a.getDueDate()==null){
+                    return (type + " " + name).compareTo(a.getType() + " " + a.getName());
+                }
                 if(dueDate.compareTo(a.getDueDate())==0){
                     return (type + " " + name).compareTo(a.getType() + " " + a.getName());
                 }
@@ -77,7 +80,15 @@ public class Assignment implements Serializable, Comparable{
                 if(this.equals(a)){
                     return EQUAL;
                 }
-
+                if(dueDate==null&&a.getDueDate()!=null){
+                    return AFTER;
+                }
+                else if(dueDate!=null&&a.getDueDate()==null){
+                    return BEFORE;
+                }
+                else if(dueDate==null&&a.getDueDate()==null){
+                    return (type + " " + name).compareTo(a.getType() + " " + a.getName());
+                }
                 if(type.equals(a.getType())){
                     return dueDate.compareTo(a.getDueDate());
                 }
@@ -128,11 +139,11 @@ public class Assignment implements Serializable, Comparable{
         this.details = details;
     }
 
-    public int getGrade() {
+    public String getGrade() {
         return grade;
     }
 
-    public void setGrade(int grade) {
+    public void setGrade(String grade) {
         this.grade = grade;
     }
 }

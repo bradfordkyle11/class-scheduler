@@ -1,0 +1,72 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.kmbapps.classscheduler.AssignmentActivity"
+    android:id="@+id/assignmentActivityLayout"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minHeight="@dimen/touchable_ui_component_min"
+            android:text="Assignment type and name"
+            android:textSize="@dimen/abc_text_size_medium_material"
+            android:id="@+id/assignmentTypeAndName"
+            android:textStyle="bold"
+            android:paddingTop="@dimen/activity_padding"
+            android:paddingBottom="@dimen/activity_padding"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:gravity="center_vertical"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minHeight="@dimen/touchable_ui_component_min"
+            android:id="@+id/assignmentDueDate"
+            android:paddingTop="@dimen/activity_padding"
+            android:paddingBottom="@dimen/activity_padding"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:gravity="center_vertical"
+            android:text="Due: 7/7/7"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minHeight="@dimen/touchable_ui_component_min"
+            android:id="@+id/assignmentDetails"
+            android:text="details"
+            android:paddingTop="@dimen/activity_padding"
+            android:paddingBottom="@dimen/activity_padding"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:gravity="center_vertical"/>
+
+    </LinearLayout>
+
+    <com.getbase.floatingactionbutton.FloatingActionButton
+        android:id="@+id/edit_assignment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="@dimen/activity_padding"
+        android:layout_marginRight="@dimen/activity_padding"
+        android:onClick="editAssignment"
+        android:layout_marginEnd="@dimen/activity_padding"
+        fab:fab_colorNormal="@color/app_primary_color"
+        fab:fab_colorPressed="@color/app_secondary_color"
+        fab:fab_colorDisabled="@color/highlight"
+        fab:fab_icon="@drawable/ic_create_white_48dp"
+/>
+
+</RelativeLayout>

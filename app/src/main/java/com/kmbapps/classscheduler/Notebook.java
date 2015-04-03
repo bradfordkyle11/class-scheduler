@@ -12,21 +12,30 @@ public class Notebook implements Serializable {
     public static final int ASSIGNMENTS = 0;
     public static final int NOTES = 1;
 
-    private static final long serialVersionUID = 1;
+    private static final long serialVersionUID = 4;
 
 
     private Hashtable<Section, List<Assignment>> assignments;
+    private Hashtable<Section, List<Assignment>> grades;
 
     public Notebook(List<Section> sections){
         assignments = new Hashtable<Section, List<Assignment>>();
+        grades = new Hashtable<Section, List<Assignment>>();
         for (Section section : sections){
             assignments.put(section, new ArrayList<Assignment>());
+            grades.put(section, new ArrayList<Assignment>());
         }
+    }
+
+    public Hashtable<Section, List<Assignment>> getGrades() {
+        return grades;
     }
 
     public List<Assignment> getAssignments(Section mClass){
         return assignments.get(mClass);
     }
+
+    public List<Assignment> getGrades(Section mClass){ return grades.get(mClass);}
 
     public void addAssignment(Section mClass, Assignment assignment){
         ArrayList<Assignment> mClassAssignments = (ArrayList) getAssignments(mClass);

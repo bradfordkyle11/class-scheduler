@@ -73,6 +73,7 @@
     <string name="toast_section_deleted">Section deleted</string>
     <string name="title_details">Details</string>
     <string name="title_assignments">Assignments</string>
+    <string name="title_grades">Grades</string>
     <string name="title_notes">Notes</string>
     <string name="text_other_info">Other info:</string>
     <string name="header_add_assignment">New Assignment</string>
@@ -93,7 +94,12 @@
     <string name="action_sort_by_type">Type</string>
     <string name="dialog_sort_by">Sort by</string>
     <string name="toast_sort_by">"Sort by: "</string>
-
+    <string name="title_activity_add_class_section">AddClassSectionActivity</string>
+    <string name="title_activity_edit_class_section">EditClassSectionActivity</string>
+    <string name="title_activity_my_class">MyClass</string>
+    <string name="title_activity_add_assignment">AddAssignmentActivity</string>
+    <string name="title_activity_assignment">Assignment</string>
+    <string name="toast_grade_deleted">Grade deleted</string>
 
 
     <!--Tags-->
@@ -117,9 +123,6 @@
         <item>@string/action_sort_by_type</item>
     </string-array>
 
-    <string name="title_activity_add_class_section">AddClassSectionActivity</string>
-    <string name="title_activity_edit_class_section">EditClassSectionActivity</string>
-    <string name="title_activity_my_class">MyClass</string>
-    <string name="title_activity_add_assignment">AddAssignmentActivity</string>
+
 
 </resources>

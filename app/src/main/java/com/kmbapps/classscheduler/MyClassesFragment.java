@@ -58,6 +58,7 @@ public class MyClassesFragment extends Fragment {
         }
 
         Hashtable<Schedule, Notebook> notebooks = ClassLoader.loadNotebooks(getActivity().getApplicationContext());
+        mNotebook = ClassLoader.loadNotebooks(getActivity().getApplicationContext()).get(mSchedule);
         mNotebook = notebooks.get(mSchedule);
 
     }
@@ -123,7 +124,6 @@ public class MyClassesFragment extends Fragment {
         public void onClick(View v) {
             Intent intent = new Intent(getActivity().getApplicationContext(), MyClassActivity.class);
             intent.putExtra("MySection", (Section) v.getTag());
-            intent.putExtra("MyNotebook", mNotebook);
             intent.putExtra("schedule", mSchedule);
             startActivity(intent);
         }

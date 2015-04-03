@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 //TODO: make new app icon (this needs to be saved as ic_launcher.png in the drawable folders)
+//TODO: put list TextViews in LinearLayouts and give them padding inside view
 
 public class Home extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks, ScheduleFragment.OnScheduleInteractionListener,

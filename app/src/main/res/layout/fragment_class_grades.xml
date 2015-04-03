@@ -1,22 +1,23 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.kmbapps.classscheduler.MyClassesFragment"
-    android:orientation="vertical">
+    tools:context="com.kmbapps.classscheduler.ClassGradesFragment">
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <LinearLayout
-            android:id="@+id/classes"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:id="@+id/gradesList"
             android:divider="?android:dividerHorizontal"
             android:showDividers="middle">
+
+
         </LinearLayout>
+
     </ScrollView>
 
-
-</LinearLayout>
+</RelativeLayout>

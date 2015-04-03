@@ -13,6 +13,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,13 +26,14 @@ import java.util.Collections;
 import java.util.List;
 
 
-//TODO: open an assignment activity when clicking on an assignment
+//TODO: Assign grade dialog when completing an assignment
+
 
 public class ClassAssignmentsFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_ASSIGNMENTS = "assignments";
-    private static final int NEW_ASSIGNMENT_REQUEST = 0;
-    private static final int EDIT_ASSIGNMENT_REQUEST = 1;
+    private static final int ASSIGNMENT_CREATOR_REQUEST = 0;
+    private static final int OPEN_ASSIGNMENT_REQUEST = 1;
 
     private int sortingMode;
 
@@ -61,6 +63,9 @@ public class ClassAssignmentsFragment extends Fragment {
             mAssignments = (ArrayList<Assignment>) getArguments().getSerializable(ARG_ASSIGNMENTS);
         }
         if(mAssignments==null){
+            sortingMode = 0;
+        }
+        else if(mAssignments.isEmpty()){
             sortingMode = 0;
         }
         else{
@@ -113,6 +118,23 @@ public class ClassAssignmentsFragment extends Fragment {
                 }
             });
 
+            assignmentListItem.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    openAssignment(v);
+                }
+            });
+
+            //add listener on the checkbox and set its tag
+            CheckBox checkBox = (CheckBox) assignmentListItem.findViewById(R.id.checkboxCompleteAssignment);
+            checkBox.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    completeAssignment(v);
+                }
+            });
+            checkBox.setTag(assignment);
+
             assignmentsList.addView(assignmentListItem);
         }
 
@@ -125,38 +147,27 @@ public class ClassAssignmentsFragment extends Fragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data){
-        if(resultCode==AddAssignmentActivity.NEW_ASSIGNMENT){
-            Assignment newAssignment = (Assignment) data.getSerializableExtra("newAssignment");
-            newAssignment.setSortingMode(sortingMode);
-            mAssignments.add(newAssignment);
+        switch(requestCode){
+            case ASSIGNMENT_CREATOR_REQUEST:
+                if(resultCode==AddAssignmentActivity.NEW_ASSIGNMENT){
+                    Assignment newAssignment = (Assignment) data.getSerializableExtra("newAssignment");
+                    newAssignment(newAssignment);
+                }
+                else if(resultCode==AddAssignmentActivity.EDITED_ASSIGNMENT){
+                    Assignment newAssignment = (Assignment) data.getSerializableExtra("newAssignment");
+                    Assignment oldAssignment = (Assignment) data.getSerializableExtra("oldAssignment");
+                    editAssignment(newAssignment, oldAssignment);
+                }
+                break;
 
-            //notify the user that new assignment was created
-            Toast toast = Toast.makeText(getActivity().getApplicationContext(), getString(R.string.toast_assignment_added), Toast.LENGTH_SHORT);
-            toast.show();
-
-            onAssignmentsChanged();
+            case OPEN_ASSIGNMENT_REQUEST:
+                if (resultCode==AssignmentActivity.EDITED_ASSIGNMENT){
+                    Assignment newAssignment = (Assignment) data.getSerializableExtra("newAssignment");
+                    Assignment oldAssignment = (Assignment) data.getSerializableExtra("oldAssignment");
+                    editAssignment(newAssignment, oldAssignment);
+                }
         }
-        else if(resultCode==AddAssignmentActivity.EDITED_ASSIGNMENT){
-            Assignment newAssignment = (Assignment) data.getSerializableExtra("newAssignment");
-            newAssignment.setSortingMode(sortingMode);
-            Assignment oldAssignment = (Assignment) data.getSerializableExtra("oldAssignment");
 
-            if(oldAssignment.equals(newAssignment)){
-                //notify the user that an assignment was not changed
-                Toast toast = Toast.makeText(getActivity().getApplicationContext(), getString(R.string.toast_assignment_no_change), Toast.LENGTH_SHORT);
-                toast.show();
-            }
-            else {
-                mAssignments.remove(oldAssignment);
-                mAssignments.add(newAssignment);
-
-                //notify the user that an assignment was edited
-                Toast toast = Toast.makeText(getActivity().getApplicationContext(), getString(R.string.toast_assignment_edited), Toast.LENGTH_SHORT);
-                toast.show();
-            }
-
-            onAssignmentsChanged();
-        }
     }
 
     public void onAssignmentsChanged() {
@@ -208,6 +219,7 @@ public class ClassAssignmentsFragment extends Fragment {
     public interface OnAssignmentFragmentInteractionListener {
         public void onAssignmentsChanged(List<Assignment> assignments);
         public void onActionModeChanged(ActionMode actionMode);
+        public void onAssignmentCompleted(Assignment assignment);
     }
 
     View.OnClickListener addAssignmentListener = new View.OnClickListener() {
@@ -215,7 +227,7 @@ public class ClassAssignmentsFragment extends Fragment {
         public void onClick(View v) {
             Intent intent = new Intent(getActivity().getApplicationContext(), AddAssignmentActivity.class);
            // intent.putExtra("Assignments", mAssignments);
-            startActivityForResult(intent, NEW_ASSIGNMENT_REQUEST);
+            startActivityForResult(intent, ASSIGNMENT_CREATOR_REQUEST);
         }
     };
 
@@ -248,7 +260,7 @@ public class ClassAssignmentsFragment extends Fragment {
                     Intent intent = new Intent(getActivity().getApplicationContext(), AddAssignmentActivity.class);
                     intent.putExtra("editMode", true);
                     intent.putExtra("assignment", (Assignment) v.getTag());
-                    startActivityForResult(intent, EDIT_ASSIGNMENT_REQUEST);
+                    startActivityForResult(intent, ASSIGNMENT_CREATOR_REQUEST);
                     mode.finish();
                     return true;
 
@@ -263,6 +275,9 @@ public class ClassAssignmentsFragment extends Fragment {
                     //notify the user
                     Toast toast = Toast.makeText(getActivity().getApplicationContext(), getString(R.string.toast_assignment_deleted), Toast.LENGTH_SHORT);
                     toast.show();
+
+                    //update the notebook
+                    ClassLoader.updateNotebooks(getActivity().getApplicationContext());
 
                     //update the ui
                     onAssignmentsChanged();
@@ -283,5 +298,49 @@ public class ClassAssignmentsFragment extends Fragment {
         }
     };
 
+    private void openAssignment(View v){
+        Assignment assignment = (Assignment) v.getTag();
+        Intent intent = new Intent(getActivity().getApplicationContext(), AssignmentActivity.class);
+        intent.putExtra("assignment", assignment);
 
+        startActivityForResult(intent, OPEN_ASSIGNMENT_REQUEST);
+    }
+
+    private void completeAssignment(View v){
+        Assignment completedAssignment = (Assignment) v.getTag();
+        mAssignments.remove(completedAssignment);
+        if(mListener!=null){
+            mListener.onAssignmentCompleted(completedAssignment);
+        }
+    }
+
+    private void newAssignment(Assignment newAssignment){
+        newAssignment.setSortingMode(sortingMode);
+        mAssignments.add(newAssignment);
+        ClassLoader.updateNotebooks(getActivity().getApplicationContext());
+        //notify the user that new assignment was created
+        Toast toast = Toast.makeText(getActivity().getApplicationContext(), getString(R.string.toast_assignment_added), Toast.LENGTH_SHORT);
+        toast.show();
+
+        onAssignmentsChanged();
+    }
+
+    private void editAssignment(Assignment newAssignment, Assignment oldAssignment){
+        newAssignment.setSortingMode(sortingMode);
+        if(oldAssignment.equals(newAssignment)){
+            //notify the user that an assignment was not changed
+            Toast toast = Toast.makeText(getActivity().getApplicationContext(), getString(R.string.toast_assignment_no_change), Toast.LENGTH_SHORT);
+            toast.show();
+        }
+        else {
+            mAssignments.remove(oldAssignment);
+            mAssignments.add(newAssignment);
+            ClassLoader.updateNotebooks(getActivity().getApplicationContext());
+            //notify the user that an assignment was edited
+            Toast toast = Toast.makeText(getActivity().getApplicationContext(), getString(R.string.toast_assignment_edited), Toast.LENGTH_SHORT);
+            toast.show();
+        }
+
+        onAssignmentsChanged();
+    }
 }

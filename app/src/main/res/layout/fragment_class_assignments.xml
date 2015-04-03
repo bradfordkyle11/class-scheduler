@@ -12,7 +12,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:id="@+id/assignmentsList">
+            android:id="@+id/assignmentsList"
+            android:divider="?android:dividerHorizontal"
+            android:showDividers="middle">
 
 
             </LinearLayout>

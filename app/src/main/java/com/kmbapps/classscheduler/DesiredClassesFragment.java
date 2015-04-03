@@ -30,6 +30,8 @@ import java.util.List;
  * create an instance of this fragment.
  *
  */
+
+//TODO: OnClick for classes and sections takes you to the edit page
 public class DesiredClassesFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     public static final String ARG_PARAM1 = "param1";
