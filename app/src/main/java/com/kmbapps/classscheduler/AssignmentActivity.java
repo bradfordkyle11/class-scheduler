@@ -34,7 +34,12 @@ public class AssignmentActivity extends ActionBarActivity {
         typeAndName.setText(mAssignment.getType() + ": " + mAssignment.getName());
         TextView dueDateTV = (TextView) findViewById(R.id.assignmentDueDate);
         Calendar dueDate = mAssignment.getDueDate();
-        dueDateTV.setText(Html.fromHtml("<b>Due:</b> " + (dueDate.get(Calendar.MONTH)+1) + "/" + dueDate.get(Calendar.DAY_OF_MONTH) + "/" + dueDate.get(Calendar.YEAR)));
+        if(dueDate!=null) {
+            dueDateTV.setText(Html.fromHtml("<b>Due:</b> " + (dueDate.get(Calendar.MONTH) + 1) + "/" + dueDate.get(Calendar.DAY_OF_MONTH) + "/" + dueDate.get(Calendar.YEAR)));
+        }
+        else{
+            dueDateTV.setText(Html.fromHtml("<i>No due date</i>"));
+        }
         TextView details = (TextView) findViewById(R.id.assignmentDetails);
         details.setText(Html.fromHtml("<b>Details:</b> " + mAssignment.getDetails()));
     }
