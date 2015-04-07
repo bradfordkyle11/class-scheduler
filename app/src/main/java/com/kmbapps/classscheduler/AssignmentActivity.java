@@ -17,6 +17,7 @@ import java.util.Calendar;
 public class AssignmentActivity extends ActionBarActivity {
 
     public final static int EDITED_ASSIGNMENT = 100;
+    public final static int DELETE_ASSIGNMENT = 101;
 
     public final static int ASSIGNMENT_CREATOR_REQUEST = 0;
 
@@ -95,6 +96,12 @@ public class AssignmentActivity extends ActionBarActivity {
                     }
                     updateAssignmentView(newAssignment);
 
+                }
+                else if(resultCode==AddAssignmentActivity.DELETE_ASSIGNMENT){
+                    Intent intent = new Intent();
+                    intent.putExtra("assignmentToDelete", mAssignment);
+                    setResult(DELETE_ASSIGNMENT, intent);
+                    finish();
                 }
                 break;
         }

@@ -32,7 +32,7 @@ import java.util.List;
  */
 
 //TODO: OnClick for classes and sections takes you to the edit page
-public class DesiredClassesFragment extends Fragment {
+public class DesiredClassesFragment extends Fragment implements ConfirmationDialogFragment.ConfirmationDialogListener{
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     public static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -46,6 +46,9 @@ public class DesiredClassesFragment extends Fragment {
 
     private String mParam1;
     private String mParam2;
+
+    //used to remove a view when returning from confirmation dialog
+    private View selectedView;
 
     private OnFragmentInteractionListener mListener;
     private List<Class> classes;
@@ -265,9 +268,6 @@ public class DesiredClassesFragment extends Fragment {
         }
     }
 
-
-    // TODO: confirmation menu for deleting classes
-
     private ActionMode.Callback classActionModeCallback = new ActionMode.Callback() {
 
         // Called when the action mode is created; startActionMode() was called
@@ -286,7 +286,7 @@ public class DesiredClassesFragment extends Fragment {
             return false; // Return false if nothing is done
         }
 
-        // Called when the user selects a contextual menu item
+        // class menu
         @Override
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
             switch (item.getItemId()) {
@@ -298,17 +298,11 @@ public class DesiredClassesFragment extends Fragment {
                     return true;
                 case R.id.action_delete:
                     v = (View) mode.getTag();
-
-                    //remove the section
-                    Class removeThis = (Class) v.getTag();
-                    ClassLoader.removeClass(getActivity(), removeThis);
-
-                    //remove the view
-                    ((ViewGroup)v.getParent().getParent()).removeView((View) v.getParent());
-                    mListener.onSectionDeleted();
-
-                    Toast toast = Toast.makeText(getActivity().getApplicationContext(), getString(R.string.toast_class_deleted), Toast.LENGTH_SHORT);
-                    toast.show();
+                    selectedView = v;
+                    Class classToDelete = (Class) v.getTag();
+                    ConfirmationDialogFragment confirmation = ConfirmationDialogFragment.newInstance(getString(R.string.title_delete_class_confirmation), classToDelete, ConfirmationDialogFragment.FRAGMENT);
+                    confirmation.setTargetFragment(DesiredClassesFragment.this, 1);
+                    confirmation.show(getActivity().getSupportFragmentManager(), "deleteClass");
 
                     mode.finish();
                     return true;
@@ -325,8 +319,6 @@ public class DesiredClassesFragment extends Fragment {
             mActionMode = null;
         }
     };
-
-    //TODO: confirmation menu for deleting sections
 
     private ActionMode.Callback classSectionActionModeCallback = new ActionMode.Callback() {
 
@@ -361,20 +353,11 @@ public class DesiredClassesFragment extends Fragment {
                     return true;
                 case R.id.action_delete:
                     v = (View) mode.getTag();
-
-                    //remove the section
-                    Section removeThis = (Section) v.getTag();
-                    Class c = removeThis.getContainingClass();
-                    ClassLoader.removeSection(getActivity(), removeThis, c);
-
-                    //remove the view
-                    ((ViewGroup)v.getParent()).removeView(v);
-                    mListener.onSectionDeleted();
-
-                    Toast toast = Toast.makeText(getActivity().getApplicationContext(), getString(R.string.toast_section_deleted), Toast.LENGTH_SHORT);
-                    toast.show();
-
-
+                    selectedView = v;
+                    Section sectionToDelete = (Section) v.getTag();
+                    ConfirmationDialogFragment confirmation = ConfirmationDialogFragment.newInstance(getString(R.string.title_delete_section_confirmation), sectionToDelete, ConfirmationDialogFragment.FRAGMENT);
+                    confirmation.setTargetFragment(DesiredClassesFragment.this, 1);
+                    confirmation.show(getActivity().getSupportFragmentManager(), "deleteSection");
 
                     mode.finish();
                     return true;
@@ -392,4 +375,40 @@ public class DesiredClassesFragment extends Fragment {
         }
     };
 
+    @Override
+    public void onConfirmationPositiveClick(ConfirmationDialogFragment dialog) {
+        switch(dialog.getTag()){
+            case "deleteClass":
+                Class classToRemove = (Class) dialog.getExtra();
+                //remove the class
+                ClassLoader.removeClass(getActivity(), classToRemove);
+
+                //remove the view
+                ((ViewGroup)selectedView.getParent().getParent()).removeView((View) selectedView.getParent());
+                mListener.onSectionDeleted();
+
+                Toast toast = Toast.makeText(getActivity().getApplicationContext(), getString(R.string.toast_class_deleted), Toast.LENGTH_SHORT);
+                toast.show();
+                break;
+            case "deleteSection":
+                //remove the section
+                Section sectionToRemove = (Section) dialog.getExtra();
+                Class c = sectionToRemove.getContainingClass();
+                ClassLoader.removeSection(getActivity(), sectionToRemove, c);
+
+                //remove the view
+                ((ViewGroup)selectedView.getParent()).removeView(selectedView);
+                mListener.onSectionDeleted();
+
+                toast = Toast.makeText(getActivity().getApplicationContext(), getString(R.string.toast_section_deleted), Toast.LENGTH_SHORT);
+                toast.show();
+                break;
+
+        }
+    }
+
+    @Override
+    public void onConfirmationNegativeClick(ConfirmationDialogFragment dialog) {
+
+    }
 }

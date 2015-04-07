@@ -22,7 +22,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 
-public class AddClassSectionActivity extends ActionBarActivity {
+public class AddClassSectionActivity extends ActionBarActivity implements ConfirmationDialogFragment.ConfirmationDialogListener{
 
     private static final int MONDAY = 1;
     private static final int TUESDAY = 2;
@@ -135,7 +135,12 @@ public class AddClassSectionActivity extends ActionBarActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.add_class_section, menu);
+        if(newClass) {
+            getMenuInflater().inflate(R.menu.add_class_section, menu);
+        }
+        else{
+            getMenuInflater().inflate(R.menu.edit_class_section, menu);
+        }
         ActionBar actionBar = getSupportActionBar();
         if(newClass) {
             actionBar.setTitle(getString(R.string.header_add_class_section));
@@ -156,8 +161,10 @@ public class AddClassSectionActivity extends ActionBarActivity {
         switch (item.getItemId()) {
             case R.id.action_save:
                 createSectionAndReturn();
-
                 break;
+
+            case R.id.action_delete:
+                deleteSectionAndReturn();
             default:
                 break;
 
@@ -708,6 +715,32 @@ public class AddClassSectionActivity extends ActionBarActivity {
             }
         }
 
+
+    }
+
+    private void deleteSectionAndReturn(){
+        ConfirmationDialogFragment.newInstance(getString(R.string.title_delete_section_confirmation), mSection, ConfirmationDialogFragment.ACTIVITY)
+                .show(getSupportFragmentManager(), "confirmation");
+    }
+
+    //delete section confirmed
+    @Override
+    public void onConfirmationPositiveClick(ConfirmationDialogFragment dialog) {
+        Class containingClass = mSection.getContainingClass();
+        ClassLoader.removeSection(this, mSection, containingClass);
+
+        //notify user
+        Toast toast = Toast.makeText(this, getString(R.string.toast_section_deleted), Toast.LENGTH_SHORT);
+        toast.show();
+
+        //return
+        Intent intent = new Intent(this, Home.class);
+        startActivity(intent);
+    }
+
+    //delete section canceled
+    @Override
+    public void onConfirmationNegativeClick(ConfirmationDialogFragment dialog) {
 
     }
 }

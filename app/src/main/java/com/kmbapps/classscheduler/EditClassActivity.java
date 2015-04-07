@@ -9,9 +9,10 @@ import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 
-public class EditClassActivity extends ActionBarActivity {
+public class EditClassActivity extends ActionBarActivity implements ConfirmationDialogFragment.ConfirmationDialogListener{
 
     Class mClass;
     @Override
@@ -64,8 +65,7 @@ public class EditClassActivity extends ActionBarActivity {
         switch (item.getItemId()) {
             case R.id.action_delete:
                 deleteClass();
-                //return
-                startActivity(intent);
+
                 break;
             case R.id.action_save:
                 saveClass();
@@ -103,6 +103,25 @@ public class EditClassActivity extends ActionBarActivity {
     }
 
     public void deleteClass(){
+        ConfirmationDialogFragment.newInstance(getString(R.string.title_delete_class_confirmation), mClass, ConfirmationDialogFragment.ACTIVITY)
+                .show(getSupportFragmentManager(), "dialog");
+    }
+
+    //delete class confirmed
+    @Override
+    public void onConfirmationPositiveClick(ConfirmationDialogFragment dialog) {
         ClassLoader.removeClass(this, mClass);
+        Toast toast = Toast.makeText(this, getString(R.string.toast_class_deleted), Toast.LENGTH_SHORT);
+        toast.show();
+
+        //return
+        Intent intent = new Intent(this, Home.class);
+        startActivity(intent);
+    }
+
+    //delete class canceled
+    @Override
+    public void onConfirmationNegativeClick(ConfirmationDialogFragment dialog) {
+
     }
 }

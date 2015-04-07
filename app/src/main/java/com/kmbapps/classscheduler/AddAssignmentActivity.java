@@ -14,10 +14,11 @@ import android.widget.TextView;
 import java.util.Calendar;
 
 
-public class AddAssignmentActivity extends ActionBarActivity {
+public class AddAssignmentActivity extends ActionBarActivity implements ConfirmationDialogFragment.ConfirmationDialogListener{
 
     public static final int NEW_ASSIGNMENT = 100;
     public static final int EDITED_ASSIGNMENT = 101;
+    public static final int DELETE_ASSIGNMENT = 102;
 
     private boolean editMode;
     private Assignment mAssignment;
@@ -54,7 +55,12 @@ public class AddAssignmentActivity extends ActionBarActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_add_assignment, menu);
+        if(editMode){
+            getMenuInflater().inflate(R.menu.edit_assignment, menu);
+        }
+        else {
+            getMenuInflater().inflate(R.menu.menu_add_assignment, menu);
+        }
         ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle(getString(R.string.header_add_assignment));
         return true;
@@ -68,6 +74,9 @@ public class AddAssignmentActivity extends ActionBarActivity {
         switch(item.getItemId()){
             case R.id.action_save:
                 saveAssignment();
+                return true;
+            case R.id.action_delete:
+                deleteAssignment();
                 return true;
 
             case android.R.id.home:
@@ -118,5 +127,25 @@ public class AddAssignmentActivity extends ActionBarActivity {
             setResult(NEW_ASSIGNMENT, intent);
         }
         finish();
+    }
+
+    private void deleteAssignment(){
+        ConfirmationDialogFragment.newInstance(getString(R.string.title_delete_assignment_confirmation), mAssignment, ConfirmationDialogFragment.ACTIVITY)
+                .show(getSupportFragmentManager(), "confirmation");
+    }
+
+    //delete assignment confirmed
+    @Override
+    public void onConfirmationPositiveClick(ConfirmationDialogFragment dialog) {
+        Intent intent = new Intent();
+        intent.putExtra("assignmentToDelete", mAssignment);
+        setResult(DELETE_ASSIGNMENT, intent);
+        finish();
+    }
+
+    //delete assignment canceled
+    @Override
+    public void onConfirmationNegativeClick(ConfirmationDialogFragment dialog) {
+
     }
 }

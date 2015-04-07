@@ -92,7 +92,7 @@
     <string name="action_sort_by">Sort by</string>
     <string name="action_sort_by_due_date">Due date</string>
     <string name="action_sort_by_type">Type</string>
-    <string name="dialog_sort_by">Sort by</string>
+    <string name="dialog_sort_by">Sort by:</string>
     <string name="toast_sort_by">"Sort by: "</string>
     <string name="title_activity_add_class_section">AddClassSectionActivity</string>
     <string name="title_activity_edit_class_section">EditClassSectionActivity</string>
@@ -100,7 +100,13 @@
     <string name="title_activity_add_assignment">AddAssignmentActivity</string>
     <string name="title_activity_assignment">Assignment</string>
     <string name="toast_grade_deleted">Grade deleted</string>
-
+    <string name="dialog_action_ok">Ok</string>
+    <string name="dialog_action_cancel">Cancel</string>
+    <string name="dialog_set_grade">Set grade:</string>
+    <string name="title_delete_section_confirmation">Delete section?</string>
+    <string name="title_delete_class_confirmation">Delete class?</string>
+    <string name="title_delete_assignment_confirmation">Delete assignment?</string>
+    <string name="title_delete_grade_confirmation">Delete grade?</string>
 
     <!--Tags-->
     <item type="id" name="TAG_SECTION">0</item>

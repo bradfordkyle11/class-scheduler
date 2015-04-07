@@ -3,6 +3,7 @@ package com.kmbapps.classscheduler;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -22,7 +23,7 @@ import java.util.List;
 
 
 public class MyClassActivity extends ActionBarActivity implements ClassAssignmentsFragment.OnAssignmentFragmentInteractionListener,
-        SortByDialogFragment.SortByDialogListener, ClassGradesFragment.OnGradesFragmentInteractionListener{
+        SortByDialogFragment.SortByDialogListener, ClassGradesFragment.OnGradesFragmentInteractionListener, ShowDialog {
 
     private final static int DETAILS = 0;
     private final static int ASSIGNMENTS = 1;
@@ -200,7 +201,7 @@ public class MyClassActivity extends ActionBarActivity implements ClassAssignmen
         currentActionMode = actionMode;
     }
 
-    public void onAssignmentCompleted(Assignment assignment){
+    public void onCompleteAssignment(Assignment assignment){
         mNotebook = ClassLoader.loadNotebooks(this).get(mSchedule);
 
         //add the grade to the notebook
@@ -229,6 +230,11 @@ public class MyClassActivity extends ActionBarActivity implements ClassAssignmen
 
 
         myClassPagerAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void showDialog(DialogFragment dialog) {
+        dialog.show(getSupportFragmentManager(), "dialog");
     }
 
     private ViewPager.OnPageChangeListener myOnPageChangeListener = new ViewPager.OnPageChangeListener() {

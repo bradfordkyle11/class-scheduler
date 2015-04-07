@@ -19,7 +19,6 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.Collections;
 
-//TODO: Everything. This was just a quick copy from the ClassAssignmentsFragment
 
 public class ClassGradesFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -77,6 +76,7 @@ public class ClassGradesFragment extends Fragment {
 
         Collections.sort(mGrades);
 
+        //TODO: change the name of these to reflect grades instead of assignments
         for (Assignment assignment : mGrades){
             LinearLayout assignmentListItem = (LinearLayout) inflater.inflate(R.layout.list_item_graded_assignment, null);
             assignmentListItem.setTag(assignment);
@@ -110,6 +110,7 @@ public class ClassGradesFragment extends Fragment {
             assignmentListItem.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    //TODO: change this to open grade
                     openAssignment(v);
                 }
             });

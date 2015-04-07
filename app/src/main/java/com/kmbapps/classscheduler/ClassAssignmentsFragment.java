@@ -26,10 +26,10 @@ import java.util.Collections;
 import java.util.List;
 
 
-//TODO: Assign grade dialog when completing an assignment
 
 
-public class ClassAssignmentsFragment extends Fragment {
+public class ClassAssignmentsFragment extends Fragment implements SetGradeDialogFragment.SetGradeDialogListener,
+        ConfirmationDialogFragment.ConfirmationDialogListener {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_ASSIGNMENTS = "assignments";
     private static final int ASSIGNMENT_CREATOR_REQUEST = 0;
@@ -42,6 +42,10 @@ public class ClassAssignmentsFragment extends Fragment {
     private ArrayList<Assignment> mAssignments;
 
     private OnAssignmentFragmentInteractionListener mListener;
+    private ShowDialog showDialog;
+
+    //this needs to be tracked to uncheck if the user cancels completing an assignment
+    private CheckBox completeAssignmentCheckbox;
 
 
     public static ClassAssignmentsFragment newInstance(ArrayList<Assignment> assignments) {
@@ -130,7 +134,7 @@ public class ClassAssignmentsFragment extends Fragment {
             checkBox.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    completeAssignment(v);
+                    openCompleteAssignmentDialog(v);
                 }
             });
             checkBox.setTag(assignment);
@@ -158,6 +162,10 @@ public class ClassAssignmentsFragment extends Fragment {
                     Assignment oldAssignment = (Assignment) data.getSerializableExtra("oldAssignment");
                     editAssignment(newAssignment, oldAssignment);
                 }
+                else if(resultCode==AddAssignmentActivity.DELETE_ASSIGNMENT){
+                    Assignment assignmentToDelete = (Assignment) data.getSerializableExtra("assignmentToDelete");
+                    deleteAssignment(assignmentToDelete);
+                }
                 break;
 
             case OPEN_ASSIGNMENT_REQUEST:
@@ -165,6 +173,10 @@ public class ClassAssignmentsFragment extends Fragment {
                     Assignment newAssignment = (Assignment) data.getSerializableExtra("newAssignment");
                     Assignment oldAssignment = (Assignment) data.getSerializableExtra("oldAssignment");
                     editAssignment(newAssignment, oldAssignment);
+                }
+                else if (resultCode==AssignmentActivity.DELETE_ASSIGNMENT){
+                    Assignment assignmentToDelete = (Assignment) data.getSerializableExtra("assignmentToDelete");
+                    deleteAssignment(assignmentToDelete);
                 }
         }
 
@@ -190,6 +202,13 @@ public class ClassAssignmentsFragment extends Fragment {
             throw new ClassCastException(activity.toString()
                     + " must implement OnFragmentInteractionListener");
         }
+
+        try {
+            showDialog = (ShowDialog) activity;
+        } catch (ClassCastException e){
+            throw new ClassCastException(activity.toString()
+                    + " must implement ShowDialog");
+        }
     }
 
     @Override
@@ -209,7 +228,7 @@ public class ClassAssignmentsFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()){
             case R.id.action_sort_by:
-                new SortByDialogFragment().newInstance(sortingMode).show(getActivity().getSupportFragmentManager(), "SortByDialogFragment");
+                SortByDialogFragment.newInstance(sortingMode).show(getActivity().getSupportFragmentManager(), "SortByDialogFragment");
                 return true;
         }
 
@@ -219,7 +238,7 @@ public class ClassAssignmentsFragment extends Fragment {
     public interface OnAssignmentFragmentInteractionListener {
         public void onAssignmentsChanged(List<Assignment> assignments);
         public void onActionModeChanged(ActionMode actionMode);
-        public void onAssignmentCompleted(Assignment assignment);
+        public void onCompleteAssignment(Assignment assignment);
     }
 
     View.OnClickListener addAssignmentListener = new View.OnClickListener() {
@@ -264,23 +283,12 @@ public class ClassAssignmentsFragment extends Fragment {
                     mode.finish();
                     return true;
 
-                //TODO: confirmation dialog for deleting
                 case R.id.action_delete:
+
                     v = (View) mode.getTag();
-
-                    //remove the assignment
                     Assignment removeThis = (Assignment) v.getTag();
-                    mAssignments.remove(removeThis);
+                    deleteAssignmentConfirmation(removeThis);
 
-                    //notify the user
-                    Toast toast = Toast.makeText(getActivity().getApplicationContext(), getString(R.string.toast_assignment_deleted), Toast.LENGTH_SHORT);
-                    toast.show();
-
-                    //update the notebook
-                    ClassLoader.updateNotebooks(getActivity().getApplicationContext());
-
-                    //update the ui
-                    onAssignmentsChanged();
 
                     mode.finish();
                     return true;
@@ -306,12 +314,13 @@ public class ClassAssignmentsFragment extends Fragment {
         startActivityForResult(intent, OPEN_ASSIGNMENT_REQUEST);
     }
 
-    private void completeAssignment(View v){
+    private void openCompleteAssignmentDialog(View v){
+        completeAssignmentCheckbox = (CheckBox) v;
         Assignment completedAssignment = (Assignment) v.getTag();
-        mAssignments.remove(completedAssignment);
-        if(mListener!=null){
-            mListener.onAssignmentCompleted(completedAssignment);
-        }
+        SetGradeDialogFragment dialog = SetGradeDialogFragment.newInstance("", completedAssignment);
+        dialog.setTargetFragment(this, 1);
+        showDialog.showDialog(dialog);
+
     }
 
     private void newAssignment(Assignment newAssignment){
@@ -342,5 +351,56 @@ public class ClassAssignmentsFragment extends Fragment {
         }
 
         onAssignmentsChanged();
+    }
+
+    public void deleteAssignmentConfirmation(Assignment assignmentToRemove){
+        ConfirmationDialogFragment confirmation = ConfirmationDialogFragment.newInstance(getString(R.string.title_delete_assignment_confirmation), assignmentToRemove, ConfirmationDialogFragment.FRAGMENT);
+        confirmation.setTargetFragment(this, 1);
+        confirmation.show(getActivity().getSupportFragmentManager(), "confirmation");
+
+
+
+    }
+
+    public void deleteAssignment(Assignment assignmentToRemove){
+        mAssignments.remove(assignmentToRemove);
+
+        //notify the user
+        Toast toast = Toast.makeText(getActivity().getApplicationContext(), getString(R.string.toast_assignment_deleted), Toast.LENGTH_SHORT);
+        toast.show();
+
+        //update the notebook
+        ClassLoader.updateNotebooks(getActivity().getApplicationContext());
+
+        //update the ui
+        onAssignmentsChanged();
+    }
+
+    //remove assignment confirmed
+    @Override
+    public void onConfirmationPositiveClick(ConfirmationDialogFragment dialog) {
+        Assignment assignmentToRemove = (Assignment) dialog.getExtra();
+        deleteAssignment(assignmentToRemove);
+
+    }
+
+    //remove assignment canceled
+    @Override
+    public void onConfirmationNegativeClick(ConfirmationDialogFragment dialog) {
+
+    }
+
+    @Override
+    public void onSetGradePositiveClick(String grade, Assignment assignment) {
+        mAssignments.remove(assignment);
+        assignment.setGrade(grade);
+        if(mListener!=null){
+            mListener.onCompleteAssignment(assignment);
+        }
+    }
+
+    @Override
+    public void onSetGradeNegativeClick() {
+        completeAssignmentCheckbox.setChecked(false);
     }
 }
