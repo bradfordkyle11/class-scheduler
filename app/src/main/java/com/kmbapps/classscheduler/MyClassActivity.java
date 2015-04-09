@@ -123,9 +123,9 @@ public class MyClassActivity extends ActionBarActivity implements ClassAssignmen
                 case DETAILS:
                     return ClassDetailsFragment.newInstance(mSection);
                 case ASSIGNMENTS:
-                    return ClassAssignmentsFragment.newInstance((ArrayList) mNotebook.getAssignments(mSection));
+                    return ClassAssignmentsFragment.newInstance((ArrayList) mNotebook.getAssignments(mSection), mSection);
                 case GRADES:
-                    return ClassGradesFragment.newInstance((ArrayList) mNotebook.getGrades(mSection));
+                    return ClassGradesFragment.newInstance((ArrayList) mNotebook.getGrades(mSection), mSection);
                 default:
                     return null;
             }

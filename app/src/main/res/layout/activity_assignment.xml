@@ -36,7 +36,19 @@
             android:paddingLeft="@dimen/activity_horizontal_margin"
             android:paddingRight="@dimen/activity_horizontal_margin"
             android:gravity="center_vertical"
-            android:text="Due: 7/7/7"/>
+            android:text="date"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minHeight="@dimen/touchable_ui_component_min"
+            android:id="@+id/assignmentGrade"
+            android:paddingTop="@dimen/activity_padding"
+            android:paddingBottom="@dimen/activity_padding"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:gravity="center_vertical"
+            android:text="Grade"/>
 
         <TextView
             android:layout_width="wrap_content"

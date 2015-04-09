@@ -205,7 +205,7 @@ public class CreateScheduleFragment extends Fragment{
         protected Void doInBackground(Void... v){
 
             //load classes so that they are not null
-            ClassLoader.loadClasses(getActivity().getApplicationContext());
+            ClassLoader.loadClasses(MyApp.getContext());
 
             //calculate schedules
             ClassLoader.updateSchedules();

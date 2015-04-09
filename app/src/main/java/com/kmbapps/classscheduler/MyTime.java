@@ -139,9 +139,9 @@ public class MyTime implements Serializable {
         time.append(String.valueOf(minute));
 
         if (pm) {
-            time.append("p");
+            time.append(MyApp.getContext().getString(R.string.abbreviation_pm));
         } else {
-            time.append("a");
+            time.append(MyApp.getContext().getString(R.string.abbreviation_am));
         }
 
         return time;

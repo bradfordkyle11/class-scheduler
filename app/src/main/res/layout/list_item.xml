@@ -15,8 +15,6 @@
         android:textSize="@dimen/abc_text_size_small_material"
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
-        android:paddingTop="@dimen/activity_padding"
-        android:paddingBottom="@dimen/padding_inside_view"
         android:layout_margin="@dimen/activity_padding"/>
 
 

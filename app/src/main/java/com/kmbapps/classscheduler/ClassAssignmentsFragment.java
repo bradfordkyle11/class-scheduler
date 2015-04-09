@@ -32,6 +32,7 @@ public class ClassAssignmentsFragment extends Fragment implements SetGradeDialog
         ConfirmationDialogFragment.ConfirmationDialogListener {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_ASSIGNMENTS = "assignments";
+    private static final String ARG_SECTION = "section";
     private static final int ASSIGNMENT_CREATOR_REQUEST = 0;
     private static final int OPEN_ASSIGNMENT_REQUEST = 1;
 
@@ -40,6 +41,7 @@ public class ClassAssignmentsFragment extends Fragment implements SetGradeDialog
     private ActionMode mActionMode;
 
     private ArrayList<Assignment> mAssignments;
+    private Section mSection;
 
     private OnAssignmentFragmentInteractionListener mListener;
     private ShowDialog showDialog;
@@ -48,10 +50,11 @@ public class ClassAssignmentsFragment extends Fragment implements SetGradeDialog
     private CheckBox completeAssignmentCheckbox;
 
 
-    public static ClassAssignmentsFragment newInstance(ArrayList<Assignment> assignments) {
+    public static ClassAssignmentsFragment newInstance(ArrayList<Assignment> assignments, Section section) {
         ClassAssignmentsFragment fragment = new ClassAssignmentsFragment();
         Bundle args = new Bundle();
         args.putSerializable(ARG_ASSIGNMENTS, assignments);
+        args.putSerializable(ARG_SECTION, section);
         fragment.setArguments(args);
         return fragment;
     }
@@ -65,6 +68,7 @@ public class ClassAssignmentsFragment extends Fragment implements SetGradeDialog
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mAssignments = (ArrayList<Assignment>) getArguments().getSerializable(ARG_ASSIGNMENTS);
+            mSection = (Section) getArguments().getSerializable(ARG_SECTION);
         }
         if(mAssignments==null){
             sortingMode = 0;
@@ -81,16 +85,24 @@ public class ClassAssignmentsFragment extends Fragment implements SetGradeDialog
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_class_assignments, container, false);
+
+        //set up the fab
+        FloatingActionButton fab = (FloatingActionButton) v.findViewById(R.id.add_assignment);
+        fab.setOnClickListener(addAssignmentListener);
 
         //add the assignments to the view
         LinearLayout assignmentsList = (LinearLayout) v.findViewById(R.id.assignmentsList);
 
         Collections.sort(mAssignments);
-
+        int id = 1;
         for (Assignment assignment : mAssignments){
             LinearLayout assignmentListItem = (LinearLayout) inflater.inflate(R.layout.list_item_upcoming_assignment, null);
+            assignmentListItem.setId(id);
+            id++;
             assignmentListItem.setTag(assignment);
             TextView assignmentName = (TextView) assignmentListItem.findViewById(R.id.assignmentName);
             assignmentName.setText(assignment.getName());
@@ -102,30 +114,26 @@ public class ClassAssignmentsFragment extends Fragment implements SetGradeDialog
                 assignmentDueDate.setText((dueDate.get(Calendar.MONTH)+1) + "/" + dueDate.get(Calendar.DAY_OF_MONTH));
             }
 
-            //add action menu listener
+            //open action mode on long click
             assignmentListItem.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
-                    if (!v.isSelected()) {
-                        v.setSelected(true);
-                        ActionBarActivity activity = (ActionBarActivity) v.getContext();
-                        mActionMode = activity.startSupportActionMode(classSectionActionModeCallback);
-                        mActionMode.setTag(v);
-                        onActionModeChanged();
-                        return true;
-                    } else {
-                        mActionMode.finish();
-                        onActionModeChanged();
-                        return true;
-                    }
+                    actionModeSetup(v);
+                    return true;
 
                 }
             });
 
+            //open assignments on click, if action mode is not active
             assignmentListItem.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    openAssignment(v);
+                    if(mActionMode==null) {
+                        openAssignment(v);
+                    }
+                    else{
+                        actionModeSetup(v);
+                    }
                 }
             });
 
@@ -138,15 +146,87 @@ public class ClassAssignmentsFragment extends Fragment implements SetGradeDialog
                 }
             });
             checkBox.setTag(assignment);
+            checkBox.setChecked(false);
 
             assignmentsList.addView(assignmentListItem);
         }
 
-        //set up the fab
-        FloatingActionButton fab = (FloatingActionButton) v.findViewById(R.id.add_assignment);
-        fab.setOnClickListener(addAssignmentListener);
+        //add a buffer to the bottom of the list
+        LinearLayout buffer = (LinearLayout) inflater.inflate(R.layout.scroll_view_buffer, null);
+        assignmentsList.addView(buffer);
+
+
 
         return v;
+    }
+
+    private void actionModeSetup(View v){
+        if (!v.isSelected()) {
+            v.setSelected(true);
+            ActionBarActivity activity = (ActionBarActivity) v.getContext();
+            if(mActionMode==null) {
+                mActionMode = activity.startSupportActionMode(classSectionActionModeCallback);
+                mActionMode.setTag(v);
+
+                //show the number of selected items
+                mActionMode.setTitle("1");
+            }
+            else{
+                //if more than one were selected
+                if(mActionMode.getTag() instanceof ArrayList){
+                    ArrayList<View> selectedViews = (ArrayList) mActionMode.getTag();
+                    selectedViews.add(v);
+
+                    //show the number of selected items
+                    mActionMode.setTitle(Integer.toString(selectedViews.size()));
+                }
+                //if only one was selected
+                else{
+                    ArrayList<View> selectedViews = new ArrayList<View>();
+
+                    //add the two selected views to a new ArrayList
+                    selectedViews.add((View) mActionMode.getTag());
+                    selectedViews.add(v);
+                    mActionMode.setTag(selectedViews);
+
+                    //show the number of selected items
+                    mActionMode.setTitle(Integer.toString(selectedViews.size()));
+
+                    //hide the menu items that don't apply to multiple views
+                    MenuItem deleteAction = mActionMode.getMenu().findItem(R.id.action_edit);
+                    deleteAction.setVisible(false);
+                }
+            }
+            onActionModeChanged();
+
+        } else {
+            //if v is the only view selected, finish the actionmode
+            if(mActionMode.getTag() instanceof View){
+                mActionMode.finish();
+            }
+            //v is not the only selected view
+            else if (mActionMode.getTag() instanceof ArrayList){
+                //unselect the view
+                ArrayList<View> selectedViews = (ArrayList) mActionMode.getTag();
+                selectedViews.remove(v);
+                v.setSelected(false);
+
+
+                //show the number of selected items
+                mActionMode.setTitle(Integer.toString(selectedViews.size()));
+
+                if(selectedViews.size()==1){
+                    mActionMode.setTag(selectedViews.get(0));
+
+                    //show the menu items that only apply when one view is selected
+                    MenuItem deleteAction = mActionMode.getMenu().findItem(R.id.action_edit);
+                    deleteAction.setVisible(true);
+                }
+
+            }
+            onActionModeChanged();
+
+        }
     }
 
     @Override
@@ -170,9 +250,7 @@ public class ClassAssignmentsFragment extends Fragment implements SetGradeDialog
 
             case OPEN_ASSIGNMENT_REQUEST:
                 if (resultCode==AssignmentActivity.EDITED_ASSIGNMENT){
-                    Assignment newAssignment = (Assignment) data.getSerializableExtra("newAssignment");
-                    Assignment oldAssignment = (Assignment) data.getSerializableExtra("oldAssignment");
-                    editAssignment(newAssignment, oldAssignment);
+                    onAssignmentsChanged();
                 }
                 else if (resultCode==AssignmentActivity.DELETE_ASSIGNMENT){
                     Assignment assignmentToDelete = (Assignment) data.getSerializableExtra("assignmentToDelete");
@@ -277,7 +355,7 @@ public class ClassAssignmentsFragment extends Fragment implements SetGradeDialog
                     View v = (View) mode.getTag();
 
                     Intent intent = new Intent(getActivity().getApplicationContext(), AddAssignmentActivity.class);
-                    intent.putExtra("editMode", true);
+                    intent.putExtra("mode", AddAssignmentActivity.EDIT_ASSIGNMENT);
                     intent.putExtra("assignment", (Assignment) v.getTag());
                     startActivityForResult(intent, ASSIGNMENT_CREATOR_REQUEST);
                     mode.finish();
@@ -285,9 +363,19 @@ public class ClassAssignmentsFragment extends Fragment implements SetGradeDialog
 
                 case R.id.action_delete:
 
-                    v = (View) mode.getTag();
-                    Assignment removeThis = (Assignment) v.getTag();
-                    deleteAssignmentConfirmation(removeThis);
+                    if(mode.getTag() instanceof  View){
+                        v = (View) mode.getTag();
+                        Assignment removeThis = (Assignment) v.getTag();
+                        deleteAssignmentConfirmation(removeThis);
+                    }
+                    else if(mode.getTag() instanceof ArrayList){
+                        ArrayList<View> views = (ArrayList) mode.getTag();
+                        ArrayList<Assignment> assignmentsToDelete = new ArrayList<>();
+                        for(View view : views){
+                            assignmentsToDelete.add((Assignment) view.getTag());
+                        }
+                        deleteAssignmentsConfirmation(assignmentsToDelete);
+                    }
 
 
                     mode.finish();
@@ -300,8 +388,16 @@ public class ClassAssignmentsFragment extends Fragment implements SetGradeDialog
         // Called when the user exits the action mode
         @Override
         public void onDestroyActionMode(ActionMode mode) {
-            View view = (View) mode.getTag();
-            view.setSelected(false);
+            if(mode.getTag() instanceof View) {
+                View view = (View) mode.getTag();
+                view.setSelected(false);
+            }
+            else if(mode.getTag() instanceof ArrayList){
+                ArrayList<View> views = (ArrayList) mode.getTag();
+                for(View view : views){
+                    view.setSelected(false);
+                }
+            }
             mActionMode = null;
         }
     };
@@ -310,6 +406,7 @@ public class ClassAssignmentsFragment extends Fragment implements SetGradeDialog
         Assignment assignment = (Assignment) v.getTag();
         Intent intent = new Intent(getActivity().getApplicationContext(), AssignmentActivity.class);
         intent.putExtra("assignment", assignment);
+        intent.putExtra("section", mSection);
 
         startActivityForResult(intent, OPEN_ASSIGNMENT_REQUEST);
     }
@@ -357,9 +454,12 @@ public class ClassAssignmentsFragment extends Fragment implements SetGradeDialog
         ConfirmationDialogFragment confirmation = ConfirmationDialogFragment.newInstance(getString(R.string.title_delete_assignment_confirmation), assignmentToRemove, ConfirmationDialogFragment.FRAGMENT);
         confirmation.setTargetFragment(this, 1);
         confirmation.show(getActivity().getSupportFragmentManager(), "confirmation");
+    }
 
-
-
+    public void deleteAssignmentsConfirmation(ArrayList<Assignment> assignmentsToRemove){
+        ConfirmationDialogFragment confirmation = ConfirmationDialogFragment.newInstance(getString(R.string.title_delete_assignments_confirmation), assignmentsToRemove, ConfirmationDialogFragment.FRAGMENT);
+        confirmation.setTargetFragment(this, 1);
+        confirmation.show(getActivity().getSupportFragmentManager(), "confirmation");
     }
 
     public void deleteAssignment(Assignment assignmentToRemove){
@@ -376,11 +476,33 @@ public class ClassAssignmentsFragment extends Fragment implements SetGradeDialog
         onAssignmentsChanged();
     }
 
+    public void deleteAssignments(ArrayList<Assignment> assignmentsToRemove){
+        for(Assignment assignmentToRemove : assignmentsToRemove) {
+            mAssignments.remove(assignmentToRemove);
+        }
+
+        //notify the user
+        Toast toast = Toast.makeText(getActivity().getApplicationContext(), getString(R.string.toast_assignments_deleted), Toast.LENGTH_SHORT);
+        toast.show();
+
+        //update the notebook
+        ClassLoader.updateNotebooks(getActivity().getApplicationContext());
+
+        //update the ui
+        onAssignmentsChanged();
+    }
+
     //remove assignment confirmed
     @Override
     public void onConfirmationPositiveClick(ConfirmationDialogFragment dialog) {
-        Assignment assignmentToRemove = (Assignment) dialog.getExtra();
-        deleteAssignment(assignmentToRemove);
+        if(dialog.getExtra() instanceof Assignment) {
+            Assignment assignmentToRemove = (Assignment) dialog.getExtra();
+            deleteAssignment(assignmentToRemove);
+        }
+        else if(dialog.getExtra() instanceof ArrayList){
+            ArrayList<Assignment> assignmentsToRemove = (ArrayList) dialog.getExtra();
+            deleteAssignments(assignmentsToRemove);
+        }
 
     }
 
@@ -393,7 +515,10 @@ public class ClassAssignmentsFragment extends Fragment implements SetGradeDialog
     @Override
     public void onSetGradePositiveClick(String grade, Assignment assignment) {
         mAssignments.remove(assignment);
+        assignment.setCompletionDate(Calendar.getInstance());
         assignment.setGrade(grade);
+        assignment.setSortingMode(Assignment.COMPARE_TYPE);
+        completeAssignmentCheckbox.setChecked(false);
         if(mListener!=null){
             mListener.onCompleteAssignment(assignment);
         }

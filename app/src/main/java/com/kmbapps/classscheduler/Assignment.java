@@ -8,10 +8,11 @@ import java.util.Calendar;
  */
 public class Assignment implements Serializable, Comparable{
     private static final long serialVersionUID = 2;
-    private static final int COMPARE_DUE_DATE = 0;
-    private static final int COMPARE_TYPE = 1;
+    public static final int COMPARE_DUE_DATE = 0;
+    public static final int COMPARE_TYPE = 1;
 
     private Calendar dueDate;
+    private Calendar completionDate;
     private String type;
     private String name;
     private String details;
@@ -39,10 +40,10 @@ public class Assignment implements Serializable, Comparable{
         Assignment a = (Assignment) object;
 
         if(dueDate!=null) {
-            return (type.equals(a.getType())) && (name.equals(a.getName())) && (details.equals(a.getDetails())) && (dueDate.equals(a.getDueDate()));
+            return (type.equals(a.getType())) && (name.equals(a.getName())) && (details.equals(a.getDetails())) && (dueDate.equals(a.getDueDate()) && grade.equals(a.getGrade()));
         }
         else{
-            return (type.equals(a.getType())) && (name.equals(a.getName())) && (details.equals(a.getDetails())) && (dueDate==a.getDueDate());
+            return (type.equals(a.getType())) && (name.equals(a.getName())) && (details.equals(a.getDetails())) && (dueDate==a.getDueDate() && grade.equals(a.getGrade()));
         }
     }
 
@@ -145,5 +146,13 @@ public class Assignment implements Serializable, Comparable{
 
     public void setGrade(String grade) {
         this.grade = grade;
+    }
+
+    public Calendar getCompletionDate() {
+        return completionDate;
+    }
+
+    public void setCompletionDate(Calendar completionDate) {
+        this.completionDate = completionDate;
     }
 }

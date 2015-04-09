@@ -10,7 +10,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:minHeight="@dimen/touchable_ui_component_min"
-        android:gravity="center_vertical">
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:id="@+id/typeLayout">
 
         <EditText
             android:layout_width="0dp"
@@ -27,7 +29,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:minHeight="@dimen/touchable_ui_component_min"
-        android:gravity="center_vertical">
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:id="@+id/nameLayout">
 
         <EditText
             android:layout_width="0dp"
@@ -36,7 +40,8 @@
             android:hint="@string/hint_assignment_name"
             android:textSize="@dimen/abc_text_size_small_material"
             android:inputType="textCapWords"
-            android:id="@+id/assignmentName"/>
+            android:id="@+id/assignmentName"
+            />
 
     </LinearLayout>
 
@@ -44,7 +49,60 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:minHeight="@dimen/touchable_ui_component_min"
-        android:gravity="center_vertical">
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:id="@+id/dueDateLayout">
+
+        <EditText
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:hint="@string/hint_assignment_due_date"
+            android:textSize="@dimen/abc_text_size_small_material"
+            android:id="@+id/assignmentDueDate"
+            android:onClick="selectDate"
+            android:focusable="false"/>
+
+        <EditText
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:hint="@string/hint_assignment_due_time"
+            android:textSize="@dimen/abc_text_size_small_material"
+            android:id="@+id/assignmentDueTime"
+            android:onClick="selectTime"
+            android:focusable="false"
+            android:visibility="gone"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="@dimen/touchable_ui_component_min"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:id="@+id/gradeLayout">
+
+        <EditText
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textSize="@dimen/abc_text_size_small_material"
+            android:id="@+id/assignmentGrade"
+            android:hint="@string/hint_assignment_grade"
+            android:inputType="numberDecimal"/>
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="@dimen/touchable_ui_component_min"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:id="@+id/detailsLayout">
 
         <EditText
             android:layout_width="0dp"
@@ -57,23 +115,7 @@
 
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:minHeight="@dimen/touchable_ui_component_min"
-        android:gravity="center_vertical">
 
-        <EditText
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:hint="@string/hint_assignment_due_date"
-            android:textSize="@dimen/abc_text_size_small_material"
-            android:id="@+id/assignmentDueDate"
-            android:onClick="selectDate"
-            android:focusable="false"/>
-
-    </LinearLayout>
 
 
 </LinearLayout>

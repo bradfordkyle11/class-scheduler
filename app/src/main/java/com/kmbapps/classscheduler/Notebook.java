@@ -43,6 +43,10 @@ public class Notebook implements Serializable {
 
     }
 
+    public Hashtable<Section, List<Assignment>> getAssignments() {
+        return assignments;
+    }
+
     public void updateAssignments(Section mClass, List<Assignment> assignments){
         this.assignments.put(mClass, assignments);
     }
@@ -59,6 +63,12 @@ public class Notebook implements Serializable {
             case NOTES:
                 break;
         }
+    }
+
+    //erases all info related to the given section
+    public void erase(Section section){
+        assignments.remove(section);
+        grades.remove(section);
     }
 
 }

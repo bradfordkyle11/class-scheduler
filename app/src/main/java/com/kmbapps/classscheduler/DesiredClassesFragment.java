@@ -39,7 +39,11 @@ public class DesiredClassesFragment extends Fragment implements ConfirmationDial
     private static final int MENU_EDIT = 0;
     private static final int MENU_DELETE = 1;
 
+    private static final int CLASS_ACTION_MODE = 0;
+    private static final int SECTION_ACTION_MODE = 1;
+
     private ActionMode mActionMode;
+    private int currentActionModeType = -1;
 
     LinearLayout classesAndSections;
     List<Class> desiredClasses;
@@ -49,6 +53,7 @@ public class DesiredClassesFragment extends Fragment implements ConfirmationDial
 
     //used to remove a view when returning from confirmation dialog
     private View selectedView;
+    private ArrayList<View> selectedViews;
 
     private OnFragmentInteractionListener mListener;
     private List<Class> classes;
@@ -124,26 +129,24 @@ public class DesiredClassesFragment extends Fragment implements ConfirmationDial
                 //add the context menu to the class
                 LinearLayout course = (LinearLayout) v.findViewById(R.id.course);
                 course.setTag(desiredClasses.get(i));
+
+                //open the action mode on long click
                 course.setOnLongClickListener(new View.OnLongClickListener() {
                     @Override
                     public boolean onLongClick(View v) {
-                        if(!v.isSelected()){
-                            v.findViewById(R.id.add_class_section).setSelected(false);
-                            v.setSelected(true);
-                            v.findViewById(R.id.add_class_section).setSelected(false);
-                            ActionBarActivity activity = (ActionBarActivity) v.getContext();
-                            mActionMode = activity.startSupportActionMode(classActionModeCallback);
-                            mActionMode.setTag(v);
-                            onActionModeChanged();
-                            return true;
+                        actionModeSetup(v, CLASS_ACTION_MODE);
+                        return true;
 
-                        }
-                        else{
-                            mActionMode.finish();
-                            onActionModeChanged();
-                            return true;
-                        }
+                    }
+                });
 
+                //select view if action mode is active, otherwise open the editor
+                course.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(mActionMode!=null){
+                            actionModeSetup(v, CLASS_ACTION_MODE);
+                        }
                     }
                 });
 
@@ -157,25 +160,26 @@ public class DesiredClassesFragment extends Fragment implements ConfirmationDial
                     sectionInfo.setText(sections.get(j).toString());
                     sections.get(j).setContainingClass(desiredClasses.get(i));
 
+                    //open action mode on long click
                     s.setOnLongClickListener(new View.OnLongClickListener() {
                         @Override
                         public boolean onLongClick(View v) {
-                            if(!v.isSelected()){
-                                v.setSelected(true);
-                                ActionBarActivity activity = (ActionBarActivity) v.getContext();
-                                mActionMode = activity.startSupportActionMode(classSectionActionModeCallback);
-                                mActionMode.setTag(v);
-                                onActionModeChanged();
-                                return true;
-                            }
-                            else{
-                                mActionMode.finish();
-                                onActionModeChanged();
-                                return true;
-                            }
 
+                            actionModeSetup(v, SECTION_ACTION_MODE);
+                            return true;
                         }
                     });
+
+                    //select view if action mode is active, otherwise open the editor
+                    s.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if(mActionMode!=null){
+                                actionModeSetup(v, SECTION_ACTION_MODE);
+                            }
+                        }
+                    });
+
                     sectionLayout.addView(s);
                 }
 
@@ -196,6 +200,151 @@ public class DesiredClassesFragment extends Fragment implements ConfirmationDial
 //        registerForContextMenu(expListView);
 
         return view;
+    }
+
+    public void actionModeSetup(View v, int type){
+        boolean newType = currentActionModeType!=type;
+        currentActionModeType = type;
+
+        switch(type){
+            case CLASS_ACTION_MODE:
+                //selecting
+                if(!v.isSelected()){
+                    //select the view
+                    v.setSelected(true);
+                    v.findViewById(R.id.add_class_section).setSelected(false);
+
+                    //nothing was selected before, or new type of selection was made
+                    if(mActionMode==null||newType){
+
+                        //if selecting a new type, finish the action mode
+                        if(mActionMode!=null){
+                            mActionMode.finish();
+                        }
+
+                        //start new action mode
+                        ActionBarActivity activity = (ActionBarActivity) v.getContext();
+                        mActionMode = activity.startSupportActionMode(classActionModeCallback);
+                        mActionMode.setTag(v);
+                        mActionMode.setTitle("1");
+                        onActionModeChanged();
+                    }
+                    //something was already selected and is the same type
+                    else{
+                        //hide the actions that don't apply to more than one view
+                        MenuItem editAction = mActionMode.getMenu().findItem(R.id.action_edit);
+                        editAction.setVisible(false);
+
+                        //only one was selected
+                        if(mActionMode.getTag() instanceof View){
+                            ArrayList<View> selectedViews = new ArrayList<>();
+                            selectedViews.add(v);
+                            selectedViews.add((View) mActionMode.getTag());
+                            mActionMode.setTag(selectedViews);
+                            mActionMode.setTitle(Integer.toString(selectedViews.size()));
+                        }
+                        //more than one selected
+                        else if(mActionMode.getTag() instanceof ArrayList){
+                            ArrayList<View> selectedViews = (ArrayList) mActionMode.getTag();
+                            selectedViews.add(v);
+                            mActionMode.setTitle(Integer.toString(selectedViews.size()));
+                        }
+                    }
+                }
+
+                //deselecting
+                else{
+                    //v was the only thing selected, so finish the action mode
+                    if(mActionMode.getTag() instanceof View) {
+                        mActionMode.finish();
+                        onActionModeChanged();
+                    }
+                    else{
+                        //deselect the view
+                        ArrayList<View> selectedViews = (ArrayList) mActionMode.getTag();
+                        selectedViews.remove(v);
+                        v.setSelected(false);
+                        mActionMode.setTitle(Integer.toString(selectedViews.size()));
+
+                        if(selectedViews.size()==1){
+                            mActionMode.setTag(selectedViews.get(0));
+
+                            //show the actions that only apply to one view
+                            MenuItem editAction = mActionMode.getMenu().findItem(R.id.action_edit);
+                            editAction.setVisible(true);
+                        }
+                    }
+                }
+                break;
+            case SECTION_ACTION_MODE:
+                //selecting
+                if(!v.isSelected()){
+                    //select the view
+                    v.setSelected(true);
+
+                    //nothing was selected before, or new type of selection was made
+                    if(mActionMode==null||newType){
+
+                        //if selecting a new type, finish the action mode
+                        if(mActionMode!=null){
+                            mActionMode.finish();
+                        }
+
+                        //start new action mode
+                        ActionBarActivity activity = (ActionBarActivity) v.getContext();
+                        mActionMode = activity.startSupportActionMode(classSectionActionModeCallback);
+                        mActionMode.setTag(v);
+                        mActionMode.setTitle("1");
+                        onActionModeChanged();
+                    }
+                    //something was already selected and is the same type
+                    else{
+                        //hide the actions that don't apply to more than one view
+                        MenuItem editAction = mActionMode.getMenu().findItem(R.id.action_edit);
+                        editAction.setVisible(false);
+
+                        //only one was selected
+                        if(mActionMode.getTag() instanceof View){
+                            ArrayList<View> selectedViews = new ArrayList<>();
+                            selectedViews.add(v);
+                            selectedViews.add((View) mActionMode.getTag());
+                            mActionMode.setTag(selectedViews);
+                            mActionMode.setTitle(Integer.toString(selectedViews.size()));
+                        }
+                        //more than one selected
+                        else if(mActionMode.getTag() instanceof ArrayList){
+                            ArrayList<View> selectedViews = (ArrayList) mActionMode.getTag();
+                            selectedViews.add(v);
+                            mActionMode.setTitle(Integer.toString(selectedViews.size()));
+                        }
+                    }
+                }
+
+                //deselecting
+                else{
+                    //v was the only thing selected, so finish the action mode
+                    if(mActionMode.getTag() instanceof View) {
+                        mActionMode.finish();
+                        onActionModeChanged();
+                    }
+                    else{
+                        //deselect the view
+                        ArrayList<View> selectedViews = (ArrayList) mActionMode.getTag();
+                        selectedViews.remove(v);
+                        v.setSelected(false);
+                        mActionMode.setTitle(Integer.toString(selectedViews.size()));
+
+                        if(selectedViews.size()==1){
+                            mActionMode.setTag(selectedViews.get(0));
+
+                            //show the actions that only apply to one view
+                            MenuItem editAction = mActionMode.getMenu().findItem(R.id.action_edit);
+                            editAction.setVisible(true);
+                        }
+                    }
+                }
+                break;
+        }
     }
 
     /*
@@ -297,12 +446,27 @@ public class DesiredClassesFragment extends Fragment implements ConfirmationDial
                     startActivity(intent);
                     return true;
                 case R.id.action_delete:
-                    v = (View) mode.getTag();
-                    selectedView = v;
-                    Class classToDelete = (Class) v.getTag();
-                    ConfirmationDialogFragment confirmation = ConfirmationDialogFragment.newInstance(getString(R.string.title_delete_class_confirmation), classToDelete, ConfirmationDialogFragment.FRAGMENT);
-                    confirmation.setTargetFragment(DesiredClassesFragment.this, 1);
-                    confirmation.show(getActivity().getSupportFragmentManager(), "deleteClass");
+                    if(mode.getTag() instanceof View) {
+                        v = (View) mode.getTag();
+                        selectedView = v;
+                        Class classToDelete = (Class) v.getTag();
+                        ConfirmationDialogFragment confirmation = ConfirmationDialogFragment.newInstance(getString(R.string.title_delete_class_confirmation), classToDelete, ConfirmationDialogFragment.FRAGMENT);
+                        confirmation.setTargetFragment(DesiredClassesFragment.this, 1);
+                        confirmation.show(getActivity().getSupportFragmentManager(), "deleteClass");
+                    }
+                    else if(mode.getTag() instanceof ArrayList){
+                        ArrayList<View> views = (ArrayList) mode.getTag();
+                        selectedViews = views;
+
+                        ArrayList<Class> classesToDelete = new ArrayList<>();
+                        for(View view : views){
+                            classesToDelete.add((Class) view.getTag());
+                        }
+
+                        ConfirmationDialogFragment confirmation = ConfirmationDialogFragment.newInstance(getString(R.string.title_delete_classes_confirmation), classesToDelete, ConfirmationDialogFragment.FRAGMENT);
+                        confirmation.setTargetFragment(DesiredClassesFragment.this, 1);
+                        confirmation.show(getActivity().getSupportFragmentManager(), "deleteClass");
+                    }
 
                     mode.finish();
                     return true;
@@ -314,8 +478,16 @@ public class DesiredClassesFragment extends Fragment implements ConfirmationDial
         // Called when the user exits the action mode
         @Override
         public void onDestroyActionMode(ActionMode mode) {
-            View view = (View) mode.getTag();
-            view.setSelected(false);
+            if(mode.getTag() instanceof View) {
+                View view = (View) mode.getTag();
+                view.setSelected(false);
+            }
+            else if (mode.getTag() instanceof ArrayList){
+                ArrayList<View> selectedViews = (ArrayList) mode.getTag();
+                for(View view : selectedViews){
+                    view.setSelected(false);
+                }
+            }
             mActionMode = null;
         }
     };
@@ -352,12 +524,29 @@ public class DesiredClassesFragment extends Fragment implements ConfirmationDial
                     startActivity(intent);
                     return true;
                 case R.id.action_delete:
-                    v = (View) mode.getTag();
-                    selectedView = v;
-                    Section sectionToDelete = (Section) v.getTag();
-                    ConfirmationDialogFragment confirmation = ConfirmationDialogFragment.newInstance(getString(R.string.title_delete_section_confirmation), sectionToDelete, ConfirmationDialogFragment.FRAGMENT);
-                    confirmation.setTargetFragment(DesiredClassesFragment.this, 1);
-                    confirmation.show(getActivity().getSupportFragmentManager(), "deleteSection");
+
+
+                    if(mode.getTag() instanceof View) {
+                        v = (View) mode.getTag();
+                        selectedView = v;
+                        Section sectionToDelete = (Section) v.getTag();
+                        ConfirmationDialogFragment confirmation = ConfirmationDialogFragment.newInstance(getString(R.string.title_delete_section_confirmation), sectionToDelete, ConfirmationDialogFragment.FRAGMENT);
+                        confirmation.setTargetFragment(DesiredClassesFragment.this, 1);
+                        confirmation.show(getActivity().getSupportFragmentManager(), "deleteSection");
+                    }
+                    else if(mode.getTag() instanceof ArrayList){
+                        ArrayList<View> views = (ArrayList) mode.getTag();
+                        selectedViews = views;
+
+                        ArrayList<Section> sectionsToDelete = new ArrayList<>();
+                        for(View view : views){
+                            sectionsToDelete.add((Section) view.getTag());
+                        }
+
+                        ConfirmationDialogFragment confirmation = ConfirmationDialogFragment.newInstance(getString(R.string.title_delete_sections_confirmation), sectionsToDelete, ConfirmationDialogFragment.FRAGMENT);
+                        confirmation.setTargetFragment(DesiredClassesFragment.this, 1);
+                        confirmation.show(getActivity().getSupportFragmentManager(), "deleteSection");
+                    }
 
                     mode.finish();
                     return true;
@@ -369,8 +558,16 @@ public class DesiredClassesFragment extends Fragment implements ConfirmationDial
         // Called when the user exits the action mode
         @Override
         public void onDestroyActionMode(ActionMode mode) {
-            View view = (View) mode.getTag();
-            view.setSelected(false);
+            if(mode.getTag() instanceof View) {
+                View view = (View) mode.getTag();
+                view.setSelected(false);
+            }
+            else if (mode.getTag() instanceof ArrayList){
+                ArrayList<View> selectedViews = (ArrayList) mode.getTag();
+                for(View view : selectedViews){
+                    view.setSelected(false);
+                }
+            }
             mActionMode = null;
         }
     };
@@ -379,29 +576,64 @@ public class DesiredClassesFragment extends Fragment implements ConfirmationDial
     public void onConfirmationPositiveClick(ConfirmationDialogFragment dialog) {
         switch(dialog.getTag()){
             case "deleteClass":
-                Class classToRemove = (Class) dialog.getExtra();
-                //remove the class
-                ClassLoader.removeClass(getActivity(), classToRemove);
+                if(dialog.getExtra() instanceof Class) {
+                    Class classToRemove = (Class) dialog.getExtra();
+                    //remove the class
+                    ClassLoader.removeClass(getActivity(), classToRemove);
 
-                //remove the view
-                ((ViewGroup)selectedView.getParent().getParent()).removeView((View) selectedView.getParent());
-                mListener.onSectionDeleted();
+                    //remove the view
+                    ((ViewGroup) selectedView.getParent().getParent()).removeView((View) selectedView.getParent());
+                    mListener.onSectionDeleted();
 
-                Toast toast = Toast.makeText(getActivity().getApplicationContext(), getString(R.string.toast_class_deleted), Toast.LENGTH_SHORT);
-                toast.show();
+                    Toast toast = Toast.makeText(getActivity().getApplicationContext(), getString(R.string.toast_class_deleted), Toast.LENGTH_SHORT);
+                    toast.show();
+                }
+                else if(dialog.getExtra() instanceof ArrayList){
+                    ArrayList<Class> classesToRemove = (ArrayList) dialog.getExtra();
+
+                    //remove the classes
+                    ClassLoader.removeClasses(getActivity().getApplicationContext(), classesToRemove);
+
+                    //remove the views
+                    for(View view : selectedViews){
+                        ((ViewGroup) view.getParent().getParent()).removeView((View) view.getParent());
+                    }
+                    mListener.onSectionDeleted();
+
+                    Toast toast = Toast.makeText(getActivity().getApplicationContext(), getString(R.string.toast_classes_deleted), Toast.LENGTH_SHORT);
+                    toast.show();
+
+                }
                 break;
             case "deleteSection":
-                //remove the section
-                Section sectionToRemove = (Section) dialog.getExtra();
-                Class c = sectionToRemove.getContainingClass();
-                ClassLoader.removeSection(getActivity(), sectionToRemove, c);
+                if(dialog.getExtra() instanceof Section) {
+                    //remove the section
+                    Section sectionToRemove = (Section) dialog.getExtra();
+                    Class c = sectionToRemove.getContainingClass();
+                    ClassLoader.removeSection(getActivity(), sectionToRemove, c);
 
-                //remove the view
-                ((ViewGroup)selectedView.getParent()).removeView(selectedView);
-                mListener.onSectionDeleted();
+                    //remove the view
+                    ((ViewGroup) selectedView.getParent()).removeView(selectedView);
+                    mListener.onSectionDeleted();
 
-                toast = Toast.makeText(getActivity().getApplicationContext(), getString(R.string.toast_section_deleted), Toast.LENGTH_SHORT);
-                toast.show();
+                    Toast toast = Toast.makeText(getActivity().getApplicationContext(), getString(R.string.toast_section_deleted), Toast.LENGTH_SHORT);
+                    toast.show();
+                }
+                else if (dialog.getExtra() instanceof ArrayList) {
+                    ArrayList<Section> sectionsToRemove = (ArrayList) dialog.getExtra();
+
+                    //remove the classes
+                    ClassLoader.removeSections(getActivity().getApplicationContext(), sectionsToRemove);
+
+                    //remove the views
+                    for(View view : selectedViews){
+                        ((ViewGroup) view.getParent()).removeView(view);
+                    }
+                    mListener.onSectionDeleted();
+
+                    Toast toast = Toast.makeText(getActivity().getApplicationContext(), getString(R.string.toast_sections_deleted), Toast.LENGTH_SHORT);
+                    toast.show();
+                }
                 break;
 
         }

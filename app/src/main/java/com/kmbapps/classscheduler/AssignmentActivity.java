@@ -19,10 +19,17 @@ public class AssignmentActivity extends ActionBarActivity {
     public final static int EDITED_ASSIGNMENT = 100;
     public final static int DELETE_ASSIGNMENT = 101;
 
+    public final static int UPCOMING_ASSIGNMENT = 0;
+    public final static int GRADED_ASSIGNMENT = 1;
+
     public final static int ASSIGNMENT_CREATOR_REQUEST = 0;
 
     private Assignment mAssignment;
     private Assignment newAssignment;
+
+    private Section mSection;
+
+    private int mode = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,16 +37,36 @@ public class AssignmentActivity extends ActionBarActivity {
         setContentView(R.layout.activity_assignment);
 
         mAssignment = (Assignment) getIntent().getSerializableExtra("assignment");
+        mSection = (Section) getIntent().getSerializableExtra("section");
+        mode = getIntent().getIntExtra("mode", UPCOMING_ASSIGNMENT);
 
         TextView typeAndName = (TextView) findViewById(R.id.assignmentTypeAndName);
         typeAndName.setText(mAssignment.getType() + ": " + mAssignment.getName());
         TextView dueDateTV = (TextView) findViewById(R.id.assignmentDueDate);
-        Calendar dueDate = mAssignment.getDueDate();
-        if(dueDate!=null) {
-            dueDateTV.setText(Html.fromHtml("<b>Due:</b> " + (dueDate.get(Calendar.MONTH) + 1) + "/" + dueDate.get(Calendar.DAY_OF_MONTH) + "/" + dueDate.get(Calendar.YEAR)));
+        if(mode == UPCOMING_ASSIGNMENT) {
+            Calendar dueDate = mAssignment.getDueDate();
+            if (dueDate != null) {
+                String dueDateString = (dueDate.get(Calendar.MONTH) + 1) + "/" + dueDate.get(Calendar.DAY_OF_MONTH) + "/" + dueDate.get(Calendar.YEAR)
+                        + " at " + MyTime.to12HourFormat(dueDate.get(Calendar.HOUR_OF_DAY), dueDate.get(Calendar.MINUTE));
+                dueDateTV.setText(Html.fromHtml("<b>Due:</b> " + dueDateString));
+            } else {
+                dueDateTV.setText(Html.fromHtml("<i>No due date</i>"));
+            }
+
+            //hide unneeded views
+            TextView gradeTV = (TextView) findViewById(R.id.assignmentGrade);
+            gradeTV.setVisibility(View.GONE);
         }
-        else{
-            dueDateTV.setText(Html.fromHtml("<i>No due date</i>"));
+        else if (mode == GRADED_ASSIGNMENT){
+            Calendar completionDate = mAssignment.getCompletionDate();
+            if (completionDate != null) {
+                String completionDateString = (completionDate.get(Calendar.MONTH) + 1) + "/" + completionDate.get(Calendar.DAY_OF_MONTH) + "/" + completionDate.get(Calendar.YEAR)
+                        + " at " + MyTime.to12HourFormat(completionDate.get(Calendar.HOUR_OF_DAY), completionDate.get(Calendar.MINUTE));
+                dueDateTV.setText(Html.fromHtml("<b>Completed:</b> " + completionDateString));
+            }
+
+            TextView gradeTV = (TextView) findViewById(R.id.assignmentGrade);
+            gradeTV.setText(Html.fromHtml("<b>Grade:</b> " + mAssignment.getGrade()));
         }
         TextView details = (TextView) findViewById(R.id.assignmentDetails);
         details.setText(Html.fromHtml("<b>Details:</b> " + mAssignment.getDetails()));
@@ -60,8 +87,8 @@ public class AssignmentActivity extends ActionBarActivity {
             case android.R.id.home:
                 Intent intent = new Intent();
                 if(newAssignment!=null){
-                    intent.putExtra("newAssignment", newAssignment);
-                    intent.putExtra("oldAssignment", mAssignment);
+//                    intent.putExtra("newAssignment", newAssignment);
+//                    intent.putExtra("oldAssignment", mAssignment);
                     setResult(EDITED_ASSIGNMENT, intent);
                 }
                 else{
@@ -89,7 +116,16 @@ public class AssignmentActivity extends ActionBarActivity {
                     }
                     else {
                         this.newAssignment = newAssignment;
-                        ClassLoader.updateNotebooks(this);
+                        if (mode==UPCOMING_ASSIGNMENT) {
+                            ClassLoader.saveAssignment(this, newAssignment, mAssignment, mSection);
+                        }
+                        else if (mode==GRADED_ASSIGNMENT){
+                            ClassLoader.saveGradedAssignment(this, newAssignment, mAssignment, mSection);
+                        }
+
+
+                        mAssignment = newAssignment;
+
                         //notify the user that an assignment was edited
                         Toast toast = Toast.makeText(this, getString(R.string.toast_assignment_edited), Toast.LENGTH_SHORT);
                         toast.show();
@@ -110,8 +146,18 @@ public class AssignmentActivity extends ActionBarActivity {
 
     public void editAssignment(View v){
         Intent intent = new Intent(this, AddAssignmentActivity.class);
-        intent.putExtra("editMode", true);
-        intent.putExtra("assignment", mAssignment);
+        if(mode==UPCOMING_ASSIGNMENT) {
+            intent.putExtra("mode", AddAssignmentActivity.EDIT_ASSIGNMENT);
+        }
+        else if(mode==GRADED_ASSIGNMENT){
+            intent.putExtra("mode", AddAssignmentActivity.EDIT_GRADED_ASSIGNMENT);
+        }
+        if(newAssignment==null) {
+            intent.putExtra("assignment", mAssignment);
+        }
+        else{
+            intent.putExtra("assignment", newAssignment);
+        }
         startActivityForResult(intent, ASSIGNMENT_CREATOR_REQUEST);
     }
 
@@ -119,11 +165,26 @@ public class AssignmentActivity extends ActionBarActivity {
     private void updateAssignmentView(Assignment newAssignment){
         TextView typeAndName = (TextView) findViewById(R.id.assignmentTypeAndName);
         typeAndName.setText(newAssignment.getType() + ": " + newAssignment.getName());
-        TextView dueDateTV = (TextView) findViewById(R.id.assignmentDueDate);
-        Calendar dueDate = newAssignment.getDueDate();
-        dueDateTV.setText("Due: " + (dueDate.get(Calendar.MONTH)+1) + "/" + dueDate.get(Calendar.DAY_OF_MONTH) + "/" + dueDate.get(Calendar.YEAR));
+
+
         TextView details = (TextView) findViewById(R.id.assignmentDetails);
-        details.setText("Details:\n" + newAssignment.getDetails());
+        details.setText(Html.fromHtml("<b>Details:</b> " + newAssignment.getDetails()));
+
+        if(mode==UPCOMING_ASSIGNMENT) {
+            TextView dueDateTV = (TextView) findViewById(R.id.assignmentDueDate);
+            Calendar dueDate = newAssignment.getDueDate();
+            if(dueDate!=null) {
+                String dueDateString = (dueDate.get(Calendar.MONTH) + 1) + "/" + dueDate.get(Calendar.DAY_OF_MONTH) + "/" + dueDate.get(Calendar.YEAR)
+                        + " at " + MyTime.to12HourFormat(dueDate.get(Calendar.HOUR_OF_DAY), dueDate.get(Calendar.MINUTE));
+                dueDateTV.setText(Html.fromHtml("<b>Due:</b> " + dueDateString));
+            }
+        }
+        else if(mode==GRADED_ASSIGNMENT){
+            TextView gradeTV = (TextView) findViewById(R.id.assignmentGrade);
+            gradeTV.setText(Html.fromHtml("<b>Grade:</b> " + mAssignment.getGrade()));
+        }
+
+
     }
 
 

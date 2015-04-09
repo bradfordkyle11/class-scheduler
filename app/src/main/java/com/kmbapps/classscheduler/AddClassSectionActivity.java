@@ -572,6 +572,8 @@ public class AddClassSectionActivity extends ActionBarActivity implements Confir
         et = (EditText) findViewById(R.id.edit_notes);
         String notes = et.getText().toString();
 
+
+
         if(mSection==null) {
             mSection = new Section(times, professor, sectionNumber, notes, myClass);
             myClass.addSection(mSection);
@@ -586,6 +588,7 @@ public class AddClassSectionActivity extends ActionBarActivity implements Confir
             myClass.getSections().set(replaceIndex, mSection);
         }
 
+        //TODO: use saveSection instead
         ClassLoader.saveClass(this, myClass);
         ClassLoader.updateSchedules();
 

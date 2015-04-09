@@ -12,10 +12,11 @@ import android.widget.TextView;
  * Created by Kyle on 3/4/2015.
  */
 public class NavigationDrawerListAdapter extends ArrayAdapter<String> {
-    private final int SCHEDULE = 0;
-    private final int SCHEDULE_DESIGNER = 1;
-    private final int MY_CLASSES = 2;
-    private final int MY_CALENDAR = 3;
+    public final static int SCHEDULE = 0;
+    public final static int SCHEDULE_DESIGNER = 4;
+    public final static int MY_CLASSES = 1;
+    public final static int MY_CALENDAR = 3;
+    public final static int MY_ASSIGNMENTS = 2;
 
     private final Context context;
     private final String[] titles;
@@ -46,6 +47,8 @@ public class NavigationDrawerListAdapter extends ArrayAdapter<String> {
             case MY_CALENDAR:
                 icon.setBackgroundResource(R.drawable.ic_today_white_24dp);
                 break;
+            case MY_ASSIGNMENTS:
+                icon.setBackgroundResource(R.drawable.ic_assignment_white_24dp);
         }
 
         TextView textView = (TextView) rowView.findViewById(R.id.text1);

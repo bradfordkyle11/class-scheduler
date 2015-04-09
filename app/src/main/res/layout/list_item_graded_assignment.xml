@@ -10,19 +10,10 @@
     android:clickable="true">
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:id="@+id/assignmentType"
-        android:gravity="center_vertical"
-        android:textSize="@dimen/abc_text_size_small_material"
-        android:textStyle="bold"
-        android:maxWidth="240dp"/>
-    <TextView
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:paddingLeft="@dimen/activity_padding"
-        android:paddingRight="@dimen/activity_padding"
+        android:layout_margin="@dimen/activity_padding"
         android:textSize="@dimen/abc_text_size_small_material"
         android:gravity="center_vertical"
         android:id="@+id/assignmentName"
@@ -36,6 +27,8 @@
         android:gravity="center_vertical"
         android:id="@+id/assignmentGrade"
         android:maxWidth="@dimen/touchable_ui_component_min"
-        android:singleLine="true"/>
+        android:singleLine="true"
+        android:layout_marginTop="@dimen/activity_padding"
+        android:layout_marginBottom="@dimen/activity_padding"/>
 
 </LinearLayout>

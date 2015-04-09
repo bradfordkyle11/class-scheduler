@@ -2,11 +2,9 @@
 <resources>
 
     <string name="app_name">Class Scheduler</string>
-    <string name="title_schedule">Current Schedule</string>
+
+    <!--Headers-->
     <string name="header_schedule">Current Schedule</string>
-    <string name="title_my_classes">My Classes</string>
-    <string name="title_my_calendar">My Calendar</string>
-    <string name="title_design_a_schedule">Design a Schedule</string>
     <string name="header_design_a_schedule">Schedule Designer</string>
     <string name="header_desired_classes">Desired Classes</string>
     <string name="header_add_class">New Class</string>
@@ -14,37 +12,78 @@
     <string name="header_edit_class_section">Edit Class Section</string>
     <string name="header_add_class_section">New Class Section</string>
     <string name="header_potential_schedule">Schedule</string>
+    <string name="header_add_assignment">New Assignment</string>
+    <string name="header_edit_assignment">Edit Assignment</string>
+
+    <!--Titles-->
+    <string name="title_my_classes">My Classes</string>
+    <string name="title_my_calendar">My Calendar</string>
+    <string name="title_design_a_schedule">Design a Schedule</string>
+    <string name="title_schedule">Current Schedule</string>
     <string name="title_section1">Section 1</string>
     <string name="title_section2">Section 2</string>
     <string name="title_section3">Section 3</string>
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="title_activity_add_class">AddClassActivity</string>
+    <string name="title_activity_edit_class">EditClassActivity</string>
+    <string name="title_details">Details</string>
+    <string name="title_assignments">Assignments</string>
+    <string name="title_grades">Grades</string>
+    <string name="title_notes">Notes</string>
+    <string name="title_activity_add_class_section">AddClassSectionActivity</string>
+    <string name="title_activity_edit_class_section">EditClassSectionActivity</string>
+    <string name="title_activity_my_class">MyClass</string>
+    <string name="title_activity_add_assignment">AddAssignmentActivity</string>
+    <string name="title_activity_assignment">Assignment</string>
+    <string name="title_delete_section_confirmation">Delete this section?</string>
+    <string name="title_delete_sections_confirmation">Delete these sections?</string>
+    <string name="title_delete_class_confirmation">Delete this class?</string>
+    <string name="title_delete_classes_confirmation">Delete these classes?</string>
+    <string name="title_delete_assignment_confirmation">Delete assignment?</string>
+    <string name="title_delete_assignments_confirmation">Delete assignments?</string>
+    <string name="title_delete_grade_confirmation">Delete this assignment?</string>
+    <string name="title_delete_grades_confirmation">Delete these assignments?</string>
+    <string name="title_drop_class_confirmation">Drop this class?</string>
+    <string name="title_drop_classes_confirmation">Drop these classes?</string>
+    <string name="title_my_assignments">My Assignments</string>
+
+    <!--Actions-->
     <string name="action_example">Example action</string>
     <string name="action_settings">Settings</string>
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="sunday_abbreviation">S</string>
-    <string name="monday_abbreviation">M</string>
-    <string name="tuesday_abbreviation">T</string>
-    <string name="wednesday_abbreviation">W</string>
-    <string name="thursday_abbreviation">Th</string>
-    <string name="friday_abbreviation">F</string>
-    <string name="saturday_abbreviation">S</string>
-    <string name="create_a_schedule">Create a Schedule</string>
-    <string name="no_classes">You have no classes. Tap + to add one.</string>
-    <string name="hint_class_department">Department (eg. Math)</string>
-    <string name="hint_class_name">Name (eg. Algebra)</string>
-    <string name="hint_class_number">Number (eg. 101)</string>
-    <string name="text_credit_hours">Credit Hours:</string>
-    <string name="button_cancel">Cancel</string>
-    <string name="button_accept">Accept</string>
-    <string name="current_page">currentPage</string>
     <string name="action_delete">Delete</string>
     <string name="action_save">Save</string>
     <string name="action_edit">Edit</string>
-    <string name="title_activity_add_class">AddClassActivity</string>
-    <string name="hello_world">Hello world!</string>
-    <string name="title_activity_edit_class">EditClassActivity</string>
-    <string name="hint_room_number">Room number</string>
+    <string name="action_sort_by">Sort by</string>
+    <string name="action_sort_by_due_date">Due date</string>
+    <string name="action_sort_by_type">Type</string>
+
+    <!--Toasts-->
+    <string name="toast_invalid_ending_time">End time must be after the start time</string>
+    <string name="toast_invalid_starting_time">Start time must be before the end time</string>
+    <string name="toast_no_start_time">You must enter a start time</string>
+    <string name="toast_no_end_time">You must enter an end time</string>
+    <string name="toast_conflicting_schedules">Schedules cannot overlap</string>
+    <string name="toast_no_schedule">You must set a schedule</string>
+    <string name="toast_set_current_schedule">Saved as current schedule</string>
+    <string name="toast_class_deleted">Class deleted</string>
+    <string name="toast_classes_deleted">Classes deleted</string>
+    <string name="toast_section_deleted">Section deleted</string>
+    <string name="toast_sections_deleted">Sections deleted</string>
+    <string name="toast_assignment_deleted">Assignment deleted</string>
+    <string name="toast_assignments_deleted">Assignments deleted</string>
+    <string name="toast_assignment_added">Assignment created</string>
+    <string name="toast_assignment_edited">Changes saved</string>
+    <string name="toast_assignment_no_change">No changes made</string>
+    <string name="toast_sort_by">"Sort by: "</string>
+    <string name="toast_grade_deleted">Assignment deleted</string>
+    <string name="toast_grades_deleted">Assignments deleted</string>
+    <string name="toast_grade_no_change">No changes made</string>
+    <string name="toast_grade_edited">Changes saved</string>
+    <string name="toast_class_dropped">Class dropped</string>
+    <string name="toast_classes_dropped">Classes dropped</string>
+
+    <!--Text-->
+    <string name="text_no_classes">You have no classes. Tap + to add one.</string>
+    <string name="text_credit_hours">Credit Hours:</string>
     <string name="text_days_and_times">Days and Times</string>
     <string name="text_from">From: </string>
     <string name="text_to">To: </string>
@@ -55,58 +94,59 @@
     <string name="text_wednesday">Wednesday</string>
     <string name="text_thursday">Thursday</string>
     <string name="text_friday">Friday</string>
-    <string name="hint_professor">Professor</string>
     <string name="text_notes">Notes</string>
-    <string name="hint_section_number">Unique section number</string>
-    <string name="hint_notes">Other info</string>
-    <string name="toast_invalid_ending_time">End time must be after the start time</string>
-    <string name="toast_invalid_starting_time">Start time must be before the end time</string>
-    <string name="toast_no_start_time">You must enter a start time</string>
-    <string name="toast_no_end_time">You must enter an end time</string>
-    <string name="toast_conflicting_schedules">Schedules cannot overlap</string>
     <string name="text_set_schedule">Set schedule</string>
-    <string name="toast_no_schedule">You must set a schedule</string>
     <string name="text_no_class_selected">No class selected</string>
     <string name="text_no_class_selected_info">Tap on a class to see its info.</string>
-    <string name="toast_set_current_schedule">Saved as current schedule</string>
-    <string name="toast_class_deleted">Class deleted</string>
-    <string name="toast_section_deleted">Section deleted</string>
-    <string name="title_details">Details</string>
-    <string name="title_assignments">Assignments</string>
-    <string name="title_grades">Grades</string>
-    <string name="title_notes">Notes</string>
     <string name="text_other_info">Other info:</string>
-    <string name="header_add_assignment">New Assignment</string>
     <string name="text_assignment_type">Type: </string>
     <string name="text_assignment_name">Name: </string>
     <string name="text_assignment_details">Details: </string>
+    <string name="text_no_grades_for_type">N/A</string>
+
+    <!--Hints-->
+    <string name="hint_class_department">Department (eg. Math)</string>
+    <string name="hint_class_name">Name (eg. Algebra)</string>
+    <string name="hint_class_number">Number (eg. 101)</string>
+    <string name="hint_room_number">Room number</string>
+    <string name="hint_professor">Professor</string>
+    <string name="hint_section_number">Unique section number</string>
+    <string name="hint_notes">Other info</string>
     <string name="hint_assignment_type">Type (eg. Test)</string>
     <string name="hint_assignment_name">Name (eg. Midterm 1)</string>
     <string name="hint_assignment_details">Details (eg. Covers chapters 1-4)</string>
     <string name="hint_assignment_due_date">Due date</string>
     <string name="hint_assignment_due_time">Time</string>
-    <string name="toast_assignment_deleted">Assignment deleted</string>
-    <string name="toast_assignment_added">Assignment created</string>
-    <string name="toast_assignment_edited">Changes saved</string>
-    <string name="toast_assignment_no_change">No changes made</string>
-    <string name="action_sort_by">Sort by</string>
-    <string name="action_sort_by_due_date">Due date</string>
-    <string name="action_sort_by_type">Type</string>
+    <string name="hint_assignment_grade">Grade</string>
+
+    <!--Abbreviations-->
+    <string name="sunday_abbreviation">S</string>
+    <string name="monday_abbreviation">M</string>
+    <string name="tuesday_abbreviation">T</string>
+    <string name="wednesday_abbreviation">W</string>
+    <string name="thursday_abbreviation">Th</string>
+    <string name="friday_abbreviation">F</string>
+    <string name="saturday_abbreviation">S</string>
+    <string name="abbreviation_am">a</string>
+    <string name="abbreviation_pm">p</string>
+
+    <!--Dialogs-->
     <string name="dialog_sort_by">Sort by:</string>
-    <string name="toast_sort_by">"Sort by: "</string>
-    <string name="title_activity_add_class_section">AddClassSectionActivity</string>
-    <string name="title_activity_edit_class_section">EditClassSectionActivity</string>
-    <string name="title_activity_my_class">MyClass</string>
-    <string name="title_activity_add_assignment">AddAssignmentActivity</string>
-    <string name="title_activity_assignment">Assignment</string>
-    <string name="toast_grade_deleted">Grade deleted</string>
     <string name="dialog_action_ok">Ok</string>
     <string name="dialog_action_cancel">Cancel</string>
     <string name="dialog_set_grade">Set grade:</string>
-    <string name="title_delete_section_confirmation">Delete section?</string>
-    <string name="title_delete_class_confirmation">Delete class?</string>
-    <string name="title_delete_assignment_confirmation">Delete assignment?</string>
-    <string name="title_delete_grade_confirmation">Delete grade?</string>
+
+    <!--Buttons-->
+    <string name="button_cancel">Cancel</string>
+    <string name="button_accept">Accept</string>
+    <string name="button_create_a_schedule">Create a Schedule</string>
+
+    <!--Other-->
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="current_page">currentPage</string>
+    <string name="hello_world">Hello world!</string>
 
     <!--Tags-->
     <item type="id" name="TAG_SECTION">0</item>

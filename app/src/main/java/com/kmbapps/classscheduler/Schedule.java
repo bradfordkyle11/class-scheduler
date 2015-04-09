@@ -26,7 +26,7 @@ public class Schedule implements Serializable {
     }
 
     public Schedule(List<Section> sections) {
-        this.sections = sections;
+        this.sections = new ArrayList<Section>(sections);
         ID = UUID.randomUUID();
     }
 
@@ -168,6 +168,10 @@ public class Schedule implements Serializable {
                 // if deriving: appendSuper(super.hashCode()).
                 append(sections.toArray()).
                 toHashCode();
+    }
+
+    public void dropClass(Section classToDrop){
+        sections.remove(classToDrop);
     }
 
 }

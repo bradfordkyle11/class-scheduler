@@ -33,6 +33,7 @@ public class ClassLoader {
     private static boolean notebooksLoaded = false;
 
 
+
     public static ArrayList<Class> loadClasses(Context context) {
         if(!classesLoaded) {
             try {
@@ -56,7 +57,7 @@ public class ClassLoader {
         return myClasses;
     }
 
-    public static void saveClass(Context context, Class myClass) {
+    public static boolean saveClass(Context context, Class myClass) {
         if (myClasses == null) {
             myClasses = new ArrayList<Class>();
         }
@@ -75,11 +76,44 @@ public class ClassLoader {
             os.close();
         } catch (FileNotFoundException e) {
             System.out.println("FileNotFoundException: " + e.getMessage());
+            return false;
         } catch (IOException e) {
             System.out.println("IOException: " + e.getMessage());
+            return false;
         }
 
         schedulesChanged = true;
+        return true;
+    }
+
+    //replaces an existing class with an updated one
+    public static boolean saveClass(Context context, Class updatedClass, Class originalClass) {
+        if (myClasses == null) {
+            myClasses = new ArrayList<Class>();
+        }
+
+        if(!myClasses.contains(updatedClass)){
+            myClasses.set(myClasses.indexOf(originalClass), updatedClass);
+        }
+        else{
+            return false;
+        }
+
+        try {
+            FileOutputStream fos = context.openFileOutput(savedClassesFile, Context.MODE_PRIVATE);
+            ObjectOutputStream os = new ObjectOutputStream(fos);
+            os.writeObject(myClasses);
+            os.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("FileNotFoundException: " + e.getMessage());
+            return false;
+        } catch (IOException e) {
+            System.out.println("IOException: " + e.getMessage());
+            return false;
+        }
+
+        schedulesChanged = true;
+        return true;
     }
 
     public static void removeClass(Context context, Class removeThis) {
@@ -99,9 +133,49 @@ public class ClassLoader {
         schedulesChanged = true;
     }
 
+    public static void removeClasses(Context context, ArrayList<Class> classesToRemove){
+        for(Class classToRemove : classesToRemove) {
+            myClasses.remove(classToRemove);
+        }
+
+        try {
+            FileOutputStream fos = context.openFileOutput(savedClassesFile, Context.MODE_PRIVATE);
+            ObjectOutputStream os = new ObjectOutputStream(fos);
+            os.writeObject(myClasses);
+            os.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("FileNotFoundException: " + e.getMessage());
+        } catch (IOException e) {
+            System.out.println("IOException: " + e.getMessage());
+        }
+
+        schedulesChanged = true;
+    }
+
     public static void removeSection(Context context, Section removeThis, Class containingClass){
-        Class c = myClasses.get(myClasses.indexOf(containingClass));
+        Class c = myClasses.get(myClasses.indexOf(removeThis.getContainingClass()));
         c.getSections().remove(removeThis);
+
+        try {
+            FileOutputStream fos = context.openFileOutput(savedClassesFile, Context.MODE_PRIVATE);
+            ObjectOutputStream os = new ObjectOutputStream(fos);
+            os.writeObject(myClasses);
+            os.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("FileNotFoundException: " + e.getMessage());
+        } catch (IOException e) {
+            System.out.println("IOException: " + e.getMessage());
+        }
+
+        schedulesChanged = true;
+    }
+
+    public static void removeSections(Context context, ArrayList<Section> sectionsToRemove){
+
+        for(Section sectionToRemove : sectionsToRemove) {
+            Class c = myClasses.get(myClasses.indexOf(sectionToRemove.getContainingClass()));
+            c.getSections().remove(sectionToRemove);
+        }
 
         try {
             FileOutputStream fos = context.openFileOutput(savedClassesFile, Context.MODE_PRIVATE);
@@ -250,4 +324,68 @@ public class ClassLoader {
             System.out.println("IOException: " + e.getMessage());
         }
     }
+
+    public static void removeNotebook(Context context, Schedule schedule){
+        mNotebooks.remove(schedule);
+        try {
+            FileOutputStream fos = context.openFileOutput(savedNotebooksFile, Context.MODE_PRIVATE);
+            ObjectOutputStream os = new ObjectOutputStream(fos);
+            os.writeObject(mNotebooks);
+            os.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("FileNotFoundException: " + e.getMessage());
+        } catch (IOException e) {
+            System.out.println("IOException: " + e.getMessage());
+        }
+    }
+
+    public static void saveAssignment(Context context, Assignment updatedAssignment, Assignment originalAssignment, Section containingSection){
+        Notebook notebook = mNotebooks.get(currentSchedule);
+        ArrayList<Assignment> assignments = (ArrayList) notebook.getAssignments(containingSection);
+        assignments.set(assignments.indexOf(originalAssignment), updatedAssignment);
+        try {
+            FileOutputStream fos = context.openFileOutput(savedNotebooksFile, Context.MODE_PRIVATE);
+            ObjectOutputStream os = new ObjectOutputStream(fos);
+            os.writeObject(mNotebooks);
+            os.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("FileNotFoundException: " + e.getMessage());
+        } catch (IOException e) {
+            System.out.println("IOException: " + e.getMessage());
+        }
+    }
+
+    public static void saveGradedAssignment(Context context, Assignment updatedAssignment, Assignment originalAssignment, Section containingSection){
+        Notebook notebook = mNotebooks.get(currentSchedule);
+        ArrayList<Assignment> gradedAssignments = (ArrayList) notebook.getGrades(containingSection);
+        gradedAssignments.set(gradedAssignments.indexOf(originalAssignment), updatedAssignment);
+        try {
+            FileOutputStream fos = context.openFileOutput(savedNotebooksFile, Context.MODE_PRIVATE);
+            ObjectOutputStream os = new ObjectOutputStream(fos);
+            os.writeObject(mNotebooks);
+            os.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("FileNotFoundException: " + e.getMessage());
+        } catch (IOException e) {
+            System.out.println("IOException: " + e.getMessage());
+        }
+    }
+
+    public static void deleteAssignment(Context context, Assignment assignmentToDelete, Section containingSection){
+        Notebook notebook = mNotebooks.get(currentSchedule);
+        ArrayList<Assignment> assignments = (ArrayList) notebook.getAssignments(containingSection);
+        assignments.remove(assignmentToDelete);
+        try {
+            FileOutputStream fos = context.openFileOutput(savedNotebooksFile, Context.MODE_PRIVATE);
+            ObjectOutputStream os = new ObjectOutputStream(fos);
+            os.writeObject(mNotebooks);
+            os.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("FileNotFoundException: " + e.getMessage());
+        } catch (IOException e) {
+            System.out.println("IOException: " + e.getMessage());
+        }
+    }
+
+
 }

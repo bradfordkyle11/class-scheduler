@@ -7,6 +7,8 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 
+import java.util.ArrayList;
+
 public class ConfirmationDialogFragment extends DialogFragment {
 
     public final static int ACTIVITY = 0;
@@ -15,15 +17,21 @@ public class ConfirmationDialogFragment extends DialogFragment {
     private ConfirmationDialogListener mListener;
 
     private final static int DELETE_CLASS = 0;
-    private final static int DELETE_SECTION = 1;
-    private final static int DELETE_ASSIGNMENT = 2;
+    private final static int DELETE_CLASSES = 1;
+    private final static int DELETE_SECTION = 2;
+    private final static int DELETE_SECTIONS = 3;
+    private final static int DELETE_ASSIGNMENT = 4;
+    private final static int DELETE_ASSIGNMENTS = 5;
 
     private int dialogType;
     private int mParent;
 
     private Class classToDelete;
+    private ArrayList<Class> classesToDelete;
     private Section sectionToDelete;
+    private ArrayList<Section> sectionsToDelete;
     private Assignment assignmentToDelete;
+    private ArrayList<Assignment> assignmentsToDelete;
 
     private String mTitle;
 
@@ -69,6 +77,28 @@ public class ConfirmationDialogFragment extends DialogFragment {
         return f;
     }
 
+    //dialog for deleting multiple things at once
+    static ConfirmationDialogFragment newInstance(String title, ArrayList thingsToDelete, int parent) {
+        ConfirmationDialogFragment f = new ConfirmationDialogFragment();
+
+        Bundle args = new Bundle();
+        args.putString("title", title);
+        args.putSerializable("thingsToDelete", thingsToDelete);
+        if(thingsToDelete.get(0) instanceof Assignment) {
+            args.putInt("dialogType", DELETE_ASSIGNMENTS);
+        }
+        else if(thingsToDelete.get(0) instanceof Class) {
+            args.putInt("dialogType", DELETE_CLASSES);
+        }
+        else if(thingsToDelete.get(0) instanceof Section) {
+            args.putInt("dialogType", DELETE_SECTIONS);
+        }
+        args.putInt("parent", parent);
+        f.setArguments(args);
+
+        return f;
+    }
+
     public ConfirmationDialogFragment(){
 
     }
@@ -105,6 +135,16 @@ public class ConfirmationDialogFragment extends DialogFragment {
                 break;
             case DELETE_ASSIGNMENT:
                 assignmentToDelete = (Assignment) getArguments().getSerializable("assignmentToDelete");
+                break;
+            case DELETE_ASSIGNMENTS:
+                assignmentsToDelete = (ArrayList) getArguments().getSerializable("thingsToDelete");
+                break;
+            case DELETE_CLASSES:
+                classesToDelete = (ArrayList) getArguments().getSerializable("thingsToDelete");
+                break;
+            case DELETE_SECTIONS:
+                sectionsToDelete = (ArrayList) getArguments().getSerializable("thingsToDelete");
+                break;
         }
 
         // Use the Builder class for convenient dialog construction
@@ -163,6 +203,12 @@ public class ConfirmationDialogFragment extends DialogFragment {
                 return sectionToDelete;
             case DELETE_ASSIGNMENT:
                 return assignmentToDelete;
+            case DELETE_ASSIGNMENTS:
+                return assignmentsToDelete;
+            case DELETE_CLASSES:
+                return classesToDelete;
+            case DELETE_SECTIONS:
+                return sectionsToDelete;
             default:
                 return null;
         }

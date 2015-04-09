@@ -8,6 +8,7 @@
     android:background="@drawable/selector_course_header"
     android:longClickable="true"
     android:paddingLeft="@dimen/activity_horizontal_margin"
+
     android:clickable="true"
     android:elevation="2dp"
     android:id="@+id/course">
@@ -18,8 +19,10 @@
         android:layout_width="0dp"
         android:layout_height="fill_parent"
         android:textSize="14sp"
-        android:text="test"
+        android:textStyle="bold"
         android:gravity="center_vertical"
+        android:layout_marginTop="@dimen/activity_padding"
+        android:layout_marginBottom="@dimen/activity_padding"
         android:textColor="@color/black"
         android:layout_weight=".8"/>
 

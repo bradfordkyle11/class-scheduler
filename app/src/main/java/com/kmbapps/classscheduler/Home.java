@@ -20,7 +20,7 @@ import android.view.ViewGroup;
 
 public class Home extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks, ScheduleFragment.OnScheduleInteractionListener,
-        DesiredClassesFragment.OnFragmentInteractionListener{
+        DesiredClassesFragment.OnFragmentInteractionListener, MyClassesFragment.OnMyClassesFragmentInteractionListener{
 
     private static final int MENU_EDIT = 0;
     private static final int MENU_DELETE = 1;
@@ -35,10 +35,7 @@ public class Home extends ActionBarActivity
      */
     private CharSequence mTitle = "Class Scheduler";
     private int mCurrentPage;
-    private final int SCHEDULE = 0;
-    private final int SCHEDULE_DESIGNER = 1;
-    private final int MY_CLASSES = 2;
-    private final int MY_CALENDAR = 3;
+
 
     private final String CURRENT_PAGE = "currentPage";
 
@@ -102,17 +99,21 @@ public class Home extends ActionBarActivity
 
     public void onSectionAttached(int number) {
         switch (number) {
-            case SCHEDULE:
+            case NavigationDrawerListAdapter.SCHEDULE:
                 mTitle = getString(R.string.title_schedule);
                 break;
-            case SCHEDULE_DESIGNER:
+            case NavigationDrawerListAdapter.SCHEDULE_DESIGNER:
                 mTitle = getString(R.string.title_design_a_schedule);
                 break;
-            case MY_CLASSES:
+            case NavigationDrawerListAdapter.MY_CLASSES:
                 mTitle = getString(R.string.title_my_classes);
                 break;
-            case MY_CALENDAR:
+            case NavigationDrawerListAdapter.MY_CALENDAR:
                 mTitle = getString(R.string.title_my_calendar);
+                break;
+            case NavigationDrawerListAdapter.MY_ASSIGNMENTS:
+                mTitle = getString(R.string.title_my_assignments);
+                break;
 
         }
     }
@@ -153,24 +154,28 @@ public class Home extends ActionBarActivity
 
     private Fragment getFragment(int position) {
         switch (position) {
-            case SCHEDULE:
+            case NavigationDrawerListAdapter.SCHEDULE:
                 mTitle = getString(R.string.header_schedule);
                 currentSchedule = ClassLoader.loadCurrentSchedule(this);
                 return ScheduleFragment.newInstance(currentSchedule, true);
 
-            case SCHEDULE_DESIGNER:
+            case NavigationDrawerListAdapter.SCHEDULE_DESIGNER:
                 mTitle = getString(R.string.header_design_a_schedule);
                 return CreateScheduleFragment.newInstance("hello", "world");
-            case MY_CLASSES:
+
+            case NavigationDrawerListAdapter.MY_CLASSES:
                 mTitle = getString(R.string.title_my_classes);
                 currentSchedule = ClassLoader.loadCurrentSchedule(this);
                 return MyClassesFragment.newInstance(currentSchedule);
 
             //TODO: MyCalendar fragment
-            case MY_CALENDAR:
+            case NavigationDrawerListAdapter.MY_CALENDAR:
                 mTitle = getString(R.string.title_my_calendar);
                 return PlaceholderFragment.newInstance(position);
 
+            case NavigationDrawerListAdapter.MY_ASSIGNMENTS:
+                mTitle = getString(R.string.title_my_assignments);
+                return PlaceholderFragment.newInstance(position);
 
             default:
                 return PlaceholderFragment.newInstance(position);
@@ -178,12 +183,12 @@ public class Home extends ActionBarActivity
     }
 
     public void onCreateScheduleClick(View view){
-        mNavigationDrawerFragment.selectItem(SCHEDULE_DESIGNER);
-        onNavigationDrawerItemSelected(SCHEDULE_DESIGNER);
+        mNavigationDrawerFragment.selectItem(NavigationDrawerListAdapter.SCHEDULE_DESIGNER);
+        onNavigationDrawerItemSelected(NavigationDrawerListAdapter.SCHEDULE_DESIGNER);
     }
 
     public void onSectionDeleted(){
-        reloadPage(SCHEDULE_DESIGNER);
+        reloadPage(NavigationDrawerListAdapter.SCHEDULE_DESIGNER);
 
     }
 
@@ -193,7 +198,7 @@ public class Home extends ActionBarActivity
     }
 
     public void onSetScheduleClick(){
-        reloadPage(SCHEDULE_DESIGNER);
+        reloadPage(NavigationDrawerListAdapter.SCHEDULE_DESIGNER);
     }
 
     /**
@@ -260,6 +265,8 @@ public class Home extends ActionBarActivity
         }
     }
 
-
-
+    @Override
+    public void onClassesDropped() {
+        reloadPage(NavigationDrawerListAdapter.MY_CLASSES);
+    }
 }

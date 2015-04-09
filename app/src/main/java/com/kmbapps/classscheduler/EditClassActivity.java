@@ -15,6 +15,7 @@ import android.widget.Toast;
 public class EditClassActivity extends ActionBarActivity implements ConfirmationDialogFragment.ConfirmationDialogListener{
 
     Class mClass;
+    Class updatedClass;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,21 +81,22 @@ public class EditClassActivity extends ActionBarActivity implements Confirmation
     }
 
     public void saveClass() {
+        updatedClass = new Class();
         EditText classDepartment = (EditText) findViewById(R.id.classDepartment);
-        mClass.setDepartment(classDepartment.getText().toString());
+        updatedClass.setDepartment(classDepartment.getText().toString());
 
         EditText classNumber = (EditText) findViewById(R.id.classNumber);
-        mClass.setNumber(classNumber.getText().toString());
+        updatedClass.setNumber(classNumber.getText().toString());
 
         EditText className = (EditText) findViewById(R.id.className);
-        mClass.setName(className.getText().toString());
+        updatedClass.setName(className.getText().toString());
 
         Spinner creditHours = (Spinner) findViewById(R.id.creditHours);
-        mClass.setCreditHours(Integer.parseInt(creditHours.getSelectedItem().toString()));
+        updatedClass.setCreditHours(Integer.parseInt(creditHours.getSelectedItem().toString()));
 
 
         //save the changes
-        ClassLoader.saveClass(this.getApplicationContext(), mClass);
+        ClassLoader.saveClass(this.getApplicationContext(), updatedClass, mClass);
 
         //return
         Intent intent = new Intent(this, Home.class);
