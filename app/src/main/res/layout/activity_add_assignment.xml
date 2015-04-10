@@ -61,7 +61,8 @@
             android:textSize="@dimen/abc_text_size_small_material"
             android:id="@+id/assignmentDueDate"
             android:onClick="selectDate"
-            android:focusable="false"/>
+            android:focusable="false"
+            android:saveEnabled="false"/>
 
         <EditText
             android:layout_width="0dp"
@@ -72,7 +73,8 @@
             android:id="@+id/assignmentDueTime"
             android:onClick="selectTime"
             android:focusable="false"
-            android:visibility="gone"/>
+            android:visibility="gone"
+            android:saveEnabled="false"/>
 
     </LinearLayout>
 

@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 
 public class AddClassActivity extends ActionBarActivity {
@@ -74,7 +75,12 @@ public class AddClassActivity extends ActionBarActivity {
         Class newClass = new Class(department, number, name, hours);
 
         //save the new class
-        ClassLoader.saveClass(this.getApplicationContext(), newClass);
+        boolean classSaved = ClassLoader.saveClass(this.getApplicationContext(), newClass);
+
+        if(!classSaved){
+            Toast toast = Toast.makeText(getApplicationContext(), getString(R.string.toast_class_already_exists), Toast.LENGTH_SHORT);
+            toast.show();
+        }
 
     }
 

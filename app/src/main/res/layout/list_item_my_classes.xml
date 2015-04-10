@@ -13,5 +13,6 @@
         android:layout_height="fill_parent"
         android:id="@+id/classTextView"
         android:text="testtesttest"
-        android:gravity="center_vertical"/>
+        android:gravity="center_vertical"
+        android:textColor="@color/primary_text_default_material_light"/>
 </LinearLayout>

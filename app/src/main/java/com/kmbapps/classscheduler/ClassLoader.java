@@ -66,7 +66,7 @@ public class ClassLoader {
             myClasses.add(myClass);
         }
         else{
-            myClasses.set(myClasses.indexOf(myClass), myClass);
+            return false;
         }
 
         try {
@@ -98,6 +98,33 @@ public class ClassLoader {
         else{
             return false;
         }
+
+        try {
+            FileOutputStream fos = context.openFileOutput(savedClassesFile, Context.MODE_PRIVATE);
+            ObjectOutputStream os = new ObjectOutputStream(fos);
+            os.writeObject(myClasses);
+            os.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("FileNotFoundException: " + e.getMessage());
+            return false;
+        } catch (IOException e) {
+            System.out.println("IOException: " + e.getMessage());
+            return false;
+        }
+
+        schedulesChanged = true;
+        return true;
+    }
+
+    public static boolean saveSection(Context context, Section updatedSection, Section originalSection, Class containingClass){
+        int index = myClasses.indexOf(containingClass);
+        if (originalSection == null) {
+            containingClass.addSection(updatedSection);
+        } else {
+            int replaceIndex = containingClass.getSections().indexOf(originalSection);
+            containingClass.getSections().set(replaceIndex, updatedSection);
+        }
+        myClasses.set(index, containingClass);
 
         try {
             FileOutputStream fos = context.openFileOutput(savedClassesFile, Context.MODE_PRIVATE);

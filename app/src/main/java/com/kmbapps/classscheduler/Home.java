@@ -17,6 +17,8 @@ import android.view.ViewGroup;
 
 //TODO: make new app icon (this needs to be saved as ic_launcher.png in the drawable folders)
 //TODO: put list TextViews in LinearLayouts and give them padding inside view
+//TODO: navdrawer accessible from other activities
+
 
 public class Home extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks, ScheduleFragment.OnScheduleInteractionListener,
@@ -173,6 +175,7 @@ public class Home extends ActionBarActivity
                 mTitle = getString(R.string.title_my_calendar);
                 return PlaceholderFragment.newInstance(position);
 
+            //TODO: MyAssignments fragment
             case NavigationDrawerListAdapter.MY_ASSIGNMENTS:
                 mTitle = getString(R.string.title_my_assignments);
                 return PlaceholderFragment.newInstance(position);

@@ -12,7 +12,8 @@
         android:minHeight="@dimen/touchable_ui_component_min"
         android:id="@+id/classTitle"
         android:gravity="center_vertical"
-        android:text="title"/>
+        android:text="title"
+        android:textColor="@color/primary_text_default_material_light"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -20,7 +21,8 @@
         android:minHeight="@dimen/touchable_ui_component_min"
         android:id="@+id/classSchedule"
         android:gravity="center_vertical"
-        android:text="schedule"/>
+        android:text="schedule"
+        android:textColor="@color/primary_text_default_material_light"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -28,7 +30,8 @@
         android:minHeight="@dimen/touchable_ui_component_min"
         android:id="@+id/professor"
         android:gravity="center_vertical"
-        android:text="professor"/>
+        android:text="professor"
+        android:textColor="@color/primary_text_default_material_light"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -36,7 +39,8 @@
         android:minHeight="@dimen/touchable_ui_component_min"
         android:id="@+id/uniqueNumber"
         android:gravity="center_vertical"
-        android:text="unique number"/>
+        android:text="unique number"
+        android:textColor="@color/primary_text_default_material_light"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -44,14 +48,17 @@
         android:minHeight="@dimen/touchable_ui_component_min"
         android:id="@+id/creditHours"
         android:gravity="center_vertical"
-        android:text="credit hours"/>
+        android:text="credit hours"
+        android:textColor="@color/primary_text_default_material_light"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:minHeight="31dp"
         android:gravity="bottom"
-        android:text="@string/text_other_info"/>
+        android:text="@string/text_other_info"
+        android:textStyle="bold"
+        android:textColor="@color/primary_text_default_material_light"/>
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">

@@ -11,6 +11,6 @@
         android:layout_height="wrap_content"
         android:inputType="numberDecimal"
         android:id="@+id/grade"
-        android:textColor="@color/black"/>
+        android:textColor="@color/primary_text_default_material_light"/>
 
 </LinearLayout>

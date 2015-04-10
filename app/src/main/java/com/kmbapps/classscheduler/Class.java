@@ -83,6 +83,10 @@ public class Class implements Serializable {
         return sections;
     }
 
+    public void setSections(List<Section> sections) {
+        this.sections = sections;
+    }
+
     @Override
     /**
      * returns string showing name, class number, and credit hours

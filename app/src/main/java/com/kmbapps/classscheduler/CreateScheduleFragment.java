@@ -24,6 +24,8 @@ import java.util.List;
  * create an instance of this fragment.
  *
  */
+
+//TODO: toast when going from 0 to 1 schedules, telling the user they can swipe to see the schedules
 public class CreateScheduleFragment extends Fragment{
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final int DESIRED_CLASSES = 0;

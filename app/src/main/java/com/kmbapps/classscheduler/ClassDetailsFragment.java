@@ -3,6 +3,7 @@ package com.kmbapps.classscheduler;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,15 +51,17 @@ public class ClassDetailsFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_class_details, container, false);
 
         TextView classTitle = (TextView) v.findViewById(R.id.classTitle);
-        classTitle.setText("Class: " + mSection.getContainingClass().getDepartment() + " " + mSection.getContainingClass().getNumber() + " " + mSection.getContainingClass().getName());
+        classTitle.setText(Html.fromHtml("<b>Class:</b> " + mSection.getContainingClass().getDepartment() + " " + mSection.getContainingClass().getNumber() + " " + mSection.getContainingClass().getName()));
         TextView classSchedule = (TextView) v.findViewById(R.id.classSchedule);
-        classSchedule.setText("Schedule:\n" + mSection.formatTime());
+
+        //TODO: HTML format time method so that line breaks are properly added
+        classSchedule.setText(Html.fromHtml("<b>Schedule:</b><br>" + mSection.formatTime()));
         TextView professor = (TextView) v.findViewById(R.id.professor);
-        professor.setText("Professor: " + mSection.getProfessor());
+        professor.setText(Html.fromHtml("<b>Professor:</b> " + mSection.getProfessor()));
         TextView uniqueNumber = (TextView) v.findViewById(R.id.uniqueNumber);
-        uniqueNumber.setText("Section number: " + mSection.getSectionNumber());
+        uniqueNumber.setText(Html.fromHtml("<b>Section number:</b> " + mSection.getSectionNumber()));
         TextView creditHours = (TextView) v.findViewById(R.id.creditHours);
-        creditHours.setText("Credit hours: " + mSection.getContainingClass().getCreditHours());
+        creditHours.setText(Html.fromHtml("<b>Credit hours:</b> " + mSection.getContainingClass().getCreditHours()));
         TextView otherInfo = (TextView) v.findViewById(R.id.otherInfo);
         otherInfo.setText(mSection.getNotes());
 

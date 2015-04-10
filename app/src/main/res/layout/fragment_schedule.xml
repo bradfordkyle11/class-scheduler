@@ -18,49 +18,56 @@
             android:layout_width="0dp"
             android:text="@string/sunday_abbreviation"
             android:layout_weight="1"
-            android:gravity="center" />
+            android:gravity="center"
+            android:textColor="@color/primary_text_default_material_light"/>
 
         <TextView
             android:layout_height="wrap_content"
             android:layout_width="0dp"
             android:text="@string/monday_abbreviation"
             android:layout_weight="1"
-            android:gravity="center" />
+            android:gravity="center"
+            android:textColor="@color/primary_text_default_material_light"/>
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@string/tuesday_abbreviation"
             android:layout_weight="1"
-            android:gravity="center" />
+            android:gravity="center"
+            android:textColor="@color/primary_text_default_material_light"/>
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@string/wednesday_abbreviation"
             android:layout_weight="1"
-            android:gravity="center" />
+            android:gravity="center"
+            android:textColor="@color/primary_text_default_material_light"/>
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@string/thursday_abbreviation"
             android:layout_weight="1"
-            android:gravity="center" />
+            android:gravity="center"
+            android:textColor="@color/primary_text_default_material_light"/>
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@string/friday_abbreviation"
             android:layout_weight="1"
-            android:gravity="center" />
+            android:gravity="center"
+            android:textColor="@color/primary_text_default_material_light"/>
 
         <TextView
             android:layout_height="wrap_content"
             android:layout_width="0dp"
             android:text="@string/saturday_abbreviation"
             android:layout_weight="1"
-            android:gravity="center" />
+            android:gravity="center"
+            android:textColor="@color/primary_text_default_material_light"/>
     </LinearLayout>
 
     <ScrollView

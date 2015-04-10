@@ -54,7 +54,8 @@
             android:textSize="@dimen/abc_text_size_medium_material"
             android:paddingTop="@dimen/padding_inside_view"
             android:paddingLeft="@dimen/padding_inside_view"
-            android:paddingRight="@dimen/padding_inside_view"/>
+            android:paddingRight="@dimen/padding_inside_view"
+            android:textColor="@color/primary_text_default_material_light"/>
 
         <LinearLayout
             android:orientation="vertical"

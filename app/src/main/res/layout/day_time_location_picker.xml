@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/dayTimeLocationPicker"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:paddingTop="@dimen/activity_padding"
-    android:paddingBottom="@dimen/activity_padding">
+    android:paddingBottom="@dimen/activity_padding"
+    tools:context="com.kmbapps.classscheduler.AddClassSectionActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -25,49 +27,56 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="@string/sunday_abbreviation" />
+                android:text="@string/sunday_abbreviation"
+                android:textColor="@color/primary_text_default_material_light"/>
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="@string/monday_abbreviation" />
+                android:text="@string/monday_abbreviation"
+                android:textColor="@color/primary_text_default_material_light"/>
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="@string/tuesday_abbreviation" />
+                android:text="@string/tuesday_abbreviation"
+                android:textColor="@color/primary_text_default_material_light"/>
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="@string/wednesday_abbreviation" />
+                android:text="@string/wednesday_abbreviation"
+                android:textColor="@color/primary_text_default_material_light"/>
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="@string/thursday_abbreviation" />
+                android:text="@string/thursday_abbreviation"
+                android:textColor="@color/primary_text_default_material_light"/>
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="@string/friday_abbreviation" />
+                android:text="@string/friday_abbreviation"
+                android:textColor="@color/primary_text_default_material_light"/>
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="@string/saturday_abbreviation" />
+                android:text="@string/saturday_abbreviation"
+                android:textColor="@color/primary_text_default_material_light"/>
 
         </LinearLayout>
 
@@ -89,7 +98,8 @@
                     android:id="@+id/sunCheck"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:onClick="showTimeAndLocation" />
+                    android:onClick="showTimeAndLocation"
+                    android:saveEnabled="false"/>
             </RelativeLayout>
 
             <RelativeLayout
@@ -102,7 +112,8 @@
                     android:id="@+id/monCheck"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:onClick="showTimeAndLocation" />
+                    android:onClick="showTimeAndLocation"
+                    android:saveEnabled="false"/>
             </RelativeLayout>
 
             <RelativeLayout
@@ -115,7 +126,8 @@
                     android:id="@+id/tueCheck"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:onClick="showTimeAndLocation" />
+                    android:onClick="showTimeAndLocation"
+                    android:saveEnabled="false"/>
             </RelativeLayout>
 
             <RelativeLayout
@@ -129,7 +141,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:onClick="showTimeAndLocation" />
+                    android:onClick="showTimeAndLocation"
+                    android:saveEnabled="false"/>
             </RelativeLayout>
 
             <RelativeLayout
@@ -142,7 +155,8 @@
                     android:id="@+id/thuCheck"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:onClick="showTimeAndLocation" />
+                    android:onClick="showTimeAndLocation"
+                    android:saveEnabled="false"/>
             </RelativeLayout>
 
             <RelativeLayout
@@ -155,7 +169,8 @@
                     android:id="@+id/friCheck"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:onClick="showTimeAndLocation" />
+                    android:onClick="showTimeAndLocation"
+                    android:saveEnabled="false"/>
             </RelativeLayout>
 
             <RelativeLayout
@@ -168,7 +183,8 @@
                     android:id="@+id/satCheck"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:onClick="showTimeAndLocation" />
+                    android:onClick="showTimeAndLocation"
+                    android:saveEnabled="false"/>
             </RelativeLayout>
 
 
@@ -199,7 +215,8 @@
                     android:clickable="false"
                     android:text="@string/text_from"
                     android:visibility="visible"
-                    android:gravity="center"/>
+                    android:gravity="center"
+                    android:textColor="@color/primary_text_default_material_light"/>
 
                 <!-- TODO: better background for startTime and endTime -->
 
@@ -211,7 +228,8 @@
                     android:clickable="true"
                     android:hint="@string/text_start_time"
                     android:onClick="setTime"
-                    android:visibility="visible" />
+                    android:visibility="visible"
+                    android:textColor="@color/primary_text_default_material_light"/>
             </LinearLayout>
 
 
@@ -227,7 +245,8 @@
                     android:clickable="false"
                     android:gravity="right"
                     android:text="@string/text_to"
-                    android:visibility="visible" />
+                    android:visibility="visible"
+                    android:textColor="@color/primary_text_default_material_light"/>
 
                 <TextView
                     android:id="@+id/endTime"
@@ -237,7 +256,8 @@
                     android:clickable="true"
                     android:hint="@string/text_end_time"
                     android:onClick="setTime"
-                    android:visibility="visible" />
+                    android:visibility="visible"
+                    android:textColor="@color/primary_text_default_material_light"/>
             </LinearLayout>
         </LinearLayout>
 
@@ -251,7 +271,7 @@
             android:hint="@string/hint_room_number"
             android:textSize="@dimen/abc_text_size_small_material"
             android:visibility="gone"
-            android:inputType="number|textCapWords"/>
+            android:saveEnabled="false"/>
     </LinearLayout>
 
 

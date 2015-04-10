@@ -18,7 +18,8 @@
         android:gravity="center_vertical"
         android:id="@+id/assignmentName"
         android:ellipsize="end"
-        android:singleLine="true"/>
+        android:singleLine="true"
+        android:textColor="@color/primary_text_default_material_light"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -29,6 +30,7 @@
         android:maxWidth="@dimen/touchable_ui_component_min"
         android:singleLine="true"
         android:layout_marginTop="@dimen/activity_padding"
-        android:layout_marginBottom="@dimen/activity_padding"/>
+        android:layout_marginBottom="@dimen/activity_padding"
+        android:textColor="@color/primary_text_default_material_light"/>
 
 </LinearLayout>

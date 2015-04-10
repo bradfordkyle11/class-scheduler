@@ -164,6 +164,8 @@ public class MyClassesFragment extends Fragment implements ConfirmationDialogFra
         @Override
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
             switch (item.getItemId()) {
+
+                //TODO: edit class (same as the activity that will be used by the ClassDetails edit fab)
                 case R.id.action_edit:
 //                    View v = (View) mode.getTag();
 //

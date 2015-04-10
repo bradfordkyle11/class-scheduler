@@ -94,6 +94,10 @@ public class EditClassActivity extends ActionBarActivity implements Confirmation
         Spinner creditHours = (Spinner) findViewById(R.id.creditHours);
         updatedClass.setCreditHours(Integer.parseInt(creditHours.getSelectedItem().toString()));
 
+        if(mClass!=null){
+            updatedClass.setSections(mClass.getSections());
+        }
+
 
         //save the changes
         ClassLoader.saveClass(this.getApplicationContext(), updatedClass, mClass);

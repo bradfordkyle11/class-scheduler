@@ -20,6 +20,7 @@
             android:textSize="@dimen/abc_text_size_medium_material"
             android:id="@+id/assignmentTypeAndName"
             android:textStyle="bold"
+            android:textColor="@color/primary_text_default_material_light"
             android:paddingTop="@dimen/activity_padding"
             android:paddingBottom="@dimen/activity_padding"
             android:paddingLeft="@dimen/activity_horizontal_margin"
@@ -36,7 +37,8 @@
             android:paddingLeft="@dimen/activity_horizontal_margin"
             android:paddingRight="@dimen/activity_horizontal_margin"
             android:gravity="center_vertical"
-            android:text="date"/>
+            android:text="date"
+            android:textColor="@color/primary_text_default_material_light"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -48,7 +50,8 @@
             android:paddingLeft="@dimen/activity_horizontal_margin"
             android:paddingRight="@dimen/activity_horizontal_margin"
             android:gravity="center_vertical"
-            android:text="Grade"/>
+            android:text="Grade"
+            android:textColor="@color/primary_text_default_material_light"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -60,7 +63,8 @@
             android:paddingBottom="@dimen/activity_padding"
             android:paddingLeft="@dimen/activity_horizontal_margin"
             android:paddingRight="@dimen/activity_horizontal_margin"
-            android:gravity="center_vertical"/>
+            android:gravity="center_vertical"
+            android:textColor="@color/primary_text_default_material_light"/>
 
     </LinearLayout>
 

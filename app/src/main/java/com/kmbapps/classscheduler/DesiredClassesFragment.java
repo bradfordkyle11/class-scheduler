@@ -31,7 +31,6 @@ import java.util.List;
  *
  */
 
-//TODO: OnClick for classes and sections takes you to the edit page
 public class DesiredClassesFragment extends Fragment implements ConfirmationDialogFragment.ConfirmationDialogListener{
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     public static final String ARG_PARAM1 = "param1";
@@ -96,7 +95,7 @@ public class DesiredClassesFragment extends Fragment implements ConfirmationDial
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_desired_classes, container, false);
 
-        //show "you have no classes text"
+        //show/hide "you have no classes text"
         TextView textview = (TextView) view.findViewById(R.id.no_classes);
         if(classes==null){
             textview.setVisibility(View.VISIBLE);
@@ -140,12 +139,19 @@ public class DesiredClassesFragment extends Fragment implements ConfirmationDial
                     }
                 });
 
-                //select view if action mode is active, otherwise open the editor
                 course.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        //select view
                         if(mActionMode!=null){
                             actionModeSetup(v, CLASS_ACTION_MODE);
+                        }
+
+                        //open class editing mode
+                        else{
+                            Intent intent = new Intent(getActivity().getApplicationContext(), EditClassActivity.class);
+                            intent.putExtra("MyClass", (Class) v.getTag());
+                            startActivity(intent);
                         }
                     }
                 });
@@ -170,12 +176,23 @@ public class DesiredClassesFragment extends Fragment implements ConfirmationDial
                         }
                     });
 
-                    //select view if action mode is active, otherwise open the editor
+
                     s.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                            //select view
                             if(mActionMode!=null){
                                 actionModeSetup(v, SECTION_ACTION_MODE);
+                            }
+
+                            //open section editing mode
+                            else{
+                                Intent intent = new Intent(getActivity(), AddClassSectionActivity.class);
+
+                                intent.putExtra("newClass", false);
+                                intent.putExtra("mSection", (Section) v.getTag());
+                                intent.putExtra("MyClass", ((Section)v.getTag()).getContainingClass());
+                                startActivity(intent);
                             }
                         }
                     });

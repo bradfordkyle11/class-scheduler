@@ -114,6 +114,8 @@
 
     <color name="class_info_background">#55ffffff</color>
 
+    <color name="text_color">#E6000000</color>
+
     <array name="classCalendarColors">
         <item>@color/blue03</item>
         <item>@color/purple03</item>

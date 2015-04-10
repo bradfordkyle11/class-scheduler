@@ -23,7 +23,7 @@
         android:gravity="center_vertical"
         android:layout_marginTop="@dimen/activity_padding"
         android:layout_marginBottom="@dimen/activity_padding"
-        android:textColor="@color/black"
+        android:textColor="@color/primary_text_default_material_light"
         android:layout_weight=".8"/>
 
 

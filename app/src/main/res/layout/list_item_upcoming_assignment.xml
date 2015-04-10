@@ -16,7 +16,8 @@
         android:gravity="center_vertical"
         android:textSize="@dimen/abc_text_size_small_material"
         android:textStyle="bold"
-        android:maxWidth="240dp"/>
+        android:maxWidth="240dp"
+        android:textColor="@color/primary_text_default_material_light"/>
     <TextView
         android:layout_width="0dp"
         android:layout_height="match_parent"
@@ -27,14 +28,16 @@
         android:gravity="center_vertical"
         android:id="@+id/assignmentName"
         android:ellipsize="end"
-        android:singleLine="true"/>
+        android:singleLine="true"
+        android:textColor="@color/primary_text_default_material_light"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:textSize="@dimen/abc_text_size_small_material"
         android:gravity="center_vertical"
-        android:id="@+id/assignmentDueDate"/>
+        android:id="@+id/assignmentDueDate"
+        android:textColor="@color/primary_text_default_material_light"/>
 
     <CheckBox
         android:layout_width="wrap_content"

@@ -22,7 +22,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 
-public class AddClassSectionActivity extends ActionBarActivity implements ConfirmationDialogFragment.ConfirmationDialogListener{
+public class AddClassSectionActivity extends ActionBarActivity implements ConfirmationDialogFragment.ConfirmationDialogListener {
 
     private static final int MONDAY = 1;
     private static final int TUESDAY = 2;
@@ -32,6 +32,9 @@ public class AddClassSectionActivity extends ActionBarActivity implements Confir
 
     private final static int DEFAULT_START_HOUR = 8;
     private final static int DEFAULT_START_MINUTE = 0;
+
+    private final static int SAVE_SECTION = 0;
+    private final static int SAVE_INSTANCE_STATE = 1;
     private Class myClass;
     private boolean newClass;
     private Section mSection;
@@ -51,101 +54,124 @@ public class AddClassSectionActivity extends ActionBarActivity implements Confir
         //testFindTime();
 
         //restore saved info if editing a section
-        if (!newClass){
-            loadingSection = true;
+        if (!newClass) {
+            Section s;
             mSection = (Section) intent.getSerializableExtra("mSection");
-            ArrayList<MyTime> times = (ArrayList<MyTime>) mSection.getTimes();
+            loadingSection = true;
+            if (savedInstanceState != null) {
+                s = (Section) savedInstanceState.getSerializable("section");
+            } else {
+                s = mSection;
+            }
+
+
+            ArrayList<MyTime> times = (ArrayList<MyTime>) s.getTimes();
 
             EditText professor = (EditText) findViewById(R.id.edit_professor);
-            professor.setText(mSection.getProfessor());
+            professor.setText(s.getProfessor());
 
             EditText sectionNumber = (EditText) findViewById(R.id.edit_section_number);
-            sectionNumber.setText(mSection.getSectionNumber());
+            sectionNumber.setText(s.getSectionNumber());
 
             EditText notes = (EditText) findViewById(R.id.edit_notes);
-            notes.setText(mSection.getNotes());
+            notes.setText(s.getNotes());
 
             //set up the dayTimeLocationPickers()
-            for(int i = 0; i < times.size(); i++){
+            for (int i = 0; i < times.size(); i++) {
                 MyTime time = times.get(i);
 
                 //restore room number
                 EditText roomNumber = (EditText) dayTimeLocationPickers.get(i).findViewById(R.id.edit_room_number);
                 roomNumber.setText(time.getRoomNumber());
 
-                TextView startTime = (TextView) dayTimeLocationPickers.get(i).findViewById(R.id.startTime);
-                startTime.setText(MyTime.to12HourFormat(time.getStartHour(), time.getStartMinute()));
+                if (time.startTimeSet()) {
+                    TextView startTime = (TextView) dayTimeLocationPickers.get(i).findViewById(R.id.startTime);
+                    startTime.setText(MyTime.to12HourFormat(time.getStartHour(), time.getStartMinute()));
+                }
 
-                TextView endTime = (TextView) dayTimeLocationPickers.get(i).findViewById(R.id.endTime);
-                endTime.setText(MyTime.to12HourFormat(time.getEndHour(), time.getEndMinute()));
+                if (time.endTimeSet()) {
+                    TextView endTime = (TextView) dayTimeLocationPickers.get(i).findViewById(R.id.endTime);
+                    endTime.setText(MyTime.to12HourFormat(time.getEndHour(), time.getEndMinute()));
+                }
 
                 //check the days
                 boolean dayChecked = false;
-                if(time.getDays().contains("Su")){
+                if (time.getDays().contains("Su")) {
                     CheckBox sunday = (CheckBox) dayTimeLocationPickers.get(i).findViewById(R.id.sunCheck);
                     sunday.setChecked(true);
                     dayChecked = true;
                 }
-                if(time.getDays().contains("M")){
+                if (time.getDays().contains("M")) {
                     CheckBox monday = (CheckBox) dayTimeLocationPickers.get(i).findViewById(R.id.monCheck);
                     monday.setChecked(true);
                     dayChecked = true;
                 }
-                if(time.getDays().contains("Tu")){
+                if (time.getDays().contains("Tu")) {
                     CheckBox tuesday = (CheckBox) dayTimeLocationPickers.get(i).findViewById(R.id.tueCheck);
                     tuesday.setChecked(true);
                     dayChecked = true;
                 }
-                if(time.getDays().contains("W")){
+                if (time.getDays().contains("W")) {
                     CheckBox wednesday = (CheckBox) dayTimeLocationPickers.get(i).findViewById(R.id.wedCheck);
                     wednesday.setChecked(true);
                     dayChecked = true;
                 }
-                if(time.getDays().contains("Th")){
+                if (time.getDays().contains("Th")) {
                     CheckBox thursday = (CheckBox) dayTimeLocationPickers.get(i).findViewById(R.id.thuCheck);
                     thursday.setChecked(true);
                     dayChecked = true;
                 }
-                if(time.getDays().contains("F")){
+                if (time.getDays().contains("F")) {
                     CheckBox friday = (CheckBox) dayTimeLocationPickers.get(i).findViewById(R.id.friCheck);
                     friday.setChecked(true);
                     dayChecked = true;
                 }
-                if(time.getDays().contains("Sa")){
+                if (time.getDays().contains("Sa")) {
                     CheckBox saturday = (CheckBox) dayTimeLocationPickers.get(i).findViewById(R.id.satCheck);
                     saturday.setChecked(true);
                     dayChecked = true;
                 }
 
                 //make views visible if a box is checked
-                if(dayChecked) {
+                if (dayChecked) {
                     View startAndEndTimes = dayTimeLocationPickers.get(i).findViewById(R.id.startAndEndTimes);
                     startAndEndTimes.setVisibility(View.VISIBLE);
                     View room = dayTimeLocationPickers.get(i).findViewById(R.id.edit_room_number);
                     room.setVisibility(View.VISIBLE);
                 }
-               // newDayTimeLocationPicker();
+                newDayTimeLocationPicker();
             }
             loadingSection = false;
 
         }
     }
 
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        Section s = createSection(SAVE_INSTANCE_STATE);
+        outState.putSerializable("section", s);
+
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        if(newClass) {
+        if (newClass) {
             getMenuInflater().inflate(R.menu.add_class_section, menu);
-        }
-        else{
+        } else {
             getMenuInflater().inflate(R.menu.edit_class_section, menu);
         }
         ActionBar actionBar = getSupportActionBar();
-        if(newClass) {
+        if (newClass) {
             actionBar.setTitle(getString(R.string.header_add_class_section));
-        }
-        else{
+        } else {
             actionBar.setTitle(getString(R.string.header_edit_class_section));
         }
         return true;
@@ -160,22 +186,36 @@ public class AddClassSectionActivity extends ActionBarActivity implements Confir
 
         switch (item.getItemId()) {
             case R.id.action_save:
-                createSectionAndReturn();
-                break;
+                Section newSection = createSection(SAVE_SECTION);
+                Class updatedClass = new Class();
+
+                if (newSection != null) {
+                    if (mSection == null) {
+                        myClass.addSection(newSection);
+                    } else {
+                        int replaceIndex = myClass.getSections().indexOf(mSection);
+                        myClass.getSections().set(replaceIndex, newSection);
+                    }
+
+                    ClassLoader.saveSection(this, newSection, mSection, myClass);
+                    ClassLoader.updateSchedules();
+
+
+                    //return
+                    Intent intent = new Intent(this, Home.class);
+                    startActivity(intent);
+                }
+                return true;
 
             case R.id.action_delete:
                 deleteSectionAndReturn();
+                return true;
             default:
                 break;
 
         }
         return super.onOptionsItemSelected(item);
     }
-
-
-    //TODO: override onSavedInstanceState to save the values in the dayTimeLocationPickers UI
-
-
 
     public void cancel(View view) {
         finish();
@@ -193,31 +233,28 @@ public class AddClassSectionActivity extends ActionBarActivity implements Confir
                         displayDate.setText(MyTime.to12HourFormat(hourOfDay, minute).toString());
                     }
                 }, mHour, mMinute, false);
-        if(view.getId()==R.id.startTime){
+        if (view.getId() == R.id.startTime) {
             String formattedTime = ((TextView) view).getText().toString();
-            if(!formattedTime.equals("")){
+            if (!formattedTime.equals("")) {
                 int hour = findHour(formattedTime);
                 int minute = findMinute(formattedTime);
                 tpd.updateTime(hour, minute);
-            }
-            else {
+            } else {
                 tpd.updateTime(DEFAULT_START_HOUR, DEFAULT_START_MINUTE);
             }
         }
-        if(view.getId()==R.id.endTime){
+        if (view.getId() == R.id.endTime) {
             String formattedTime = ((TextView) view).getText().toString();
-            if(!formattedTime.equals("")){
+            if (!formattedTime.equals("")) {
                 int hour = findHour(formattedTime);
                 int minute = findMinute(formattedTime);
                 tpd.updateTime(hour, minute);
-            }
-            else {
+            } else {
                 LinearLayout startAndEndTimes = (LinearLayout) view.getParent().getParent();
                 TextView startTime = (TextView) startAndEndTimes.findViewById(R.id.startTime);
                 if (!startTime.getText().toString().equals("")) {
                     tpd.updateTime(findHour(startTime.getText().toString()), findMinute(startTime.getText().toString()));
-                }
-                else{
+                } else {
                     tpd.updateTime(DEFAULT_START_HOUR, DEFAULT_START_MINUTE);
                 }
             }
@@ -244,8 +281,8 @@ public class AddClassSectionActivity extends ActionBarActivity implements Confir
         //inflate the new layout
         LayoutInflater inflater = (LayoutInflater) this
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        dayTimeLocationPickers.set(dayTimeLocationPickers.size()-1, inflater.inflate(R.layout.day_time_location_picker, null));
-        dayTimeLocationPickers.get(dayTimeLocationPickers.size()-1).setTag(dayTimeLocationPickers.size()-1);
+        dayTimeLocationPickers.set(dayTimeLocationPickers.size() - 1, inflater.inflate(R.layout.day_time_location_picker, null));
+        dayTimeLocationPickers.get(dayTimeLocationPickers.size() - 1).setTag(dayTimeLocationPickers.size() - 1);
 
         setTextChangedListeners();
 
@@ -256,11 +293,12 @@ public class AddClassSectionActivity extends ActionBarActivity implements Confir
         layout.addView(dayTimeLocationPickers.get(dayTimeLocationPickers.size() - 1));
     }
 
-    public void setTextChangedListeners(){
-        TextView endTime = (TextView) dayTimeLocationPickers.get(dayTimeLocationPickers.size()-1).findViewById(R.id.endTime);
+    public void setTextChangedListeners() {
+        TextView endTime = (TextView) dayTimeLocationPickers.get(dayTimeLocationPickers.size() - 1).findViewById(R.id.endTime);
         endTime.addTextChangedListener(new SelectTimeTextWatcher(endTime) {
             @Override
             public void afterTextChanged(Editable s) {
+
                 LinearLayout startAndEndTimes = (LinearLayout) getView().getParent().getParent();
                 LinearLayout dayTimeLocationPickerLayout = (LinearLayout) getView().getParent().getParent().getParent().getParent();
                 TextView startTime = (TextView) startAndEndTimes.findViewById(R.id.startTime);
@@ -279,25 +317,33 @@ public class AddClassSectionActivity extends ActionBarActivity implements Confir
                     eTime.hour = findHour(endTime.getText().toString());
                     eTime.minute = findMinute(endTime.getText().toString());
 
-                    if(eTime.before(sTime)){
-                        CharSequence text = getString(R.string.toast_invalid_ending_time);
+                    if (eTime.before(sTime)) {
 
-                        Toast toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT);
-                        toast.show();
+                        if(!loadingSection) {
+                            Toast toast = Toast.makeText(getApplicationContext(), getString(R.string.toast_invalid_ending_time), Toast.LENGTH_SHORT);
+                            toast.show();
+                        }
 
-                        endTime.setText("");
+                        endTime.setTextColor(getResources().getColor(R.color.red03));
                         valid = false;
                     }
 
-                    Integer position = (Integer) dayTimeLocationPickerLayout.getTag();
-                    if (valid && (dayTimeLocationPickers.indexOf(dayTimeLocationPickerLayout)==dayTimeLocationPickers.size()-1)) {
-                        newDayTimeLocationPicker();
+                    if(valid){
+                        startTime.setTextColor(getResources().getColor(R.color.primary_text_default_material_light));
+                        endTime.setTextColor(getResources().getColor(R.color.primary_text_default_material_light));
                     }
-                }
-                else if(!loadingSection){
+
+                    Integer position = (Integer) dayTimeLocationPickerLayout.getTag();
+                    if (!loadingSection) {
+                        if (valid && (dayTimeLocationPickers.indexOf(dayTimeLocationPickerLayout) == dayTimeLocationPickers.size() - 1)) {
+                            newDayTimeLocationPicker();
+                        }
+                    }
+                } else if (!loadingSection) {
                     removeEmptyDayTimeLocationPickers();
                 }
             }
+
 
             @Override
             public void beforeTextChanged(CharSequence s, int start,
@@ -311,7 +357,7 @@ public class AddClassSectionActivity extends ActionBarActivity implements Confir
             }
         });
 
-        TextView startTime = (TextView) dayTimeLocationPickers.get(dayTimeLocationPickers.size()-1).findViewById(R.id.startTime);
+        TextView startTime = (TextView) dayTimeLocationPickers.get(dayTimeLocationPickers.size() - 1).findViewById(R.id.startTime);
         startTime.addTextChangedListener(new SelectTimeTextWatcher(startTime) {
             @Override
             public void afterTextChanged(Editable s) {
@@ -333,25 +379,33 @@ public class AddClassSectionActivity extends ActionBarActivity implements Confir
                     eTime.hour = findHour(endTime.getText().toString());
                     eTime.minute = findMinute(endTime.getText().toString());
 
-                    if(eTime.before(sTime)){
-                        CharSequence text = getString(R.string.toast_invalid_starting_time);
+                    if (eTime.before(sTime)) {
 
-                        Toast toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT);
-                        toast.show();
+                        if(!loadingSection) {
+                            Toast toast = Toast.makeText(getApplicationContext(), getString(R.string.toast_invalid_starting_time), Toast.LENGTH_SHORT);
+                            toast.show();
+                        }
 
-                        startTime.setText("");
+                        startTime.setTextColor(getResources().getColor(R.color.red03));
                         valid = false;
                     }
 
-                    Integer position = (Integer) dayTimeLocationPickerLayout.getTag();
-                    if (valid && (dayTimeLocationPickers.indexOf(dayTimeLocationPickerLayout)==dayTimeLocationPickers.size()-1)) {
-                        newDayTimeLocationPicker();
+                    if(valid){
+                        startTime.setTextColor(getResources().getColor(R.color.abc_primary_text_material_light));
+                        endTime.setTextColor(getResources().getColor(R.color.abc_primary_text_material_light));
                     }
-                }
-                else if(!loadingSection){
+
+                    Integer position = (Integer) dayTimeLocationPickerLayout.getTag();
+                    if (!loadingSection) {
+                        if (valid && (dayTimeLocationPickers.indexOf(dayTimeLocationPickerLayout) == dayTimeLocationPickers.size() - 1)) {
+                            newDayTimeLocationPicker();
+                        }
+                    }
+                } else if (!loadingSection) {
                     removeEmptyDayTimeLocationPickers();
                 }
             }
+
 
             @Override
             public void beforeTextChanged(CharSequence s, int start,
@@ -366,10 +420,10 @@ public class AddClassSectionActivity extends ActionBarActivity implements Confir
         });
     }
 
-    public void removeEmptyDayTimeLocationPickers(){
-        for (int i = 0; i < dayTimeLocationPickers.size(); i++){
+    public void removeEmptyDayTimeLocationPickers() {
+        for (int i = 0; i < dayTimeLocationPickers.size(); i++) {
             View startAndEndTimesLayout = dayTimeLocationPickers.get(i).findViewById(R.id.startAndEndTimes);
-            if(startAndEndTimesLayout.getVisibility()==View.GONE){
+            if (startAndEndTimesLayout.getVisibility() == View.GONE) {
 
                 LinearLayout layout = (LinearLayout) findViewById(R.id.dayTimeLocationLayout);
 
@@ -436,7 +490,7 @@ public class AddClassSectionActivity extends ActionBarActivity implements Confir
             v = layout.findViewById(R.id.edit_room_number);
             v.setVisibility(View.GONE);
 
-            if (dayTimeLocationPickers.indexOf(layout)!=dayTimeLocationPickers.size()-1){ //if not the last view in the list
+            if (dayTimeLocationPickers.indexOf(layout) != dayTimeLocationPickers.size() - 1) { //if not the last view in the list
                 dayTimeLocationPickers.remove(layout);
                 LinearLayout l = (LinearLayout) findViewById(R.id.dayTimeLocationLayout);
                 l.removeView(layout);
@@ -491,7 +545,8 @@ public class AddClassSectionActivity extends ActionBarActivity implements Confir
 
     }
 
-    public void createSectionAndReturn() {
+    //creates a section from the info on the page and returns that section
+    public Section createSection(int mode) {
         boolean validSchedule = true;
         boolean hasSchedule = false;
         ArrayList<MyTime> times = new ArrayList<MyTime>();
@@ -514,23 +569,44 @@ public class AddClassSectionActivity extends ActionBarActivity implements Confir
 
                 TextView startTime = (TextView) dayTimeLocationPickers.get(i).findViewById(R.id.startTime);
 
-                if(startTime.getText().toString().equals("")){
-                    String text = getString(R.string.toast_no_start_time);
-                    Toast toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT);
-                    toast.show();
-                    validSchedule = false;
-                    return;
+                if (mode == SAVE_SECTION) {
+                    if (startTime.getText().toString().equals("")) {
+                        String text = getString(R.string.toast_no_start_time);
+                        Toast toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT);
+                        toast.show();
+
+                        validSchedule = false;
+                        return null;
+
+                    }
+                    else if(startTime.getCurrentTextColor()==getResources().getColor(R.color.red03)){
+                        Toast toast = Toast.makeText(getApplicationContext(), getString(R.string.toast_invalid_starting_time), Toast.LENGTH_SHORT);
+                        toast.show();
+                        validSchedule = false;
+                        return null;
+                    }
                 }
                 time.setStartHour(findHour(startTime.getText().toString()));
                 time.setStartMinute(findMinute(startTime.getText().toString()));
 
                 TextView endTime = (TextView) dayTimeLocationPickers.get(i).findViewById(R.id.endTime);
-                if(endTime.getText().toString().equals("")){
-                    String text = getString(R.string.toast_no_end_time);
-                    Toast toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT);
-                    toast.show();
-                    validSchedule = false;
-                    return;
+                if (mode == SAVE_SECTION) {
+                    if (endTime.getText().toString().equals("")) {
+                        String text = getString(R.string.toast_no_end_time);
+                        Toast toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT);
+                        toast.show();
+
+                        validSchedule = false;
+                        return null;
+
+                    }
+
+                    else if(endTime.getCurrentTextColor()==getResources().getColor(R.color.red03)){
+                        Toast toast = Toast.makeText(getApplicationContext(), getString(R.string.toast_invalid_ending_time), Toast.LENGTH_SHORT);
+                        toast.show();
+                        validSchedule = false;
+                        return null;
+                    }
                 }
                 time.setEndHour(findHour(endTime.getText().toString()));
                 time.setEndMinute(findMinute(endTime.getText().toString()));
@@ -543,24 +619,24 @@ public class AddClassSectionActivity extends ActionBarActivity implements Confir
 
         }
 
-        // TODO: highlight the offending schedule or time selector
+        if (mode == SAVE_SECTION) {
+            if (!MyTime.noConflicts(times)) {
+                validSchedule = false;
+                String text = getString(R.string.toast_conflicting_schedules);
+                Toast toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT);
+                toast.show();
+            }
 
-        if(!MyTime.noConflicts(times)){
-            validSchedule = false;
-            String text = getString(R.string.toast_conflicting_schedules);
-            Toast toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT);
-            toast.show();
-        }
-
-        if(!validSchedule){
-            return;
-        }
-        if(!hasSchedule){
-            String text = getString(R.string.toast_no_schedule);
-            Toast toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT);
-            toast.show();
-            validSchedule = false;
-            return;
+            if (!validSchedule) {
+                return null;
+            }
+            if (!hasSchedule) {
+                String text = getString(R.string.toast_no_schedule);
+                Toast toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT);
+                toast.show();
+                validSchedule = false;
+                return null;
+            }
         }
 
         EditText et = (EditText) findViewById(R.id.edit_professor);
@@ -573,29 +649,9 @@ public class AddClassSectionActivity extends ActionBarActivity implements Confir
         String notes = et.getText().toString();
 
 
+        Section newSection = new Section(times, professor, sectionNumber, notes, myClass);
+        return newSection;
 
-        if(mSection==null) {
-            mSection = new Section(times, professor, sectionNumber, notes, myClass);
-            myClass.addSection(mSection);
-        }
-        else{
-            int replaceIndex = myClass.getSections().indexOf(mSection);
-            mSection.setTimes(times);
-            mSection.setProfessor(professor);
-            mSection.setSectionNumber(sectionNumber);
-            mSection.setNotes(notes);
-            mSection.setContainingClass(myClass);
-            myClass.getSections().set(replaceIndex, mSection);
-        }
-
-        //TODO: use saveSection instead
-        ClassLoader.saveClass(this, myClass);
-        ClassLoader.updateSchedules();
-
-
-        //return
-        Intent intent = new Intent(this, Home.class);
-        startActivity(intent);
     }
 
 
@@ -603,6 +659,9 @@ public class AddClassSectionActivity extends ActionBarActivity implements Confir
     //CAUTION: findMinute and findHour will break if the toString method of MyTime is changed
 
     private int findMinute(String time) {
+        if (time.equals("")) {
+            return -1;
+        }
         StringBuilder timeSB = new StringBuilder(time);
         StringBuilder minute = new StringBuilder("");
         minute.append(timeSB.charAt(timeSB.indexOf(":") + 1));
@@ -612,6 +671,9 @@ public class AddClassSectionActivity extends ActionBarActivity implements Confir
     }
 
     private int findHour(String time) {
+        if (time.equals("")) {
+            return -1;
+        }
         StringBuilder timeSB = new StringBuilder(time);
         StringBuilder hour = new StringBuilder("");
 
@@ -721,7 +783,7 @@ public class AddClassSectionActivity extends ActionBarActivity implements Confir
 
     }
 
-    private void deleteSectionAndReturn(){
+    private void deleteSectionAndReturn() {
         ConfirmationDialogFragment.newInstance(getString(R.string.title_delete_section_confirmation), mSection, ConfirmationDialogFragment.ACTIVITY)
                 .show(getSupportFragmentManager(), "confirmation");
     }

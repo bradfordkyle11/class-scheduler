@@ -83,7 +83,8 @@
                 android:id="@+id/textView3"
                 android:textSize="@dimen/abc_text_size_medium_material"
                 android:paddingLeft="4dp"
-                android:paddingRight="4dp"/>
+                android:paddingRight="4dp"
+                android:textColor="@color/primary_text_default_material_light"/>
 
             <Spinner
                 android:layout_width="wrap_content"

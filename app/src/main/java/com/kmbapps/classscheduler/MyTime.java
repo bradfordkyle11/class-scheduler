@@ -20,6 +20,9 @@ public class MyTime implements Serializable {
     private int endHour;
     private int endMinute;
     private String roomNumber;
+
+    private boolean startTimeSet = true;
+    private boolean endTimeSet = true;
     private static final long serialVersionUID = 55556;
 
 
@@ -63,6 +66,9 @@ public class MyTime implements Serializable {
     }
 
     public void setStartHour(int startHour) {
+        if(startHour<0||startHour>23){
+            startTimeSet = false;
+        }
         this.startHour = startHour;
     }
 
@@ -72,6 +78,9 @@ public class MyTime implements Serializable {
     }
 
     public void setStartMinute(int startMinute) {
+        if(startMinute<0||startMinute>59){
+            startTimeSet = false;
+        }
         this.startMinute = startMinute;
     }
 
@@ -80,6 +89,9 @@ public class MyTime implements Serializable {
     }
 
     public void setEndHour(int endHour) {
+        if(endHour<0||endHour>23){
+            endTimeSet = false;
+        }
         this.endHour = endHour;
     }
 
@@ -88,7 +100,18 @@ public class MyTime implements Serializable {
     }
 
     public void setEndMinute(int endMinute) {
+        if(endMinute<0||endMinute>59){
+            endTimeSet = false;
+        }
         this.endMinute = endMinute;
+    }
+
+    public boolean startTimeSet(){
+        return startTimeSet;
+    }
+
+    public boolean endTimeSet(){
+        return endTimeSet;
     }
 
 

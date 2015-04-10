@@ -33,6 +33,7 @@
         <activity
             android:name=".AddClassSectionActivity"
             android:label="@string/title_activity_add_class_section"
+            android:windowSoftInputMode="stateHidden|adjustResize"
             android:parentActivityName=".Home" >
         </activity>
         <activity
