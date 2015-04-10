@@ -24,6 +24,8 @@ import java.util.ArrayList;
 
 public class AddClassSectionActivity extends ActionBarActivity implements ConfirmationDialogFragment.ConfirmationDialogListener {
 
+    //TODO: bug: a red start time will switch to a red end time on screen rotate
+
     private static final int MONDAY = 1;
     private static final int TUESDAY = 2;
     private static final int WEDNESDAY = 3;
@@ -54,7 +56,7 @@ public class AddClassSectionActivity extends ActionBarActivity implements Confir
         //testFindTime();
 
         //restore saved info if editing a section
-        if (!newClass) {
+        if (!newClass||savedInstanceState!=null) {
             Section s;
             mSection = (Section) intent.getSerializableExtra("mSection");
             loadingSection = true;

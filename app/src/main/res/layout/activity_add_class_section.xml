@@ -25,7 +25,8 @@
                 android:layout_height="wrap_content"
                 android:textSize="@dimen/abc_text_size_small_material"
                 android:hint="@string/hint_professor"
-                android:inputType="textCapWords"/>
+                android:inputType="textCapWords"
+                android:imeOptions="flagNoExtractUi"/>
         </LinearLayout>
 
         <LinearLayout
@@ -43,7 +44,8 @@
                 android:layout_height="wrap_content"
                 android:textSize="@dimen/abc_text_size_small_material"
                 android:hint="@string/hint_section_number"
-                android:inputType="textCapWords"/>
+                android:inputType="textCapWords"
+                android:imeOptions="flagNoExtractUi"/>
         </LinearLayout>
 
 

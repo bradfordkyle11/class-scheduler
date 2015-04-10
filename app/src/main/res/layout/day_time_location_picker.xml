@@ -271,7 +271,8 @@
             android:hint="@string/hint_room_number"
             android:textSize="@dimen/abc_text_size_small_material"
             android:visibility="gone"
-            android:saveEnabled="false"/>
+            android:saveEnabled="false"
+            android:imeOptions="flagNoExtractUi"/>
     </LinearLayout>
 
 

@@ -21,7 +21,8 @@
             android:hint="@string/hint_assignment_type"
             android:id="@+id/assignmentType"
             android:inputType="textCapWords"
-            android:textSize="@dimen/abc_text_size_small_material"/>
+            android:textSize="@dimen/abc_text_size_small_material"
+            android:imeOptions="flagNoExtractUi"/>
 
         </LinearLayout>
 
@@ -41,6 +42,7 @@
             android:textSize="@dimen/abc_text_size_small_material"
             android:inputType="textCapWords"
             android:id="@+id/assignmentName"
+            android:imeOptions="flagNoExtractUi"
             />
 
     </LinearLayout>
@@ -93,7 +95,8 @@
             android:textSize="@dimen/abc_text_size_small_material"
             android:id="@+id/assignmentGrade"
             android:hint="@string/hint_assignment_grade"
-            android:inputType="numberDecimal"/>
+            android:inputType="numberDecimal"
+            android:imeOptions="flagNoExtractUi"/>
 
 
     </LinearLayout>
