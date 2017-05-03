@@ -108,9 +108,9 @@ public class NavigationDrawerFragment extends Fragment {
                 R.layout.list_item_nav_drawer,
                 new String[]{
                         getString(R.string.title_schedule),
-                        getString(R.string.title_my_classes),
+                        /*getString(R.string.title_my_classes),
                         getString(R.string.title_my_assignments),
-                        getString(R.string.title_my_calendar),
+                        getString(R.string.title_my_calendar),*/ //TODO re-add these features
                         getString(R.string.title_design_a_schedule)
                 }));
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);

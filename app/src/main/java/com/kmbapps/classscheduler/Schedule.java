@@ -4,6 +4,8 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
@@ -30,6 +32,12 @@ public class Schedule implements Serializable {
         ID = UUID.randomUUID();
     }
 
+    static final Comparator<Schedule> NUM_CLASSES = new Comparator<Schedule>(){
+        public int compare(Schedule s1, Schedule s2){
+            return Integer.compare(s2.getSections().size(), s1.getSections().size());
+        }
+    };
+
     public UUID getID() {
         return ID;
     }
@@ -48,6 +56,10 @@ public class Schedule implements Serializable {
 
     //TODO: move schedule-creating algorithm to its own class
     //TODO: improve the algorithm. Allow customization (eg. max credit hours, preferred classes)
+
+    /*
+    *
+    * */
 
     public static void createSchedulesRecursive(Class thisClass, List<Class> otherClasses, List<List<Section>> sectionLists) {
         List<Class> newOtherClasses = new ArrayList<Class>();
@@ -103,7 +115,7 @@ public class Schedule implements Serializable {
             }
 
             if(classesCompatible){
-                sectionLists = newSchedules;
+                sectionLists.addAll(newSchedules);
                 staticSectionLists = sectionLists;
             }
 
@@ -135,9 +147,11 @@ public class Schedule implements Serializable {
         }
 
 
-
+        Collections.sort(schedules, NUM_CLASSES);
         return schedules;
     }
+
+
 
     @Override
     public boolean equals(Object o) {
