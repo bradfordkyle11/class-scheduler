@@ -28,9 +28,16 @@ public class Section implements Serializable {
             return false;
         }
         Section s = (Section) object;
+        boolean timesEqual = times.equals(s.getTimes());
+        boolean professorEqual = professor.equals(s.getProfessor());
+        boolean sectionNumberEqual = sectionNumber.equals(s.getSectionNumber());
+        boolean notesEqual = notes.equals(s.getNotes());
+        boolean containingClassEqual = containingClass.equals(s.getContainingClass());
 
-        return (times.equals(s.getTimes()))&&(professor.equals(s.getProfessor()))&&(sectionNumber.equals(s.getSectionNumber()))
-                &&(notes.equals(s.getNotes()))&&(containingClass.equals(s.getContainingClass()));
+        return timesEqual && professorEqual && sectionNumberEqual && notesEqual && containingClassEqual;
+
+//        return (times.equals(s.getTimes()))&&(professor.equals(s.getProfessor()))&&(sectionNumber.equals(s.getSectionNumber()))
+//                &&(notes.equals(s.getNotes()))&&(containingClass.equals(s.getContainingClass()));
     }
 
     @Override

@@ -194,9 +194,6 @@ public class AddClassSectionActivity extends ActionBarActivity implements Confir
                 if (newSection != null) {
                     if (mSection == null) {
                         myClass.addSection(newSection);
-                    } else {
-                        int replaceIndex = myClass.getSections().indexOf(mSection);
-                        myClass.getSections().set(replaceIndex, newSection);
                     }
 
                     ClassLoader.saveSection(this, newSection, mSection, myClass);
