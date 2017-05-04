@@ -23,7 +23,7 @@ import java.util.List;
 
 
 public class MyClassActivity extends ActionBarActivity implements ClassAssignmentsFragment.OnAssignmentFragmentInteractionListener,
-        SortByDialogFragment.SortByDialogListener, ClassGradesFragment.OnGradesFragmentInteractionListener, ShowDialog {
+        SortByDialogFragment.SortByDialogListener, ClassGradesFragment.OnGradesFragmentInteractionListener, ShowDialog, ConfirmationDialogFragment.ConfirmationDialogListener {
 
     private final static int DETAILS = 0;
     private final static int ASSIGNMENTS = 1;
@@ -40,7 +40,7 @@ public class MyClassActivity extends ActionBarActivity implements ClassAssignmen
 
     private MyClassPagerAdapter myClassPagerAdapter;
     private ViewPager mViewPager;
-    private int mCurrentPage = 1;
+    private int mCurrentPage = DETAILS;
 
     private ActionMode currentActionMode;
 
@@ -70,7 +70,7 @@ public class MyClassActivity extends ActionBarActivity implements ClassAssignmen
                         getSupportFragmentManager());
         mViewPager = (ViewPager) findViewById(R.id.classPager);
         mViewPager.setAdapter(myClassPagerAdapter);
-        mViewPager.setOnPageChangeListener(myOnPageChangeListener);
+        mViewPager.addOnPageChangeListener(myOnPageChangeListener);
         mViewPager.setCurrentItem(mCurrentPage);
 
 
@@ -90,6 +90,10 @@ public class MyClassActivity extends ActionBarActivity implements ClassAssignmen
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
+        if (mViewPager.getCurrentItem()==DETAILS) {
+            getMenuInflater().inflate(R.menu.context_menu_class_section, menu);
+            return true;
+        }
         return false;
     }
 
@@ -99,6 +103,24 @@ public class MyClassActivity extends ActionBarActivity implements ClassAssignmen
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
+        switch (id) {
+            case R.id.action_delete:
+                if (mViewPager.getCurrentItem()==DETAILS) {
+                    ConfirmationDialogFragment.newInstance(getString(R.string.title_delete_class_confirmation), mSection.getContainingClass(), ConfirmationDialogFragment.ACTIVITY)
+                            .show(getSupportFragmentManager(), "dialog");
+                }
+                return true;
+            case R.id.action_edit:
+                Intent intent = new Intent(this, AddClassSectionActivity.class);
+
+                intent.putExtra("newClass", false);
+                intent.putExtra("mSection", mSection);
+                intent.putExtra("MyClass", mSection.getContainingClass());
+                intent.putExtra("where", ClassLoader.CURR_SCHEDULE);
+                intent.putExtra("editClass", true);
+                startActivity(intent); //TODO: this activity returns to MyClassesFragment, when here we want it to return to MyClassActivity
+                return true;
+        }
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
@@ -138,8 +160,8 @@ public class MyClassActivity extends ActionBarActivity implements ClassAssignmen
 
         @Override
         public int getCount() {
-            return 3;
-        }
+            return 1;
+        } //TODO: change this when I add features
 
         @Override
         public CharSequence getPageTitle(int position) {
@@ -240,7 +262,7 @@ public class MyClassActivity extends ActionBarActivity implements ClassAssignmen
     private ViewPager.OnPageChangeListener myOnPageChangeListener = new ViewPager.OnPageChangeListener() {
         @Override
         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
+            invalidateOptionsMenu();
         }
 
         @Override
@@ -256,4 +278,22 @@ public class MyClassActivity extends ActionBarActivity implements ClassAssignmen
 
         }
     };
+
+    //delete class confirmed
+    @Override
+    public void onConfirmationPositiveClick(ConfirmationDialogFragment dialog) {
+        ClassLoader.removeSection(this, mSection, ClassLoader.CURR_SCHEDULE);
+        Toast toast = Toast.makeText(this, getString(R.string.toast_class_deleted), Toast.LENGTH_SHORT);
+        toast.show();
+
+        //return
+        Intent intent = new Intent(this, Home.class);
+        startActivity(intent);
+    }
+
+    //delete class canceled
+    @Override
+    public void onConfirmationNegativeClick(ConfirmationDialogFragment dialog) {
+
+    }
 }

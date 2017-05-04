@@ -16,11 +16,13 @@ public class EditClassActivity extends ActionBarActivity implements Confirmation
 
     Class mClass;
     Class updatedClass;
+    int where;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Intent intent = getIntent();
         mClass = (Class) intent.getSerializableExtra("MyClass");
+        where = intent.getIntExtra("where", ClassLoader.DESIRED_CLASSES);
 
         setContentView(R.layout.activity_add_class);
 
@@ -100,7 +102,7 @@ public class EditClassActivity extends ActionBarActivity implements Confirmation
 
 
         //save the changes
-        ClassLoader.saveClass(this.getApplicationContext(), updatedClass, mClass);
+        ClassLoader.saveClass(this.getApplicationContext(), updatedClass, mClass, where);
 
         //return
         Intent intent = new Intent(this, Home.class);

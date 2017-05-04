@@ -11,6 +11,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -108,10 +109,10 @@ public class NavigationDrawerFragment extends Fragment {
                 R.layout.list_item_nav_drawer,
                 new String[]{
                         getString(R.string.title_schedule),
-                        /*getString(R.string.title_my_classes),
-                        getString(R.string.title_my_assignments),
+                        /*getString(R.string.title_my_assignments),
                         getString(R.string.title_my_calendar),*/ //TODO re-add these features
-                        getString(R.string.title_design_a_schedule)
+                        getString(R.string.title_design_a_schedule),
+                        getString(R.string.title_my_classes)
                 }));
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
         return mDrawerListView;
@@ -273,7 +274,7 @@ public class NavigationDrawerFragment extends Fragment {
     }
 
     private ActionBar getActionBar() {
-        return ((ActionBarActivity) getActivity()).getSupportActionBar();
+        return ((AppCompatActivity) getActivity()).getSupportActionBar();
     }
 
     /**

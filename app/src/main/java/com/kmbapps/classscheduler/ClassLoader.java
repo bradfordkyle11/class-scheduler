@@ -32,6 +32,9 @@ public class ClassLoader {
     private static Hashtable<Schedule, Notebook> mNotebooks;
     private static boolean notebooksLoaded = false;
 
+    public static final int CURR_SCHEDULE = 0;
+    public static final int DESIRED_CLASSES = 1;
+
 
 
     public static ArrayList<Class> loadClasses(Context context) {
@@ -57,7 +60,7 @@ public class ClassLoader {
         return myClasses;
     }
 
-    public static boolean saveClass(Context context, Class myClass) {
+    public static boolean saveClass(Context context, Class myClass, int where) {
         if (myClasses == null) {
             myClasses = new ArrayList<Class>();
         }
@@ -87,7 +90,7 @@ public class ClassLoader {
     }
 
     //replaces an existing class with an updated one
-    public static boolean saveClass(Context context, Class updatedClass, Class originalClass) {
+    public static boolean saveClass(Context context, Class updatedClass, Class originalClass, int where) {
         if (myClasses == null) {
             myClasses = new ArrayList<Class>();
         }
@@ -116,31 +119,41 @@ public class ClassLoader {
         return true;
     }
 
-    public static boolean saveSection(Context context, Section updatedSection, Section originalSection, Class containingClass){
-        int index = myClasses.indexOf(containingClass);
-        if (originalSection == null) {
-            containingClass.addSection(updatedSection);
-        } else {
-            int replaceIndex = containingClass.getSections().indexOf(originalSection);
-            containingClass.getSections().set(replaceIndex, updatedSection);
-        }
-        myClasses.set(index, containingClass);
+    public static boolean saveSection(Context context, Section updatedSection, Section originalSection, Class containingClass, int where){
+        int index;
+        switch (where){
+            case CURR_SCHEDULE:
+                index = currentSchedule.getSections().indexOf(originalSection);
+                currentSchedule.getSections().set(index, updatedSection);
 
-        try {
-            FileOutputStream fos = context.openFileOutput(savedClassesFile, Context.MODE_PRIVATE);
-            ObjectOutputStream os = new ObjectOutputStream(fos);
-            os.writeObject(myClasses);
-            os.close();
-        } catch (FileNotFoundException e) {
-            System.out.println("FileNotFoundException: " + e.getMessage());
-            return false;
-        } catch (IOException e) {
-            System.out.println("IOException: " + e.getMessage());
-            return false;
+                setCurrentSchedule(context, currentSchedule);
+                return true;
+            case DESIRED_CLASSES:
+                index = myClasses.indexOf(containingClass);
+                if (originalSection == null) {
+                    containingClass.addSection(updatedSection);
+                } else {
+                    int replaceIndex = containingClass.getSections().indexOf(originalSection);
+                    containingClass.getSections().set(replaceIndex, updatedSection);
+                }
+                myClasses.set(index, containingClass);
+                try {
+                    FileOutputStream fos = context.openFileOutput(savedClassesFile, Context.MODE_PRIVATE);
+                    ObjectOutputStream os = new ObjectOutputStream(fos);
+                    os.writeObject(myClasses);
+                    os.close();
+                } catch (FileNotFoundException e) {
+                    System.out.println("FileNotFoundException: " + e.getMessage());
+                    return false;
+                } catch (IOException e) {
+                    System.out.println("IOException: " + e.getMessage());
+                    return false;
+                }
+                schedulesChanged = true;
+                return true;
+            default:
+                return false;
         }
-
-        schedulesChanged = true;
-        return true;
     }
 
     public static void removeClass(Context context, Class removeThis) {
@@ -179,25 +192,34 @@ public class ClassLoader {
         schedulesChanged = true;
     }
 
-    public static void removeSection(Context context, Section removeThis, Class containingClass){
-        Class c = myClasses.get(myClasses.indexOf(removeThis.getContainingClass()));
-        c.getSections().remove(removeThis);
+    public static void removeSection(Context context, Section removeThis, int where){
+        switch (where){
+            case CURR_SCHEDULE:
+                currentSchedule.getSections().remove(removeThis);
+                setCurrentSchedule(context, currentSchedule);
+                break;
+            case DESIRED_CLASSES:
+                Class c = myClasses.get(myClasses.indexOf(removeThis.getContainingClass()));
+                c.getSections().remove(removeThis);
 
-        try {
-            FileOutputStream fos = context.openFileOutput(savedClassesFile, Context.MODE_PRIVATE);
-            ObjectOutputStream os = new ObjectOutputStream(fos);
-            os.writeObject(myClasses);
-            os.close();
-        } catch (FileNotFoundException e) {
-            System.out.println("FileNotFoundException: " + e.getMessage());
-        } catch (IOException e) {
-            System.out.println("IOException: " + e.getMessage());
+                try {
+                    FileOutputStream fos = context.openFileOutput(savedClassesFile, Context.MODE_PRIVATE);
+                    ObjectOutputStream os = new ObjectOutputStream(fos);
+                    os.writeObject(myClasses);
+                    os.close();
+                } catch (FileNotFoundException e) {
+                    System.out.println("FileNotFoundException: " + e.getMessage());
+                } catch (IOException e) {
+                    System.out.println("IOException: " + e.getMessage());
+                }
+
+                schedulesChanged = true;
+                break;
         }
 
-        schedulesChanged = true;
     }
 
-    public static void removeSections(Context context, ArrayList<Section> sectionsToRemove){
+    public static void removeSections(Context context, ArrayList<Section> sectionsToRemove, int where){
 
         for(Section sectionToRemove : sectionsToRemove) {
             Class c = myClasses.get(myClasses.indexOf(sectionToRemove.getContainingClass()));

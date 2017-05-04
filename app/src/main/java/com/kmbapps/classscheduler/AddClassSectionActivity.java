@@ -12,9 +12,11 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -43,6 +45,8 @@ public class AddClassSectionActivity extends ActionBarActivity implements Confir
     private boolean loadingSection; //true if loading a previously saved section
     private ArrayList<View> dayTimeLocationPickers = new ArrayList<View>();
     private ArrayList<MyTime> currentTimes;
+    private int where;
+    private boolean editClass;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +57,13 @@ public class AddClassSectionActivity extends ActionBarActivity implements Confir
         Intent intent = getIntent();
         myClass = (Class) intent.getSerializableExtra("MyClass");
         newClass = intent.getBooleanExtra("newClass", true);
+        where = intent.getIntExtra("where", ClassLoader.DESIRED_CLASSES);
+        editClass = intent.getBooleanExtra("editClass", false);
         //testFindTime();
+        if (editClass){
+            LinearLayout classDetails = (LinearLayout) findViewById(R.id.classDetails);
+            classDetails.setVisibility(View.VISIBLE);
+        }
 
         //restore saved info if editing a section
         if (!newClass||savedInstanceState!=null) {
@@ -64,6 +74,26 @@ public class AddClassSectionActivity extends ActionBarActivity implements Confir
                 s = (Section) savedInstanceState.getSerializable("section");
             } else {
                 s = mSection;
+            }
+
+            if (editClass){
+                Spinner spinner = (Spinner) findViewById(R.id.creditHours);
+                ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                        R.array.credit_hours_array, android.R.layout.simple_spinner_item);
+                // Specify the layout to use when the list of choices appears
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                // Apply the adapter to the spinner
+                spinner.setAdapter(adapter);
+                spinner.setSelection(myClass.getCreditHours() - 1);
+
+                EditText department = (EditText) findViewById(R.id.classDepartment);
+                department.setText(myClass.getDepartment());
+
+                EditText number = (EditText) findViewById(R.id.classNumber);
+                number.setText(myClass.getNumber());
+
+                EditText name = (EditText) findViewById(R.id.className);
+                name.setText(myClass.getName());
             }
 
 
@@ -196,7 +226,7 @@ public class AddClassSectionActivity extends ActionBarActivity implements Confir
                         myClass.addSection(newSection);
                     }
 
-                    ClassLoader.saveSection(this, newSection, mSection, myClass);
+                    ClassLoader.saveSection(this, newSection, mSection, myClass, where);
                     ClassLoader.updateSchedules();
 
 
@@ -546,6 +576,29 @@ public class AddClassSectionActivity extends ActionBarActivity implements Confir
 
     //creates a section from the info on the page and returns that section
     public Section createSection(int mode) {
+
+        Class updatedClass = new Class();
+        boolean classUpdated = false;
+        if (editClass){
+
+            EditText classDepartment = (EditText) findViewById(R.id.classDepartment);
+            updatedClass.setDepartment(classDepartment.getText().toString());
+
+            EditText classNumber = (EditText) findViewById(R.id.classNumber);
+            updatedClass.setNumber(classNumber.getText().toString());
+
+            EditText className = (EditText) findViewById(R.id.className);
+            updatedClass.setName(className.getText().toString());
+
+            Spinner creditHours = (Spinner) findViewById(R.id.creditHours);
+            updatedClass.setCreditHours(Integer.parseInt(creditHours.getSelectedItem().toString()));
+            updatedClass.addSection(mSection);
+
+            if (updatedClass != myClass){
+                classUpdated = true;
+            }
+
+        }
         boolean validSchedule = true;
         boolean hasSchedule = false;
         ArrayList<MyTime> times = new ArrayList<MyTime>();
@@ -648,8 +701,12 @@ public class AddClassSectionActivity extends ActionBarActivity implements Confir
         String notes = et.getText().toString();
 
 
-        Section newSection = new Section(times, professor, sectionNumber, notes, myClass);
-        return newSection;
+        if (classUpdated) {
+            return new Section(times, professor, sectionNumber, notes, updatedClass);
+        }
+        else {
+            return new Section(times, professor, sectionNumber, notes, myClass);
+        }
 
     }
 
@@ -790,8 +847,7 @@ public class AddClassSectionActivity extends ActionBarActivity implements Confir
     //delete section confirmed
     @Override
     public void onConfirmationPositiveClick(ConfirmationDialogFragment dialog) {
-        Class containingClass = mSection.getContainingClass();
-        ClassLoader.removeSection(this, mSection, containingClass);
+        ClassLoader.removeSection(this, mSection, where);
 
         //notify user
         Toast toast = Toast.makeText(this, getString(R.string.toast_section_deleted), Toast.LENGTH_SHORT);

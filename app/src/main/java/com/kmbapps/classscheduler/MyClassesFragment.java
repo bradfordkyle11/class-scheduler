@@ -217,16 +217,16 @@ public class MyClassesFragment extends Fragment implements ConfirmationDialogFra
     private void dropClasses(ArrayList<Section> classesToDrop){
         //remove the notebook associated with the current schedule
         //this is because the schedule will change and the notebook will no longer be properly mapped to it
-        ClassLoader.removeNotebook(getActivity().getApplicationContext(), mSchedule);
+        //ClassLoader.removeNotebook(getActivity().getApplicationContext(), mSchedule);
 
         for(Section classToDrop : classesToDrop){
-            mSchedule.dropClass(classToDrop);
-            mNotebook.erase(classToDrop);
+            mSchedule.dropClass(classToDrop); //TODO: change to ClassLoader.deleteSection
+          //  mNotebook.erase(classToDrop);
         }
-        ClassLoader.updateNotebook(getActivity().getApplicationContext(), mSchedule, mNotebook);
+       // ClassLoader.updateNotebook(getActivity().getApplicationContext(), mSchedule, mNotebook);
 
         ClassLoader.setCurrentSchedule(getActivity().getApplicationContext(), mSchedule);
-        ClassLoader.updateNotebooks(getActivity().getApplicationContext());
+        //ClassLoader.updateNotebooks(getActivity().getApplicationContext());
 
         if(classesToDrop.size()==1) {
             Toast toast = Toast.makeText(getActivity().getApplicationContext(), getString(R.string.toast_class_dropped), Toast.LENGTH_SHORT);

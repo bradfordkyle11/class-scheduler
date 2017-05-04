@@ -138,7 +138,7 @@ public class Class implements Serializable {
     }
 
     public void saveClass(Context context) {
-        ClassLoader.saveClass(context, this);
+        ClassLoader.saveClass(context, this, ClassLoader.DESIRED_CLASSES);
     }
 
 

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.view.ActionMode;
 import android.view.LayoutInflater;
@@ -460,6 +461,7 @@ public class DesiredClassesFragment extends Fragment implements ConfirmationDial
                     View v = (View) mode.getTag();
                     Intent intent = new Intent(getActivity().getApplicationContext(), EditClassActivity.class);
                     intent.putExtra("MyClass", (Class) v.getTag());
+                    intent.putExtra("where", ClassLoader.DESIRED_CLASSES);
                     startActivity(intent);
                     return true;
                 case R.id.action_delete:
@@ -538,6 +540,7 @@ public class DesiredClassesFragment extends Fragment implements ConfirmationDial
                     intent.putExtra("newClass", false);
                     intent.putExtra("mSection", (Section) v.getTag());
                     intent.putExtra("MyClass", ((Section)v.getTag()).getContainingClass());
+                    intent.putExtra("where", ClassLoader.DESIRED_CLASSES);
                     startActivity(intent);
                     return true;
                 case R.id.action_delete:
@@ -627,7 +630,7 @@ public class DesiredClassesFragment extends Fragment implements ConfirmationDial
                     //remove the section
                     Section sectionToRemove = (Section) dialog.getExtra();
                     Class c = sectionToRemove.getContainingClass();
-                    ClassLoader.removeSection(getActivity(), sectionToRemove, c);
+                    ClassLoader.removeSection(getActivity(), sectionToRemove, ClassLoader.DESIRED_CLASSES);
 
                     //remove the view
                     ((ViewGroup) selectedView.getParent()).removeView(selectedView);
@@ -640,7 +643,7 @@ public class DesiredClassesFragment extends Fragment implements ConfirmationDial
                     ArrayList<Section> sectionsToRemove = (ArrayList) dialog.getExtra();
 
                     //remove the classes
-                    ClassLoader.removeSections(getActivity().getApplicationContext(), sectionsToRemove);
+                    ClassLoader.removeSections(getActivity().getApplicationContext(), sectionsToRemove, ClassLoader.DESIRED_CLASSES);
 
                     //remove the views
                     for(View view : selectedViews){

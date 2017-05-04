@@ -75,7 +75,7 @@ public class AddClassActivity extends ActionBarActivity {
         Class newClass = new Class(department, number, name, hours);
 
         //save the new class
-        boolean classSaved = ClassLoader.saveClass(this.getApplicationContext(), newClass);
+        boolean classSaved = ClassLoader.saveClass(this.getApplicationContext(), newClass, ClassLoader.DESIRED_CLASSES);
 
         if(!classSaved){
             Toast toast = Toast.makeText(getApplicationContext(), getString(R.string.toast_class_already_exists), Toast.LENGTH_SHORT);

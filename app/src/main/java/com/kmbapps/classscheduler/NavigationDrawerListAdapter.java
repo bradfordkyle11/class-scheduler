@@ -13,11 +13,11 @@ import android.widget.TextView;
  */
 public class NavigationDrawerListAdapter extends ArrayAdapter<String> {
     public final static int SCHEDULE = 0;
-    //TODO: after re-adding features, schedule designer should be 4, my classes should be 1
+    //TODO: make sure these are still accurate when adding features
     public final static int SCHEDULE_DESIGNER = 1;
-    public final static int MY_CLASSES = 4;
+    public final static int MY_CLASSES = 2;
     public final static int MY_CALENDAR = 3;
-    public final static int MY_ASSIGNMENTS = 2;
+    public final static int MY_ASSIGNMENTS = 4;
 
     private final Context context;
     private final String[] titles;

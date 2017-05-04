@@ -96,6 +96,8 @@
     <string name="text_thursday">Thursday</string>
     <string name="text_friday">Friday</string>
     <string name="text_notes">Notes</string>
+    <string name="text_class_details">Class Details:</string>
+    <string name="text_section_details">Section Details:</string>
     <string name="text_set_schedule">Set schedule</string>
     <string name="text_no_class_selected">No class selected</string>
     <string name="text_no_class_selected_info">Tap on a class to see its info.</string>
