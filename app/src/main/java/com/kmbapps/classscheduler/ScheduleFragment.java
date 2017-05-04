@@ -1,6 +1,7 @@
 package com.kmbapps.classscheduler;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -30,7 +31,7 @@ import java.util.Hashtable;
  * create an instance of this fragment.
  *
  */
-public class ScheduleFragment extends Fragment {
+public class ScheduleFragment extends Fragment implements ConfirmationDialogFragment.ConfirmationDialogListener{
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_SCHEDULE = "schedule";
     private static final String ARG_IS_MAIN_SCHEDULE = "isMainSchedule";
@@ -338,7 +339,15 @@ public class ScheduleFragment extends Fragment {
 
     View.OnClickListener setScheduleListener = new View.OnClickListener() {
         public void onClick(View view){
-            setAsSchedule();
+            Schedule currSchedule = ClassLoader.loadCurrentSchedule(getActivity());
+            if (currSchedule.getSections().isEmpty()){
+                setAsSchedule();
+            }
+            else {
+                ConfirmationDialogFragment confirmation = ConfirmationDialogFragment.newInstance(getString(R.string.title_set_schedule_confirmation), schedule, ConfirmationDialogFragment.FRAGMENT);
+                confirmation.setTargetFragment(ScheduleFragment.this, 1);
+                confirmation.show(getActivity().getSupportFragmentManager(), "confirmation");
+            }
         }
     };
 
@@ -391,6 +400,18 @@ public class ScheduleFragment extends Fragment {
 
     public void openScheduleDesigner(View view){
         mListener.onCreateScheduleClick(view);
+    }
+
+    //delete section confirmed
+    @Override
+    public void onConfirmationPositiveClick(ConfirmationDialogFragment dialog) {
+        setAsSchedule();
+    }
+
+    //delete section canceled
+    @Override
+    public void onConfirmationNegativeClick(ConfirmationDialogFragment dialog) {
+
     }
 
 }

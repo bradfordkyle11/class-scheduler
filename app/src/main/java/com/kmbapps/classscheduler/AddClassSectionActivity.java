@@ -63,6 +63,13 @@ public class AddClassSectionActivity extends ActionBarActivity implements Confir
         if (editClass){
             LinearLayout classDetails = (LinearLayout) findViewById(R.id.classDetails);
             classDetails.setVisibility(View.VISIBLE);
+            Spinner spinner = (Spinner) findViewById(R.id.creditHours);
+            ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                    R.array.credit_hours_array, android.R.layout.simple_spinner_item);
+            // Specify the layout to use when the list of choices appears
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            // Apply the adapter to the spinner
+            spinner.setAdapter(adapter);
         }
 
         //restore saved info if editing a section
@@ -592,10 +599,17 @@ public class AddClassSectionActivity extends ActionBarActivity implements Confir
 
             Spinner creditHours = (Spinner) findViewById(R.id.creditHours);
             updatedClass.setCreditHours(Integer.parseInt(creditHours.getSelectedItem().toString()));
-            updatedClass.addSection(mSection);
+            if (mSection != null){
+                updatedClass.addSection(mSection);
+            }
 
-            if (updatedClass != myClass){
+            if (myClass == null){
                 classUpdated = true;
+                myClass = updatedClass;
+            }
+            else if (!updatedClass.equals(myClass)){
+                classUpdated = true;
+                //don't change myClass to updatedClass here, because containing class is updated when class loader saves
             }
 
         }
@@ -700,13 +714,23 @@ public class AddClassSectionActivity extends ActionBarActivity implements Confir
         et = (EditText) findViewById(R.id.edit_notes);
         String notes = et.getText().toString();
 
-
+        Section newSection;
         if (classUpdated) {
-            return new Section(times, professor, sectionNumber, notes, updatedClass);
+            newSection = new Section(times, professor, sectionNumber, notes, updatedClass);
         }
         else {
-            return new Section(times, professor, sectionNumber, notes, myClass);
+            newSection = new Section(times, professor, sectionNumber, notes, myClass);
         }
+        if (ClassLoader.loadCurrentSchedule(this).isCompatible(newSection, mSection) || mode == SAVE_INSTANCE_STATE){
+            return newSection;
+        }
+        else {
+            String text = getString(R.string.toast_other_sections_conflict);
+            Toast toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT);
+            toast.show();
+            return null;
+        }
+
 
     }
 

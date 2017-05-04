@@ -44,6 +44,7 @@
     <string name="title_delete_grades_confirmation">Delete these assignments?</string>
     <string name="title_drop_class_confirmation">Drop this class?</string>
     <string name="title_drop_classes_confirmation">Drop these classes?</string>
+    <string name="title_set_schedule_confirmation">Replace your current schedule with this one?</string>
     <string name="title_my_assignments">My Assignments</string>
 
     <!--Actions-->
@@ -63,6 +64,7 @@
     <string name="toast_no_end_time">You must enter an end time</string>
     <string name="toast_conflicting_schedules">Schedules cannot overlap</string>
     <string name="toast_no_schedule">You must set a schedule</string>
+    <string name="toast_other_sections_conflict">This class\'s schedule conflicts with your other class schedules</string>
     <string name="toast_set_current_schedule">Saved as current schedule</string>
     <string name="toast_class_deleted">Class deleted</string>
     <string name="toast_classes_deleted">Classes deleted</string>

@@ -50,6 +50,8 @@ public class Schedule implements Serializable {
         this.sections = sections;
     }
 
+    public void addSection(Section section){sections.add(section); }
+
     public boolean isEmpty() {
         return sections.isEmpty();
     }
@@ -151,6 +153,26 @@ public class Schedule implements Serializable {
         return schedules;
     }
 
+    /*
+    * This method checks if a newly created/edited section is compatible with this schedule
+    * @param newSection - the newly created/edited section
+    * @param originalSection - the pre-edit section or null if the section is new
+    * @return true if the section schedule doesn't overlap, false otherwise*/
+    public boolean isCompatible(Section newSection, Section originalSection){
+        ArrayList<List<MyTime>> times = new ArrayList<List<MyTime>>();
+        for (Section section : sections){
+            if (originalSection != null){
+                if (!section.equals(originalSection)){
+                    times.add(section.getTimes());
+                }
+            }
+            else {
+                times.add(section.getTimes());
+            }
+        }
+        times.add(newSection.getTimes());
+        return MyTime.noConflicts(times);
+    }
 
 
     @Override

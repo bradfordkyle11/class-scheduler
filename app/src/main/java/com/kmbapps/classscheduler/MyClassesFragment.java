@@ -91,6 +91,9 @@ public class MyClassesFragment extends Fragment implements ConfirmationDialogFra
             });
             classes.addView(v);
         }
+
+        View fab = view.findViewById(R.id.add_class);
+        fab.setOnClickListener(addClassListener);
         return view;
     }
 
@@ -165,16 +168,17 @@ public class MyClassesFragment extends Fragment implements ConfirmationDialogFra
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
             switch (item.getItemId()) {
 
-                //TODO: edit class (same as the activity that will be used by the ClassDetails edit fab)
                 case R.id.action_edit:
-//                    View v = (View) mode.getTag();
-//
-//                    Intent intent = new Intent(getActivity().getApplicationContext(), AddAssignmentActivity.class);
-//                    intent.putExtra("mode", AddAssignmentActivity.EDIT_GRADED_ASSIGNMENT);
-//                    intent.putExtra("assignment", (Assignment) v.getTag());
-//                    startActivityForResult(intent, ASSIGNMENT_CREATOR_REQUEST);
-//                    mode.finish();
-//                    return true;
+                    View v = (View) ((ArrayList)mode.getTag()).get(0); //can only edit one at a time
+                    Section s = (Section) v.getTag();
+                    Intent intent = new Intent(getActivity(), AddClassSectionActivity.class);
+                    intent.putExtra("newClass", false);
+                    intent.putExtra("mSection", s);
+                    intent.putExtra("MyClass", s.getContainingClass());
+                    intent.putExtra("where", ClassLoader.CURR_SCHEDULE);
+                    intent.putExtra("editClass", true);
+                    startActivity(intent);
+                    return true;
 
                 case R.id.action_delete:
 
@@ -313,5 +317,16 @@ public class MyClassesFragment extends Fragment implements ConfirmationDialogFra
 
         }
     }
+
+    public View.OnClickListener addClassListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Intent intent = new Intent(getActivity(), AddClassSectionActivity.class);
+            intent.putExtra("newClass", true);
+            intent.putExtra("where", ClassLoader.CURR_SCHEDULE);
+            intent.putExtra("editClass", true);
+            startActivity(intent);
+        }
+    };
 
 }

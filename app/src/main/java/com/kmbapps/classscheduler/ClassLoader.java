@@ -124,7 +124,12 @@ public class ClassLoader {
         switch (where){
             case CURR_SCHEDULE:
                 index = currentSchedule.getSections().indexOf(originalSection);
-                currentSchedule.getSections().set(index, updatedSection);
+                if (index < 0){
+                    currentSchedule.getSections().add(updatedSection);
+                }
+                else {
+                    currentSchedule.getSections().set(index, updatedSection);
+                }
 
                 setCurrentSchedule(context, currentSchedule);
                 return true;

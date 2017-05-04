@@ -99,6 +99,15 @@ public class ConfirmationDialogFragment extends DialogFragment {
         return f;
     }
 
+    static ConfirmationDialogFragment newInstance(String title, Schedule schedule, int parent){
+        ConfirmationDialogFragment f = new ConfirmationDialogFragment();
+        Bundle args = new Bundle();
+        args.putString("title", title);
+        args.putInt("parent", parent);
+        f.setArguments(args);
+        return f;
+    }
+
     public ConfirmationDialogFragment(){
 
     }
