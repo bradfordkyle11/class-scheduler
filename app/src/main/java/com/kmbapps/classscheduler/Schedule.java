@@ -8,6 +8,9 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by Kyle on 3/2/2015.
@@ -17,24 +20,37 @@ import java.util.UUID;
 public class Schedule implements Serializable {
 
     private List<Section> sections;
-    private static final long serialVersionUID = 1000;
-    private static List<List<Section>> staticSectionLists = new ArrayList<List<Section>>();
+    private int priorityScore;
+    private static final long serialVersionUID = 1001;
+    private static List<List<Section>> staticSectionLists = Collections.synchronizedList( new ArrayList<List<Section>>());
     private final UUID ID;
 
 
     public Schedule() {
         this.sections = new ArrayList<Section>();
+        priorityScore = 0;
         ID = UUID.randomUUID();
     }
 
     public Schedule(List<Section> sections) {
         this.sections = new ArrayList<Section>(sections);
+        for (Section s : this.sections){
+            priorityScore += Class.NUM_PRIORITIES - 1 - s.getContainingClass().getPriority();
+        }
         ID = UUID.randomUUID();
     }
 
     static final Comparator<Schedule> NUM_CLASSES = new Comparator<Schedule>(){
         public int compare(Schedule s1, Schedule s2){
+            int s1PriorityScore;
+            int s2PriorityScore;
             return Integer.compare(s2.getSections().size(), s1.getSections().size());
+        }
+    };
+
+    static final Comparator<Schedule> NUM_AND_PRIORITY = new Comparator<Schedule>(){
+        public int compare(Schedule s1, Schedule s2){
+            return Integer.compare(s2.getSections().size() + s2.getPriorityScore(), s1.getSections().size() + s1.getPriorityScore());
         }
     };
 
@@ -80,10 +96,10 @@ public class Schedule implements Serializable {
                 ArrayList<Section> s = new ArrayList<Section>();
                 s.add(section);
                 sectionLists.add(s);
-                staticSectionLists = sectionLists;
+                staticSectionLists.addAll(sectionLists);
             }
             if(sectionLists.isEmpty()){
-                staticSectionLists = sectionLists;
+                staticSectionLists.addAll(sectionLists);
             }
 
             if(!otherClasses.isEmpty()) {
@@ -120,7 +136,7 @@ public class Schedule implements Serializable {
 
             if(classesCompatible){
                 sectionLists.addAll(newSchedules);
-                staticSectionLists = sectionLists;
+                staticSectionLists.addAll(sectionLists);
             }
 
             if(!otherClasses.isEmpty()) {
@@ -130,7 +146,10 @@ public class Schedule implements Serializable {
     }
 
     public static List<Schedule> createSchedules(List<Class> classes) {
-        Collections.sort(classes, Class.PRIORITY);
+        if (classes != null) {
+            Collections.sort(classes, Class.PRIORITY);
+        }
+        staticSectionLists.clear();
         List<Schedule> schedules = new ArrayList<Schedule>();
         if (classes == null) {
             return schedules;
@@ -139,20 +158,30 @@ public class Schedule implements Serializable {
             return schedules;
         }
 
+        ExecutorService es = Executors.newCachedThreadPool();
         for (int i = 0; i < classes.size(); i++) {
             List<Class> otherClasses = new ArrayList<Class>();
             otherClasses.addAll(classes);
             Class thisClass = otherClasses.remove(i);
-            createSchedulesRecursive(thisClass, otherClasses, new ArrayList<List<Section>>());
-            for(List<Section> schedule : staticSectionLists){
-                if(!schedules.contains(new Schedule(schedule))){
-                    schedules.add(new Schedule(schedule));
-                }
+            es.execute(new createSchedulesThread(Integer.toString(i), thisClass, otherClasses, new ArrayList<List<Section>>()));
+
+            // createSchedulesRecursive(thisClass, otherClasses, new ArrayList<List<Section>>());
+        }
+        es.shutdown();
+        try {
+            boolean finshed = es.awaitTermination(1, TimeUnit.MINUTES);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        for(List<Section> schedule : staticSectionLists){
+            if(!schedules.contains(new Schedule(schedule))){
+                schedules.add(new Schedule(schedule));
             }
         }
 
 
-        Collections.sort(schedules, NUM_CLASSES);
+        Collections.sort(schedules, NUM_AND_PRIORITY);
         return schedules;
     }
 
@@ -213,4 +242,31 @@ public class Schedule implements Serializable {
         sections.remove(classToDrop);
     }
 
+    public int getPriorityScore() {
+        return priorityScore;
+    }
 }
+class createSchedulesThread implements Runnable{
+    Thread runner;
+    Class thisClass;
+    List<Class> otherClasses;
+    List<List<Section>> sectionLists;
+
+    public createSchedulesThread(String threadName, Class thisClass, List<Class> otherClasses, List<List<Section>> sectionLists){
+        this.thisClass = thisClass;
+        this.otherClasses = otherClasses;
+        this.sectionLists = sectionLists;
+        runner = new Thread(this, threadName);
+    }
+
+    public void run(){
+        Schedule.createSchedulesRecursive(thisClass, otherClasses, sectionLists);
+    }
+
+    public void start(){
+        runner.start();
+    }
+
+}
+
+

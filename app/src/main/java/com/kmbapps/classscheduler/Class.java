@@ -23,6 +23,7 @@ public class Class implements Serializable {
     public static final int HIGH = 1;
     public static final int MEDIUM = 2;
     public static final int LOW = 3;
+    public static final int NUM_PRIORITIES = 4;
     private final UUID ID;
     private String department;
     private String number;
@@ -30,7 +31,7 @@ public class Class implements Serializable {
     private int creditHours;
     private int priority;
     private List<Section> sections;
-    private static final long serialVersionUID = 9999999;
+    private static final long serialVersionUID = 1000000;
 
     public UUID getId() {
         return ID;

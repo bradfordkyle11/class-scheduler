@@ -78,10 +78,10 @@ public class AddClassActivity extends ActionBarActivity {
         EditText className = (EditText) findViewById(R.id.className);
         String name = className.getText().toString();
 
-        Spinner creditHours = (Spinner) findViewById(R.id.priority);
+        Spinner creditHours = (Spinner) findViewById(R.id.creditHours);
         int hours = Integer.parseInt(creditHours.getSelectedItem().toString());
 
-        Spinner classPriority = (Spinner) findViewById(R.id.creditHours);
+        Spinner classPriority = (Spinner) findViewById(R.id.priority);
         int priority = classPriority.getSelectedItemPosition();
 
         Class newClass = new Class(department, number, name, hours, priority);

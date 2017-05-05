@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.format.Time;
 import android.view.LayoutInflater;
@@ -24,7 +25,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 
-public class AddClassSectionActivity extends ActionBarActivity implements ConfirmationDialogFragment.ConfirmationDialogListener {
+public class AddClassSectionActivity extends AppCompatActivity implements ConfirmationDialogFragment.ConfirmationDialogListener {
 
     //TODO: bug: a red start time will switch to a red end time on screen rotate
 
