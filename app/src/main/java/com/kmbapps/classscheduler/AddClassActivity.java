@@ -21,11 +21,20 @@ public class AddClassActivity extends ActionBarActivity {
 
         Spinner spinner = (Spinner) findViewById(R.id.creditHours);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                R.array.credit_hours_array, android.R.layout.simple_spinner_item);
+                R.array.credit_hours_array, R.layout.spinner_dropdown_item);
         // Specify the layout to use when the list of choices appears
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        //adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Apply the adapter to the spinner
         spinner.setAdapter(adapter);
+
+        Spinner priority = (Spinner) findViewById(R.id.priority);
+        ArrayAdapter<CharSequence> priorityAdapter = ArrayAdapter.createFromResource(this,
+                R.array.priority_array, R.layout.spinner_dropdown_item);
+        // Specify the layout to use when the list of choices appears
+        //adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Apply the adapter to the spinner
+        priority.setAdapter(priorityAdapter);
+        priority.setSelection(Class.HIGH);
 
     }
 
@@ -69,10 +78,13 @@ public class AddClassActivity extends ActionBarActivity {
         EditText className = (EditText) findViewById(R.id.className);
         String name = className.getText().toString();
 
-        Spinner creditHours = (Spinner) findViewById(R.id.creditHours);
+        Spinner creditHours = (Spinner) findViewById(R.id.priority);
         int hours = Integer.parseInt(creditHours.getSelectedItem().toString());
 
-        Class newClass = new Class(department, number, name, hours);
+        Spinner classPriority = (Spinner) findViewById(R.id.creditHours);
+        int priority = classPriority.getSelectedItemPosition();
+
+        Class newClass = new Class(department, number, name, hours, priority);
 
         //save the new class
         boolean classSaved = ClassLoader.saveClass(this.getApplicationContext(), newClass, ClassLoader.DESIRED_CLASSES);

@@ -38,6 +38,8 @@ public class Schedule implements Serializable {
         }
     };
 
+
+
     public UUID getID() {
         return ID;
     }
@@ -128,6 +130,7 @@ public class Schedule implements Serializable {
     }
 
     public static List<Schedule> createSchedules(List<Class> classes) {
+        Collections.sort(classes, Class.PRIORITY);
         List<Schedule> schedules = new ArrayList<Schedule>();
         if (classes == null) {
             return schedules;

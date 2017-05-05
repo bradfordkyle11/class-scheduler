@@ -28,12 +28,21 @@ public class EditClassActivity extends ActionBarActivity implements Confirmation
 
         Spinner spinner = (Spinner) findViewById(R.id.creditHours);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                R.array.credit_hours_array, android.R.layout.simple_spinner_item);
+                R.array.credit_hours_array, R.layout.spinner_dropdown_item);
         // Specify the layout to use when the list of choices appears
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        //adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Apply the adapter to the spinner
         spinner.setAdapter(adapter);
-        spinner.setSelection(mClass.getCreditHours() - 1);
+        spinner.setSelection(mClass.getCreditHours() - 1); //credit hours from 1+ so subtract 1
+
+        Spinner priority = (Spinner) findViewById(R.id.priority);
+        ArrayAdapter<CharSequence> priorityAdapter = ArrayAdapter.createFromResource(this,
+                R.array.priority_array, R.layout.spinner_dropdown_item);
+        // Specify the layout to use when the list of choices appears
+        //adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Apply the adapter to the spinner
+        priority.setAdapter(priorityAdapter);
+        priority.setSelection(mClass.getPriority()); //priority from 0+
 
         EditText department = (EditText) findViewById(R.id.classDepartment);
         department.setText(mClass.getDepartment());
@@ -95,6 +104,9 @@ public class EditClassActivity extends ActionBarActivity implements Confirmation
 
         Spinner creditHours = (Spinner) findViewById(R.id.creditHours);
         updatedClass.setCreditHours(Integer.parseInt(creditHours.getSelectedItem().toString()));
+
+        Spinner classPriority = (Spinner) findViewById(R.id.priority);
+        updatedClass.setPriority(classPriority.getSelectedItemPosition());
 
         if(mClass!=null){
             updatedClass.setSections(mClass.getSections());

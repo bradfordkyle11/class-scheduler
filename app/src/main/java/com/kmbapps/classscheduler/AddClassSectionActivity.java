@@ -48,6 +48,8 @@ public class AddClassSectionActivity extends ActionBarActivity implements Confir
     private int where;
     private boolean editClass;
 
+    //TODO: Use this activity for all class and section creation to avoid code redundancy
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,15 +63,7 @@ public class AddClassSectionActivity extends ActionBarActivity implements Confir
         editClass = intent.getBooleanExtra("editClass", false);
         //testFindTime();
         if (editClass){
-            LinearLayout classDetails = (LinearLayout) findViewById(R.id.classDetails);
-            classDetails.setVisibility(View.VISIBLE);
-            Spinner spinner = (Spinner) findViewById(R.id.creditHours);
-            ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                    R.array.credit_hours_array, android.R.layout.simple_spinner_item);
-            // Specify the layout to use when the list of choices appears
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            // Apply the adapter to the spinner
-            spinner.setAdapter(adapter);
+            initializeClassViews(myClass);
         }
 
         //restore saved info if editing a section
@@ -84,23 +78,7 @@ public class AddClassSectionActivity extends ActionBarActivity implements Confir
             }
 
             if (editClass){
-                Spinner spinner = (Spinner) findViewById(R.id.creditHours);
-                ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                        R.array.credit_hours_array, android.R.layout.simple_spinner_item);
-                // Specify the layout to use when the list of choices appears
-                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                // Apply the adapter to the spinner
-                spinner.setAdapter(adapter);
-                spinner.setSelection(myClass.getCreditHours() - 1);
-
-                EditText department = (EditText) findViewById(R.id.classDepartment);
-                department.setText(myClass.getDepartment());
-
-                EditText number = (EditText) findViewById(R.id.classNumber);
-                number.setText(myClass.getNumber());
-
-                EditText name = (EditText) findViewById(R.id.className);
-                name.setText(myClass.getName());
+                initializeClassViews(mSection.getContainingClass());
             }
 
 
@@ -599,6 +577,9 @@ public class AddClassSectionActivity extends ActionBarActivity implements Confir
 
             Spinner creditHours = (Spinner) findViewById(R.id.creditHours);
             updatedClass.setCreditHours(Integer.parseInt(creditHours.getSelectedItem().toString()));
+
+            Spinner priority = (Spinner) findViewById(R.id.priority);
+            updatedClass.setPriority(priority.getSelectedItemPosition());
             if (mSection != null){
                 updatedClass.addSection(mSection);
             }
@@ -721,7 +702,7 @@ public class AddClassSectionActivity extends ActionBarActivity implements Confir
         else {
             newSection = new Section(times, professor, sectionNumber, notes, myClass);
         }
-        if (ClassLoader.loadCurrentSchedule(this).isCompatible(newSection, mSection) || mode == SAVE_INSTANCE_STATE){
+        if (ClassLoader.loadCurrentSchedule(this).isCompatible(newSection, mSection) || mode == SAVE_INSTANCE_STATE || where == ClassLoader.DESIRED_CLASSES){
             return newSection;
         }
         else {
@@ -886,5 +867,42 @@ public class AddClassSectionActivity extends ActionBarActivity implements Confir
     @Override
     public void onConfirmationNegativeClick(ConfirmationDialogFragment dialog) {
 
+    }
+
+    private void initializeClassViews(Class mClass){
+        LinearLayout classDetails = (LinearLayout) findViewById(R.id.classDetails);
+        classDetails.setVisibility(View.VISIBLE);
+        Spinner spinner = (Spinner) findViewById(R.id.creditHours);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.credit_hours_array, R.layout.spinner_dropdown_item);
+        // Specify the layout to use when the list of choices appears
+        //adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Apply the adapter to the spinner
+        spinner.setAdapter(adapter);
+
+
+        Spinner priority = (Spinner) findViewById(R.id.priority);
+        ArrayAdapter<CharSequence> priorityAdapter = ArrayAdapter.createFromResource(this,
+                R.array.priority_array, R.layout.spinner_dropdown_item);
+        // Specify the layout to use when the list of choices appears
+        //adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Apply the adapter to the spinner
+        priority.setAdapter(priorityAdapter);
+        if (mClass != null) {
+            spinner.setSelection(mClass.getCreditHours() - 1);
+            priority.setSelection(mClass.getPriority());
+
+            EditText department = (EditText) findViewById(R.id.classDepartment);
+            department.setText(mClass.getDepartment());
+
+            EditText number = (EditText) findViewById(R.id.classNumber);
+            number.setText(mClass.getNumber());
+
+            EditText name = (EditText) findViewById(R.id.className);
+            name.setText(mClass.getName());
+        }
+        else {
+            priority.setSelection(mClass.HIGH);
+        }
     }
 }

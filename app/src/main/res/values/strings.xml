@@ -108,6 +108,11 @@
     <string name="text_assignment_name">Name: </string>
     <string name="text_assignment_details">Details: </string>
     <string name="text_no_grades_for_type">N/A</string>
+    <string name="text_priority">Priority:</string>
+    <string name="text_priority_0">Necessary</string>
+    <string name="text_priority_1">High</string>
+    <string name="text_priority_2">Medium</string>
+    <string name="text_priority_3">Low</string>
 
     <!--Hints-->
     <string name="hint_class_department">Department (eg. Math)</string>
@@ -167,6 +172,13 @@
         <item>7</item>
         <item>8</item>
         <item>9</item>
+    </string-array>
+
+    <string-array name="priority_array">
+        <item>@string/text_priority_0</item>
+        <item>@string/text_priority_1</item>
+        <item>@string/text_priority_2</item>
+        <item>@string/text_priority_3</item>
     </string-array>
 
     <string-array name = "sort_by_dialog_array">

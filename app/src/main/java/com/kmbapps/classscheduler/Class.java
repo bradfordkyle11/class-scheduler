@@ -6,6 +6,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.StringTokenizer;
 import java.util.UUID;
@@ -17,19 +18,31 @@ import java.util.UUID;
 //TODO: implement parcelable for quicker passing between activities
 
 public class Class implements Serializable {
+
+    public static final int NECESSARY = 0;
+    public static final int HIGH = 1;
+    public static final int MEDIUM = 2;
+    public static final int LOW = 3;
     private final UUID ID;
     private String department;
     private String number;
     private String name;
     private int creditHours;
+    private int priority;
     private List<Section> sections;
-    private static final long serialVersionUID = 999999;
+    private static final long serialVersionUID = 9999999;
 
     public UUID getId() {
         return ID;
     }
 
     private static ArrayList<Class> myClasses;
+
+    static final Comparator<Class> PRIORITY = new Comparator<Class>(){
+        public int compare(Class c1, Class c2){
+            return Integer.compare(c1.getPriority(), c2.getPriority());
+        }
+    };
 
     @Override
     public boolean equals(Object object){
@@ -39,7 +52,7 @@ public class Class implements Serializable {
         Class c = (Class) object;
 
         return (department.equals(c.getDepartment()))&&(number.equals(c.getNumber()))&&(name.equals(c.getName()))
-                &&(creditHours==c.getCreditHours());
+                &&(creditHours==c.getCreditHours()&&priority==c.getPriority());
     }
 
     @Override
@@ -59,10 +72,11 @@ public class Class implements Serializable {
         number = "";
         name = "";
         creditHours = 0;
+        priority = 0;
         sections = new ArrayList<Section>();
     }
 
-    Class(String department, String number, String name, int creditHours) {
+    Class(String department, String number, String name, int creditHours, int priority) {
         //create list of classes if it hasn't been already
         if (Class.myClasses == null) {
             Class.myClasses = new ArrayList<Class>();
@@ -74,6 +88,7 @@ public class Class implements Serializable {
         this.department = department;
         this.number = number;
         this.creditHours = creditHours;
+        this.priority = priority;
         Class.myClasses.add(this);
 
         sections = new ArrayList<Section>();
@@ -119,6 +134,14 @@ public class Class implements Serializable {
         this.number = number;
     }
 
+    public int getPriority() {
+        return priority;
+    }
+
+    public void setPriority(int priority) {
+        this.priority = priority;
+    }
+
     public int getCreditHours() {
         return creditHours;
     }
@@ -132,8 +155,9 @@ public class Class implements Serializable {
         String department = tokens.nextToken();
         String number = tokens.nextToken();
         String name = tokens.nextToken();
+        int priority = Integer.parseInt(tokens.nextToken());
         int creditHours = Integer.parseInt(tokens.nextToken());
-        Class myClass = new Class(name, department, number, creditHours);
+        Class myClass = new Class(name, department, number, creditHours, priority);
         return myClass;
     }
 
