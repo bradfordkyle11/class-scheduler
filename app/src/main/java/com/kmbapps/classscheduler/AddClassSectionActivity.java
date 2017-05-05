@@ -213,7 +213,7 @@ public class AddClassSectionActivity extends AppCompatActivity implements Confir
                     }
 
                     ClassLoader.saveSection(this, newSection, mSection, myClass, where);
-                    ClassLoader.updateSchedules();
+                    ClassLoader.updateSchedules(this);
 
 
                     //return

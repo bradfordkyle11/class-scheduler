@@ -1,14 +1,19 @@
 package com.kmbapps.classscheduler;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceActivity;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.view.ActionMode;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -70,6 +75,7 @@ public class CreateScheduleFragment extends Fragment{
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
@@ -82,6 +88,26 @@ public class CreateScheduleFragment extends Fragment{
         }
 
 
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.create_schedule, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_settings) {
+            Intent intent = new Intent(getActivity(), ScheduleDesignerSettingsActivity.class);
+            intent.putExtra(PreferenceActivity.EXTRA_NO_HEADERS, true);
+            intent.putExtra(PreferenceActivity.EXTRA_SHOW_FRAGMENT, ScheduleDesignerSettingsActivity.ScheduleDesignerPreferenceFragment.class.getName());
+            startActivity(intent);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     public class ScheduleDesignerPagerAdapter extends FragmentStatePagerAdapter {
@@ -210,7 +236,7 @@ public class CreateScheduleFragment extends Fragment{
             ClassLoader.loadClasses(MyApp.getContext());
 
             //calculate schedules
-            ClassLoader.updateSchedules();
+            ClassLoader.updateSchedules(getActivity());
             potentialSchedules =  ClassLoader.loadSchedules();
 
 

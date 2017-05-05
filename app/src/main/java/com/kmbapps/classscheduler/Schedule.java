@@ -24,6 +24,10 @@ public class Schedule implements Serializable {
     private static final long serialVersionUID = 1001;
     private static List<List<Section>> staticSectionLists = Collections.synchronizedList( new ArrayList<List<Section>>());
     private final UUID ID;
+    private static int minNumClasses;
+    private static int maxNumClasses;
+    private static int minCreditHours;
+    private static int maxCreditHours;
 
 
     public Schedule() {
@@ -42,8 +46,6 @@ public class Schedule implements Serializable {
 
     static final Comparator<Schedule> NUM_CLASSES = new Comparator<Schedule>(){
         public int compare(Schedule s1, Schedule s2){
-            int s1PriorityScore;
-            int s2PriorityScore;
             return Integer.compare(s2.getSections().size(), s1.getSections().size());
         }
     };
@@ -96,10 +98,18 @@ public class Schedule implements Serializable {
                 ArrayList<Section> s = new ArrayList<Section>();
                 s.add(section);
                 sectionLists.add(s);
-                staticSectionLists.addAll(sectionLists);
+                for (List<Section> schedule : sectionLists){
+                    if (meetsSpecifications(schedule)) {
+                        staticSectionLists.add(schedule);
+                    }
+                }
             }
             if(sectionLists.isEmpty()){
-                staticSectionLists.addAll(sectionLists);
+                for (List<Section> schedule : sectionLists){
+                    if (meetsSpecifications(schedule)) {
+                        staticSectionLists.add(schedule);
+                    }
+                }
             }
 
             if(!otherClasses.isEmpty()) {
@@ -136,7 +146,12 @@ public class Schedule implements Serializable {
 
             if(classesCompatible){
                 sectionLists.addAll(newSchedules);
-                staticSectionLists.addAll(sectionLists);
+                for (List<Section> schedule : sectionLists){
+                    if (meetsSpecifications(schedule)) {
+                        staticSectionLists.add(schedule);
+                    }
+                }
+
             }
 
             if(!otherClasses.isEmpty()) {
@@ -145,7 +160,11 @@ public class Schedule implements Serializable {
         }
     }
 
-    public static List<Schedule> createSchedules(List<Class> classes) {
+    public static List<Schedule> createSchedules(List<Class> classes, int minCreditHours, int maxCreditHours, int minNumClasses, int maxNumClasses) {
+        Schedule.minCreditHours = minCreditHours;
+        Schedule.maxCreditHours = maxCreditHours;
+        Schedule.minNumClasses = minNumClasses;
+        Schedule.maxNumClasses = maxNumClasses;
         if (classes != null) {
             Collections.sort(classes, Class.PRIORITY);
         }
@@ -244,6 +263,20 @@ public class Schedule implements Serializable {
 
     public int getPriorityScore() {
         return priorityScore;
+    }
+
+    private static int getCreditHours(List<Section> schedule){
+        int creditHours = 0;
+        for (Section s : schedule){
+            creditHours += s.getContainingClass().getCreditHours();
+        }
+        return creditHours;
+    }
+
+    private static boolean meetsSpecifications(List<Section> schedule){
+        int creditHours = getCreditHours(schedule);
+        return schedule.size() >= minNumClasses && schedule.size() <= maxNumClasses
+                && creditHours >= minCreditHours && creditHours <= maxCreditHours;
     }
 }
 class createSchedulesThread implements Runnable{

@@ -1,6 +1,8 @@
 package com.kmbapps.classscheduler;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -245,9 +247,19 @@ public class ClassLoader {
         schedulesChanged = true;
     }
 
-    public static void updateSchedules(){
+    static void setSchedulesChanged(boolean schedulesChanged){
+        ClassLoader.schedulesChanged = schedulesChanged;
+    }
+
+    public static void updateSchedules(Context context){
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
+        String minCreditHours = pref.getString("min_credit_hours",  context.getResources().getString(R.string.pref_min_credit_hours));
+        String maxCreditHours = pref.getString("max_credit_hours",  context.getResources().getString(R.string.pref_max_credit_hours));
+        String minNumClasses = pref.getString("min_num_classes",  context.getResources().getString(R.string.pref_min_num_classes));
+        String maxNumClasses = pref.getString("max_num_classes",  context.getResources().getString(R.string.pref_max_num_classes));
         if(schedulesChanged){
-            schedules = Schedule.createSchedules(myClasses);
+            schedules = Schedule.createSchedules(myClasses, Integer.parseInt(minCreditHours), Integer.parseInt(maxCreditHours),
+                    Integer.parseInt(minNumClasses), Integer.parseInt((maxNumClasses)));
             schedulesChanged = false;
         }
     }
