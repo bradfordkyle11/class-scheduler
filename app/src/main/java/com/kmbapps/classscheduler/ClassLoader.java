@@ -22,9 +22,12 @@ import java.util.concurrent.ConcurrentLinkedDeque;
 public class ClassLoader {
     private static ArrayList<Class> myClasses;
     private static boolean classesLoaded = false;
+    private static boolean classesChanged = false;
 
     private static List<Schedule> schedules;
+    private static boolean schedulesChange = false;
     private static List<Schedule> selectSchedules;
+    private static boolean selectSchedulesChanged = false;
     private static boolean schedulesChanged = false;
     private static boolean schedulesLoaded = false;
     private static boolean schedulesOptionsChanged = false;
@@ -32,6 +35,7 @@ public class ClassLoader {
     public static final int SELECT_SCHEDULES = 1;
 
     private static Schedule currentSchedule;
+    private static boolean currentScheduleChanged = false;
     private static boolean scheduleLoaded = false;
 
     private static String savedClassesFile = "savedclasses.txt";
@@ -41,6 +45,7 @@ public class ClassLoader {
     private static String selectSchedulesFile = "SelectSchedules.txt";
 
     private static Hashtable<Schedule, Notebook> mNotebooks;
+    private static boolean notebooksChanged = false;
     private static boolean notebooksLoaded = false;
 
     private static ConcurrentLinkedDeque<Integer> availableColors;
@@ -63,6 +68,10 @@ public class ClassLoader {
                 ObjectInputStream is = new ObjectInputStream(fis);
                 System.out.println(is.toString());
                 myClasses = (ArrayList<Class>) is.readObject();
+                if (myClasses == null){
+                    myClasses = new ArrayList<>();
+                    classesChanged = true;
+                }
                 loadColors(context, DESIRED_CLASSES);
                 classesLoaded = true;
                 is.close();
@@ -87,6 +96,7 @@ public class ClassLoader {
         if(!myClasses.contains(myClass)){
             myClass.setColor(getNextAvailableColor(context, DESIRED_CLASSES));
             myClasses.add(myClass);
+            classesChanged = true;
         }
         else{
             return false;
@@ -117,6 +127,7 @@ public class ClassLoader {
         if(!myClasses.contains(updatedClass)){
             updatedClass.setColor(originalClass.getColor());
             myClasses.set(myClasses.indexOf(originalClass), updatedClass);
+            classesChanged = true;
         }
         else{
             return false;
@@ -146,23 +157,28 @@ public class ClassLoader {
         selectSchedules = Schedule.updateSchedules(Integer.parseInt(minCreditHours), Integer.parseInt(maxCreditHours),
                 Integer.parseInt(minNumClasses), Integer.parseInt((maxNumClasses)), updatedClass, originalClass, loadSchedules(context, ALL_SCHEDULES));
         //saveSchedules(context);
+        schedulesChange = true;
+        selectSchedulesChanged = true;
         schedulesChanged = false;
         return true;
     }
 
     public static void saveClasses(Context context){
-        if (!classesLoaded){
-            loadClasses(context);
-        }
-        try {
-            FileOutputStream fos = context.openFileOutput(savedClassesFile, Context.MODE_PRIVATE);
-            ObjectOutputStream os = new ObjectOutputStream(fos);
-            os.writeObject(myClasses);
-            os.close();
-        } catch (FileNotFoundException e) {
-            System.out.println("FileNotFoundException: " + e.getMessage());
-        } catch (IOException e) {
-            System.out.println("IOException: " + e.getMessage());
+        if (classesChanged) {
+            if (!classesLoaded) {
+                loadClasses(context);
+            }
+            try {
+                FileOutputStream fos = context.openFileOutput(savedClassesFile, Context.MODE_PRIVATE);
+                ObjectOutputStream os = new ObjectOutputStream(fos);
+                os.writeObject(myClasses);
+                classesChanged = true;
+                os.close();
+            } catch (FileNotFoundException e) {
+                System.out.println("FileNotFoundException: " + e.getMessage());
+            } catch (IOException e) {
+                System.out.println("IOException: " + e.getMessage());
+            }
         }
     }
 
@@ -190,6 +206,7 @@ public class ClassLoader {
                     containingClass.getSections().set(replaceIndex, updatedSection);
                 }
                 myClasses.set(index, containingClass);
+                classesChanged = true;
                 /*try {
                     FileOutputStream fos = context.openFileOutput(savedClassesFile, Context.MODE_PRIVATE);
                     ObjectOutputStream os = new ObjectOutputStream(fos);
@@ -213,6 +230,8 @@ public class ClassLoader {
                         Integer.MIN_VALUE, Integer.MAX_VALUE, updatedSection, originalSection, loadSchedules(context, ALL_SCHEDULES));
                 selectSchedules = Schedule.updateSchedules(Integer.parseInt(minCreditHours), Integer.parseInt(maxCreditHours),
                         Integer.parseInt(minNumClasses), Integer.parseInt((maxNumClasses)), loadSchedules(context, ALL_SCHEDULES));
+                schedulesChange = true;
+                selectSchedulesChanged = true;
                 schedulesChanged = false;
                 //saveSchedules(context);
                 return true;
@@ -224,6 +243,7 @@ public class ClassLoader {
     public static void removeClass(Context context, Class removeThis) {
         releaseColor(removeThis.getColor(), DESIRED_CLASSES);
         myClasses.remove(removeThis);
+        classesChanged = true;
 
         /*try {
             FileOutputStream fos = context.openFileOutput(savedClassesFile, Context.MODE_PRIVATE);
@@ -246,6 +266,9 @@ public class ClassLoader {
                 Integer.MIN_VALUE, Integer.MAX_VALUE, null, removeThis, loadSchedules(context, ALL_SCHEDULES));
         selectSchedules = Schedule.updateSchedules(Integer.parseInt(minCreditHours), Integer.parseInt(maxCreditHours),
                 Integer.parseInt(minNumClasses), Integer.parseInt((maxNumClasses)), loadSchedules(context, ALL_SCHEDULES));
+
+        schedulesChange = true;
+        selectSchedulesChanged = true;
         //saveSchedules(context);
         schedulesChanged = false;
     }
@@ -255,6 +278,7 @@ public class ClassLoader {
             releaseColor(classToRemove.getColor(), DESIRED_CLASSES);
             myClasses.remove(classToRemove);
         }
+        classesChanged = true;
 
         /*try {
             FileOutputStream fos = context.openFileOutput(savedClassesFile, Context.MODE_PRIVATE);
@@ -280,6 +304,7 @@ public class ClassLoader {
             case DESIRED_CLASSES:
                 Class c = myClasses.get(myClasses.indexOf(removeThis.getContainingClass()));
                 c.getSections().remove(removeThis);
+                classesChanged = true;
 
                 /*try {
                     FileOutputStream fos = context.openFileOutput(savedClassesFile, Context.MODE_PRIVATE);
@@ -301,6 +326,8 @@ public class ClassLoader {
                         Integer.MIN_VALUE, Integer.MAX_VALUE, null, removeThis, loadSchedules(context, ALL_SCHEDULES));
                 selectSchedules = Schedule.updateSchedules(Integer.parseInt(minCreditHours), Integer.parseInt(maxCreditHours),
                         Integer.parseInt(minNumClasses), Integer.parseInt((maxNumClasses)), loadSchedules(context, ALL_SCHEDULES));
+                schedulesChange = true;
+                selectSchedulesChanged = true;
                 //saveSchedules(context);
                 schedulesChanged = false;
                 break;
@@ -314,6 +341,7 @@ public class ClassLoader {
             Class c = myClasses.get(myClasses.indexOf(sectionToRemove.getContainingClass()));
             c.getSections().remove(sectionToRemove);
         }
+        classesChanged = true;
 
         /*try {
             FileOutputStream fos = context.openFileOutput(savedClassesFile, Context.MODE_PRIVATE);
@@ -355,6 +383,7 @@ public class ClassLoader {
         else if (schedulesOptionsChanged){
             selectSchedules = Schedule.updateSchedules(Integer.parseInt(minCreditHours), Integer.parseInt(maxCreditHours),
                     Integer.parseInt(minNumClasses), Integer.parseInt((maxNumClasses)), loadSchedules(context, ClassLoader.ALL_SCHEDULES));
+            selectSchedulesChanged = true;
            // saveSchedules(context);
         }
     }
@@ -362,6 +391,7 @@ public class ClassLoader {
     public static void setCurrentSchedule(Context context, Schedule schedule){
         currentSchedule = schedule;
         loadColors(context, CURR_SCHEDULE);
+        currentScheduleChanged = true;
 
         /*try {
             FileOutputStream fos = context.openFileOutput(currentScheduleFile, Context.MODE_PRIVATE);
@@ -376,18 +406,21 @@ public class ClassLoader {
     }
 
     public static void saveCurrentSchedule(Context context){
-        if (!scheduleLoaded){
-            loadCurrentSchedule(context);
-        }
-        try {
-            FileOutputStream fos = context.openFileOutput(currentScheduleFile, Context.MODE_PRIVATE);
-            ObjectOutputStream os = new ObjectOutputStream(fos);
-            os.writeObject(currentSchedule);
-            os.close();
-        } catch (FileNotFoundException e) {
-            System.out.println("FileNotFoundException: " + e.getMessage());
-        } catch (IOException e) {
-            System.out.println("IOException: " + e.getMessage());
+        if (currentScheduleChanged) {
+            if (!scheduleLoaded) {
+                loadCurrentSchedule(context);
+            }
+            try {
+                FileOutputStream fos = context.openFileOutput(currentScheduleFile, Context.MODE_PRIVATE);
+                ObjectOutputStream os = new ObjectOutputStream(fos);
+                os.writeObject(currentSchedule);
+                currentScheduleChanged = false;
+                os.close();
+            } catch (FileNotFoundException e) {
+                System.out.println("FileNotFoundException: " + e.getMessage());
+            } catch (IOException e) {
+                System.out.println("IOException: " + e.getMessage());
+            }
         }
     }
 
@@ -423,18 +456,24 @@ public class ClassLoader {
         try {
             FileOutputStream fos = context.openFileOutput(schedulesFile, Context.MODE_PRIVATE);
             ObjectOutputStream os = new ObjectOutputStream(fos);
-            os.writeObject(schedules);
+            if (schedulesChange) {
+                os.writeObject(schedules);
+            }
             os.close();
             if (fos != null){
                 fos.close();
             }
             fos = context.openFileOutput(selectSchedulesFile, Context.MODE_PRIVATE);
             os = new ObjectOutputStream(fos);
-            os.writeObject(selectSchedules);
+            if (selectSchedulesChanged) {
+                os.writeObject(selectSchedules);
+            }
             os.close();
             if (fos != null){
                 fos.close();
             }
+            schedulesChange = false;
+            selectSchedulesChanged = false;
         } catch (FileNotFoundException e) {
             System.out.println("FileNotFoundException: " + e.getMessage());
         } catch (IOException e) {
@@ -523,6 +562,7 @@ public class ClassLoader {
             FileOutputStream fos = context.openFileOutput(savedNotebooksFile, Context.MODE_PRIVATE);
             ObjectOutputStream os = new ObjectOutputStream(fos);
             os.writeObject(notebooks);
+            notebooksChanged = false;
             os.close();
         } catch (FileNotFoundException e) {
             System.out.println("FileNotFoundException: " + e.getMessage());
