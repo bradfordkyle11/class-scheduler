@@ -127,6 +127,11 @@ public class Home extends ActionBarActivity
         actionBar.setTitle(mTitle);
     }
 
+    @Override
+    protected void onPause() {
+        ClassLoader.save(this);
+        super.onPause();
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

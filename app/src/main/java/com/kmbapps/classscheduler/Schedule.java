@@ -303,6 +303,9 @@ public class Schedule implements Serializable {
         newSchedule.addAll(schedule);
         //get times of the sections that are currently on the schedule
         for (Section s: schedule) {
+            if (s.getContainingClass().equals(section.getContainingClass())){
+                return false;
+            }
             times.add(s.getTimes());
         }
 

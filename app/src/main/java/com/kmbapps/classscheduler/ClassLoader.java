@@ -50,6 +50,11 @@ public class ClassLoader {
     public static final int DESIRED_CLASSES = 1;
 
 
+    public static void save(Context context){
+        saveCurrentSchedule(context);
+        saveClasses(context);
+        saveSchedules(context);
+    }
 
     public static ArrayList<Class> loadClasses(Context context) {
         if(!classesLoaded) {
@@ -87,7 +92,7 @@ public class ClassLoader {
             return false;
         }
 
-        try {
+        /*try {
             FileOutputStream fos = context.openFileOutput(savedClassesFile, Context.MODE_PRIVATE);
             ObjectOutputStream os = new ObjectOutputStream(fos);
             os.writeObject(myClasses);
@@ -98,7 +103,7 @@ public class ClassLoader {
         } catch (IOException e) {
             System.out.println("IOException: " + e.getMessage());
             return false;
-        }
+        }*/
 
         return true;
     }
@@ -117,7 +122,7 @@ public class ClassLoader {
             return false;
         }
 
-        try {
+        /*try {
             FileOutputStream fos = context.openFileOutput(savedClassesFile, Context.MODE_PRIVATE);
             ObjectOutputStream os = new ObjectOutputStream(fos);
             os.writeObject(myClasses);
@@ -128,7 +133,7 @@ public class ClassLoader {
         } catch (IOException e) {
             System.out.println("IOException: " + e.getMessage());
             return false;
-        }
+        }*/
 
         //update schedule
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
@@ -137,12 +142,28 @@ public class ClassLoader {
         String minNumClasses = pref.getString("min_num_classes",  context.getResources().getString(R.string.pref_min_num_classes));
         String maxNumClasses = pref.getString("max_num_classes",  context.getResources().getString(R.string.pref_max_num_classes));
         schedules = Schedule.updateSchedules(Integer.MIN_VALUE, Integer.MAX_VALUE,
-                Integer.MIN_VALUE, Integer.MAX_VALUE, updatedClass, originalClass, schedules);
+                Integer.MIN_VALUE, Integer.MAX_VALUE, updatedClass, originalClass, loadSchedules(context, ALL_SCHEDULES));
         selectSchedules = Schedule.updateSchedules(Integer.parseInt(minCreditHours), Integer.parseInt(maxCreditHours),
-                Integer.parseInt(minNumClasses), Integer.parseInt((maxNumClasses)), updatedClass, originalClass, schedules);
-        saveSchedules(context);
+                Integer.parseInt(minNumClasses), Integer.parseInt((maxNumClasses)), updatedClass, originalClass, loadSchedules(context, ALL_SCHEDULES));
+        //saveSchedules(context);
         schedulesChanged = false;
         return true;
+    }
+
+    public static void saveClasses(Context context){
+        if (!classesLoaded){
+            loadClasses(context);
+        }
+        try {
+            FileOutputStream fos = context.openFileOutput(savedClassesFile, Context.MODE_PRIVATE);
+            ObjectOutputStream os = new ObjectOutputStream(fos);
+            os.writeObject(myClasses);
+            os.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("FileNotFoundException: " + e.getMessage());
+        } catch (IOException e) {
+            System.out.println("IOException: " + e.getMessage());
+        }
     }
 
     public static boolean saveSection(Context context, Section updatedSection, Section originalSection, Class containingClass, int where){
@@ -169,7 +190,7 @@ public class ClassLoader {
                     containingClass.getSections().set(replaceIndex, updatedSection);
                 }
                 myClasses.set(index, containingClass);
-                try {
+                /*try {
                     FileOutputStream fos = context.openFileOutput(savedClassesFile, Context.MODE_PRIVATE);
                     ObjectOutputStream os = new ObjectOutputStream(fos);
                     os.writeObject(myClasses);
@@ -180,7 +201,7 @@ public class ClassLoader {
                 } catch (IOException e) {
                     System.out.println("IOException: " + e.getMessage());
                     return false;
-                }
+                }*/
 
                 //update schedule
                 SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
@@ -189,11 +210,11 @@ public class ClassLoader {
                 String minNumClasses = pref.getString("min_num_classes",  context.getResources().getString(R.string.pref_min_num_classes));
                 String maxNumClasses = pref.getString("max_num_classes",  context.getResources().getString(R.string.pref_max_num_classes));
                 schedules = Schedule.updateSchedules(Integer.MIN_VALUE, Integer.MAX_VALUE,
-                        Integer.MIN_VALUE, Integer.MAX_VALUE, updatedSection, originalSection, schedules);
+                        Integer.MIN_VALUE, Integer.MAX_VALUE, updatedSection, originalSection, loadSchedules(context, ALL_SCHEDULES));
                 selectSchedules = Schedule.updateSchedules(Integer.parseInt(minCreditHours), Integer.parseInt(maxCreditHours),
-                        Integer.parseInt(minNumClasses), Integer.parseInt((maxNumClasses)), schedules);
+                        Integer.parseInt(minNumClasses), Integer.parseInt((maxNumClasses)), loadSchedules(context, ALL_SCHEDULES));
                 schedulesChanged = false;
-                saveSchedules(context);
+                //saveSchedules(context);
                 return true;
             default:
                 return false;
@@ -204,7 +225,7 @@ public class ClassLoader {
         releaseColor(removeThis.getColor(), DESIRED_CLASSES);
         myClasses.remove(removeThis);
 
-        try {
+        /*try {
             FileOutputStream fos = context.openFileOutput(savedClassesFile, Context.MODE_PRIVATE);
             ObjectOutputStream os = new ObjectOutputStream(fos);
             os.writeObject(myClasses);
@@ -213,7 +234,7 @@ public class ClassLoader {
             System.out.println("FileNotFoundException: " + e.getMessage());
         } catch (IOException e) {
             System.out.println("IOException: " + e.getMessage());
-        }
+        }*/
 
         //update schedule
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
@@ -222,10 +243,10 @@ public class ClassLoader {
         String minNumClasses = pref.getString("min_num_classes",  context.getResources().getString(R.string.pref_min_num_classes));
         String maxNumClasses = pref.getString("max_num_classes",  context.getResources().getString(R.string.pref_max_num_classes));
         schedules = Schedule.updateSchedules(Integer.MIN_VALUE, Integer.MAX_VALUE,
-                Integer.MIN_VALUE, Integer.MAX_VALUE, null, removeThis, schedules);
+                Integer.MIN_VALUE, Integer.MAX_VALUE, null, removeThis, loadSchedules(context, ALL_SCHEDULES));
         selectSchedules = Schedule.updateSchedules(Integer.parseInt(minCreditHours), Integer.parseInt(maxCreditHours),
-                Integer.parseInt(minNumClasses), Integer.parseInt((maxNumClasses)), schedules);
-        saveSchedules(context);
+                Integer.parseInt(minNumClasses), Integer.parseInt((maxNumClasses)), loadSchedules(context, ALL_SCHEDULES));
+        //saveSchedules(context);
         schedulesChanged = false;
     }
 
@@ -235,7 +256,7 @@ public class ClassLoader {
             myClasses.remove(classToRemove);
         }
 
-        try {
+        /*try {
             FileOutputStream fos = context.openFileOutput(savedClassesFile, Context.MODE_PRIVATE);
             ObjectOutputStream os = new ObjectOutputStream(fos);
             os.writeObject(myClasses);
@@ -244,7 +265,7 @@ public class ClassLoader {
             System.out.println("FileNotFoundException: " + e.getMessage());
         } catch (IOException e) {
             System.out.println("IOException: " + e.getMessage());
-        }
+        }*/
 
         //TODO: update schedules with the new method
         schedulesChanged = true;
@@ -260,7 +281,7 @@ public class ClassLoader {
                 Class c = myClasses.get(myClasses.indexOf(removeThis.getContainingClass()));
                 c.getSections().remove(removeThis);
 
-                try {
+                /*try {
                     FileOutputStream fos = context.openFileOutput(savedClassesFile, Context.MODE_PRIVATE);
                     ObjectOutputStream os = new ObjectOutputStream(fos);
                     os.writeObject(myClasses);
@@ -269,7 +290,7 @@ public class ClassLoader {
                     System.out.println("FileNotFoundException: " + e.getMessage());
                 } catch (IOException e) {
                     System.out.println("IOException: " + e.getMessage());
-                }
+                }*/
                 //update schedule
                 SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
                 String minCreditHours = pref.getString("min_credit_hours",  context.getResources().getString(R.string.pref_min_credit_hours));
@@ -277,10 +298,10 @@ public class ClassLoader {
                 String minNumClasses = pref.getString("min_num_classes",  context.getResources().getString(R.string.pref_min_num_classes));
                 String maxNumClasses = pref.getString("max_num_classes",  context.getResources().getString(R.string.pref_max_num_classes));
                 schedules = Schedule.updateSchedules(Integer.MIN_VALUE, Integer.MAX_VALUE,
-                        Integer.MIN_VALUE, Integer.MAX_VALUE, null, removeThis, schedules);
+                        Integer.MIN_VALUE, Integer.MAX_VALUE, null, removeThis, loadSchedules(context, ALL_SCHEDULES));
                 selectSchedules = Schedule.updateSchedules(Integer.parseInt(minCreditHours), Integer.parseInt(maxCreditHours),
-                        Integer.parseInt(minNumClasses), Integer.parseInt((maxNumClasses)), schedules);
-                saveSchedules(context);
+                        Integer.parseInt(minNumClasses), Integer.parseInt((maxNumClasses)), loadSchedules(context, ALL_SCHEDULES));
+                //saveSchedules(context);
                 schedulesChanged = false;
                 break;
         }
@@ -294,7 +315,7 @@ public class ClassLoader {
             c.getSections().remove(sectionToRemove);
         }
 
-        try {
+        /*try {
             FileOutputStream fos = context.openFileOutput(savedClassesFile, Context.MODE_PRIVATE);
             ObjectOutputStream os = new ObjectOutputStream(fos);
             os.writeObject(myClasses);
@@ -303,7 +324,7 @@ public class ClassLoader {
             System.out.println("FileNotFoundException: " + e.getMessage());
         } catch (IOException e) {
             System.out.println("IOException: " + e.getMessage());
-        }
+        }*/
 
         //TODO: update schedules with the new method
 
@@ -327,14 +348,14 @@ public class ClassLoader {
         if(schedulesChanged){
             schedules = Schedule.createSchedules(myClasses, Integer.parseInt(minCreditHours), Integer.parseInt(maxCreditHours),
                     Integer.parseInt(minNumClasses), Integer.parseInt((maxNumClasses)), 3);
-            saveSchedules(context);
+            //saveSchedules(context);
             schedulesLoaded = true;
             schedulesChanged = false;
         }
         else if (schedulesOptionsChanged){
             selectSchedules = Schedule.updateSchedules(Integer.parseInt(minCreditHours), Integer.parseInt(maxCreditHours),
                     Integer.parseInt(minNumClasses), Integer.parseInt((maxNumClasses)), loadSchedules(context, ClassLoader.ALL_SCHEDULES));
-            saveSchedules(context);
+           // saveSchedules(context);
         }
     }
 
@@ -342,6 +363,22 @@ public class ClassLoader {
         currentSchedule = schedule;
         loadColors(context, CURR_SCHEDULE);
 
+        /*try {
+            FileOutputStream fos = context.openFileOutput(currentScheduleFile, Context.MODE_PRIVATE);
+            ObjectOutputStream os = new ObjectOutputStream(fos);
+            os.writeObject(currentSchedule);
+            os.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("FileNotFoundException: " + e.getMessage());
+        } catch (IOException e) {
+            System.out.println("IOException: " + e.getMessage());
+        }*/
+    }
+
+    public static void saveCurrentSchedule(Context context){
+        if (!scheduleLoaded){
+            loadCurrentSchedule(context);
+        }
         try {
             FileOutputStream fos = context.openFileOutput(currentScheduleFile, Context.MODE_PRIVATE);
             ObjectOutputStream os = new ObjectOutputStream(fos);
@@ -379,6 +416,9 @@ public class ClassLoader {
     }
 
     public static void saveSchedules(Context context){
+        if (!schedulesLoaded){
+            loadSchedules(context, ALL_SCHEDULES);
+        }
 
         try {
             FileOutputStream fos = context.openFileOutput(schedulesFile, Context.MODE_PRIVATE);

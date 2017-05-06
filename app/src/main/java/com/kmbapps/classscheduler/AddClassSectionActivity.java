@@ -165,6 +165,12 @@ public class AddClassSectionActivity extends AppCompatActivity implements Confir
     }
 
     @Override
+    protected void onPause() {
+        ClassLoader.save(this);
+        super.onPause();
+    }
+
+    @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
     }

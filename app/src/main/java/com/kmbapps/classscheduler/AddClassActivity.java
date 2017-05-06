@@ -37,6 +37,11 @@ public class AddClassActivity extends ActionBarActivity {
         priority.setSelection(Class.HIGH);
 
     }
+    @Override
+    protected void onPause() {
+        ClassLoader.save(this);
+        super.onPause();
+    }
 
 
     @Override

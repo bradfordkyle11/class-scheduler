@@ -141,6 +141,12 @@ public class AddAssignmentActivity extends ActionBarActivity implements Confirma
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    protected void onPause() {
+        ClassLoader.save(this);
+        super.onPause();
+    }
+
     public void selectDate(View view){
         Calendar calendar = Calendar.getInstance();
         TextView dateTV = (TextView) view;

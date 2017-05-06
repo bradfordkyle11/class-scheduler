@@ -77,6 +77,12 @@ public class MyClassActivity extends ActionBarActivity implements ClassAssignmen
     }
 
     @Override
+    protected void onPause() {
+        ClassLoader.save(this);
+        super.onPause();
+    }
+
+    @Override
     public void onSaveInstanceState(Bundle savedInstanceState){
 
         savedInstanceState.putInt(CURRENT_PAGE, mViewPager.getCurrentItem());

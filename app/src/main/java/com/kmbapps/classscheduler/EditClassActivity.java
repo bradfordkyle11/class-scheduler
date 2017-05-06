@@ -57,6 +57,12 @@ public class EditClassActivity extends ActionBarActivity implements Confirmation
 
     }
 
+    @Override
+    protected void onPause() {
+        ClassLoader.save(this);
+        super.onPause();
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
