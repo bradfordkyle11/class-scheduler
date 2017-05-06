@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- TODO: use softer colors for the class calendar colors array -->
-    <!-- TODO: add more color swatches from the android material design color page -->
-
     <color name="blue01">#0099CC</color>
     <color name="blue02">#079DD0</color>
     <color name="blue03">#0FA1D3</color>
@@ -88,6 +85,7 @@
     <color name="teal08">#80CBC4</color>
     <color name="teal09">#B2DFDB</color>
     <color name="teal10">#E0F2F1</color>
+    <color name="teal12">#E0F2F1</color>
 
 
     <color name="gray01">#2d2d2d</color>
@@ -101,6 +99,18 @@
     <color name="gray09">#EEEEEE</color>
     <color name="gray10">#F5F5F5</color>
     <color name="gray11">#FAFAFA</color>
+
+    <color name="brown03">#66483D</color>
+    <color name="brown08">#A67563</color>
+    <color name="brown12">#FFC7B3</color>
+
+    <color name="pink03">#8C123B</color>
+    <color name="pink08">#E91E63</color>
+    <color name="pink12">#FF80AA</color>
+
+    <color name="deep_purple03">#3A2166</color>
+    <color name="deep_purple08">#673Ab7</color>
+    <color name="deep_purple12">#AE80FF</color>
 
 
     <color name="black">#000000</color>
@@ -117,21 +127,32 @@
     <color name="text_color">#E6000000</color>
 
     <array name="classCalendarColors">
+        <item>@color/blue08</item>
+        <item>@color/purple08</item>
+        <item>@color/green08</item>
+        <item>@color/orange08</item>
+        <item>@color/red08</item>
+        <item>@color/teal08</item>
+        <item>@color/deep_purple08</item>
+        <item>@color/brown08</item>
+        <item>@color/pink08</item>
         <item>@color/blue03</item>
         <item>@color/purple03</item>
         <item>@color/green03</item>
         <item>@color/orange03</item>
         <item>@color/red03</item>
-        <item>@color/blue07</item>
-        <item>@color/purple07</item>
-        <item>@color/green07</item>
-        <item>@color/orange07</item>
-        <item>@color/red07</item>
+        <item>@color/teal03</item>
+        <item>@color/deep_purple03</item>
+        <item>@color/brown03</item>
+        <item>@color/pink03</item>
         <item>@color/blue12</item>
         <item>@color/purple12</item>
         <item>@color/green12</item>
         <item>@color/orange12</item>
         <item>@color/red12</item>
+        <item>@color/deep_purple12</item>
+        <item>@color/brown12</item>
+        <item>@color/pink12</item>
     </array>
 
 

@@ -31,6 +31,7 @@ public class Class implements Serializable {
     private int creditHours;
     private int priority;
     private List<Section> sections;
+    private int color;
     private static final long serialVersionUID = 1000000;
 
     public UUID getId() {
@@ -179,5 +180,11 @@ public class Class implements Serializable {
         return sections.get(position);
     }
 
+    public int getColor() {
+        return color;
+    }
 
+    public void setColor(int color) {
+        this.color = color;
+    }
 }

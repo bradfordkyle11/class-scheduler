@@ -237,7 +237,7 @@ public class CreateScheduleFragment extends Fragment{
 
             //calculate schedules
             ClassLoader.updateSchedules(getActivity());
-            potentialSchedules =  ClassLoader.loadSchedules();
+            potentialSchedules =  ClassLoader.loadSchedules(getActivity(), ClassLoader.SELECT_SCHEDULES);
 
 
             return null;

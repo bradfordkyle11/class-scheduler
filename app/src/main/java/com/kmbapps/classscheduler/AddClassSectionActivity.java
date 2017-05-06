@@ -213,7 +213,7 @@ public class AddClassSectionActivity extends AppCompatActivity implements Confir
                     }
 
                     ClassLoader.saveSection(this, newSection, mSection, myClass, where);
-                    ClassLoader.updateSchedules(this);
+                    //ClassLoader.updateSchedules(this);
 
 
                     //return
@@ -581,15 +581,18 @@ public class AddClassSectionActivity extends AppCompatActivity implements Confir
 
             Spinner priority = (Spinner) findViewById(R.id.priority);
             updatedClass.setPriority(priority.getSelectedItemPosition());
+
             if (mSection != null){
                 updatedClass.addSection(mSection);
             }
 
             if (myClass == null){
                 classUpdated = true;
+                updatedClass.setColor(ClassLoader.getNextAvailableColor(this, ClassLoader.CURR_SCHEDULE)); //TODO: this is broken if this activity is refactored to be used in all class adding situations
                 myClass = updatedClass;
             }
             else if (!updatedClass.equals(myClass)){
+                updatedClass.setColor(myClass.getColor());
                 classUpdated = true;
                 //don't change myClass to updatedClass here, because containing class is updated when class loader saves
             }

@@ -187,7 +187,7 @@ public class ScheduleDesignerSettingsActivity extends AppCompatPreferenceActivit
         public boolean onOptionsItemSelected(MenuItem item) {
             int id = item.getItemId();
             if (id == android.R.id.home) {
-                ClassLoader.setSchedulesChanged(true);
+                ClassLoader.setSchedulesOptionsChanged(true);
                 startActivity(new Intent(getActivity(), Home.class));
                 return true;
             }

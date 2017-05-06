@@ -13,6 +13,8 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Set;
+import java.util.concurrent.ConcurrentLinkedDeque;
 
 /**
  * Created by Kyle on 9/23/2014.
@@ -22,7 +24,12 @@ public class ClassLoader {
     private static boolean classesLoaded = false;
 
     private static List<Schedule> schedules;
-    private static boolean schedulesChanged = true;
+    private static List<Schedule> selectSchedules;
+    private static boolean schedulesChanged = false;
+    private static boolean schedulesLoaded = false;
+    private static boolean schedulesOptionsChanged = false;
+    public static final int ALL_SCHEDULES = 0;
+    public static final int SELECT_SCHEDULES = 1;
 
     private static Schedule currentSchedule;
     private static boolean scheduleLoaded = false;
@@ -30,9 +37,14 @@ public class ClassLoader {
     private static String savedClassesFile = "savedclasses.txt";
     private static String currentScheduleFile = "CurrentSchedule.txt";
     private static String savedNotebooksFile = "Notebooks.txt";
+    private static String schedulesFile = "schedules.txt";
+    private static String selectSchedulesFile = "SelectSchedules.txt";
 
     private static Hashtable<Schedule, Notebook> mNotebooks;
     private static boolean notebooksLoaded = false;
+
+    private static ConcurrentLinkedDeque<Integer> availableColors;
+    private static ConcurrentLinkedDeque<Integer> currScheduleAvailableColors;
 
     public static final int CURR_SCHEDULE = 0;
     public static final int DESIRED_CLASSES = 1;
@@ -45,8 +57,8 @@ public class ClassLoader {
                 FileInputStream fis = context.openFileInput(savedClassesFile);
                 ObjectInputStream is = new ObjectInputStream(fis);
                 System.out.println(is.toString());
-
                 myClasses = (ArrayList<Class>) is.readObject();
+                loadColors(context, DESIRED_CLASSES);
                 classesLoaded = true;
                 is.close();
             } catch (FileNotFoundException e) {
@@ -68,6 +80,7 @@ public class ClassLoader {
         }
 
         if(!myClasses.contains(myClass)){
+            myClass.setColor(getNextAvailableColor(context, DESIRED_CLASSES));
             myClasses.add(myClass);
         }
         else{
@@ -87,7 +100,6 @@ public class ClassLoader {
             return false;
         }
 
-        schedulesChanged = true;
         return true;
     }
 
@@ -98,6 +110,7 @@ public class ClassLoader {
         }
 
         if(!myClasses.contains(updatedClass)){
+            updatedClass.setColor(originalClass.getColor());
             myClasses.set(myClasses.indexOf(originalClass), updatedClass);
         }
         else{
@@ -117,7 +130,18 @@ public class ClassLoader {
             return false;
         }
 
-        schedulesChanged = true;
+        //update schedule
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
+        String minCreditHours = pref.getString("min_credit_hours",  context.getResources().getString(R.string.pref_min_credit_hours));
+        String maxCreditHours = pref.getString("max_credit_hours",  context.getResources().getString(R.string.pref_max_credit_hours));
+        String minNumClasses = pref.getString("min_num_classes",  context.getResources().getString(R.string.pref_min_num_classes));
+        String maxNumClasses = pref.getString("max_num_classes",  context.getResources().getString(R.string.pref_max_num_classes));
+        schedules = Schedule.updateSchedules(Integer.MIN_VALUE, Integer.MAX_VALUE,
+                Integer.MIN_VALUE, Integer.MAX_VALUE, updatedClass, originalClass, schedules);
+        selectSchedules = Schedule.updateSchedules(Integer.parseInt(minCreditHours), Integer.parseInt(maxCreditHours),
+                Integer.parseInt(minNumClasses), Integer.parseInt((maxNumClasses)), updatedClass, originalClass, schedules);
+        saveSchedules(context);
+        schedulesChanged = false;
         return true;
     }
 
@@ -125,6 +149,7 @@ public class ClassLoader {
         int index;
         switch (where){
             case CURR_SCHEDULE:
+                useColor(containingClass.getColor(), where);
                 index = currentSchedule.getSections().indexOf(originalSection);
                 if (index < 0){
                     currentSchedule.getSections().add(updatedSection);
@@ -156,7 +181,19 @@ public class ClassLoader {
                     System.out.println("IOException: " + e.getMessage());
                     return false;
                 }
-                schedulesChanged = true;
+
+                //update schedule
+                SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
+                String minCreditHours = pref.getString("min_credit_hours",  context.getResources().getString(R.string.pref_min_credit_hours));
+                String maxCreditHours = pref.getString("max_credit_hours",  context.getResources().getString(R.string.pref_max_credit_hours));
+                String minNumClasses = pref.getString("min_num_classes",  context.getResources().getString(R.string.pref_min_num_classes));
+                String maxNumClasses = pref.getString("max_num_classes",  context.getResources().getString(R.string.pref_max_num_classes));
+                schedules = Schedule.updateSchedules(Integer.MIN_VALUE, Integer.MAX_VALUE,
+                        Integer.MIN_VALUE, Integer.MAX_VALUE, updatedSection, originalSection, schedules);
+                selectSchedules = Schedule.updateSchedules(Integer.parseInt(minCreditHours), Integer.parseInt(maxCreditHours),
+                        Integer.parseInt(minNumClasses), Integer.parseInt((maxNumClasses)), schedules);
+                schedulesChanged = false;
+                saveSchedules(context);
                 return true;
             default:
                 return false;
@@ -164,6 +201,7 @@ public class ClassLoader {
     }
 
     public static void removeClass(Context context, Class removeThis) {
+        releaseColor(removeThis.getColor(), DESIRED_CLASSES);
         myClasses.remove(removeThis);
 
         try {
@@ -177,11 +215,23 @@ public class ClassLoader {
             System.out.println("IOException: " + e.getMessage());
         }
 
-        schedulesChanged = true;
+        //update schedule
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
+        String minCreditHours = pref.getString("min_credit_hours",  context.getResources().getString(R.string.pref_min_credit_hours));
+        String maxCreditHours = pref.getString("max_credit_hours",  context.getResources().getString(R.string.pref_max_credit_hours));
+        String minNumClasses = pref.getString("min_num_classes",  context.getResources().getString(R.string.pref_min_num_classes));
+        String maxNumClasses = pref.getString("max_num_classes",  context.getResources().getString(R.string.pref_max_num_classes));
+        schedules = Schedule.updateSchedules(Integer.MIN_VALUE, Integer.MAX_VALUE,
+                Integer.MIN_VALUE, Integer.MAX_VALUE, null, removeThis, schedules);
+        selectSchedules = Schedule.updateSchedules(Integer.parseInt(minCreditHours), Integer.parseInt(maxCreditHours),
+                Integer.parseInt(minNumClasses), Integer.parseInt((maxNumClasses)), schedules);
+        saveSchedules(context);
+        schedulesChanged = false;
     }
 
     public static void removeClasses(Context context, ArrayList<Class> classesToRemove){
         for(Class classToRemove : classesToRemove) {
+            releaseColor(classToRemove.getColor(), DESIRED_CLASSES);
             myClasses.remove(classToRemove);
         }
 
@@ -196,6 +246,7 @@ public class ClassLoader {
             System.out.println("IOException: " + e.getMessage());
         }
 
+        //TODO: update schedules with the new method
         schedulesChanged = true;
     }
 
@@ -219,8 +270,18 @@ public class ClassLoader {
                 } catch (IOException e) {
                     System.out.println("IOException: " + e.getMessage());
                 }
-
-                schedulesChanged = true;
+                //update schedule
+                SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
+                String minCreditHours = pref.getString("min_credit_hours",  context.getResources().getString(R.string.pref_min_credit_hours));
+                String maxCreditHours = pref.getString("max_credit_hours",  context.getResources().getString(R.string.pref_max_credit_hours));
+                String minNumClasses = pref.getString("min_num_classes",  context.getResources().getString(R.string.pref_min_num_classes));
+                String maxNumClasses = pref.getString("max_num_classes",  context.getResources().getString(R.string.pref_max_num_classes));
+                schedules = Schedule.updateSchedules(Integer.MIN_VALUE, Integer.MAX_VALUE,
+                        Integer.MIN_VALUE, Integer.MAX_VALUE, null, removeThis, schedules);
+                selectSchedules = Schedule.updateSchedules(Integer.parseInt(minCreditHours), Integer.parseInt(maxCreditHours),
+                        Integer.parseInt(minNumClasses), Integer.parseInt((maxNumClasses)), schedules);
+                saveSchedules(context);
+                schedulesChanged = false;
                 break;
         }
 
@@ -244,11 +305,17 @@ public class ClassLoader {
             System.out.println("IOException: " + e.getMessage());
         }
 
+        //TODO: update schedules with the new method
+
         schedulesChanged = true;
     }
 
     static void setSchedulesChanged(boolean schedulesChanged){
         ClassLoader.schedulesChanged = schedulesChanged;
+    }
+
+    static void setSchedulesOptionsChanged(boolean schedulesOptionsChanged){
+        ClassLoader.schedulesOptionsChanged = schedulesOptionsChanged;
     }
 
     public static void updateSchedules(Context context){
@@ -259,13 +326,21 @@ public class ClassLoader {
         String maxNumClasses = pref.getString("max_num_classes",  context.getResources().getString(R.string.pref_max_num_classes));
         if(schedulesChanged){
             schedules = Schedule.createSchedules(myClasses, Integer.parseInt(minCreditHours), Integer.parseInt(maxCreditHours),
-                    Integer.parseInt(minNumClasses), Integer.parseInt((maxNumClasses)));
+                    Integer.parseInt(minNumClasses), Integer.parseInt((maxNumClasses)), 3);
+            saveSchedules(context);
+            schedulesLoaded = true;
             schedulesChanged = false;
+        }
+        else if (schedulesOptionsChanged){
+            selectSchedules = Schedule.updateSchedules(Integer.parseInt(minCreditHours), Integer.parseInt(maxCreditHours),
+                    Integer.parseInt(minNumClasses), Integer.parseInt((maxNumClasses)), loadSchedules(context, ClassLoader.ALL_SCHEDULES));
+            saveSchedules(context);
         }
     }
 
     public static void setCurrentSchedule(Context context, Schedule schedule){
         currentSchedule = schedule;
+        loadColors(context, CURR_SCHEDULE);
 
         try {
             FileOutputStream fos = context.openFileOutput(currentScheduleFile, Context.MODE_PRIVATE);
@@ -303,8 +378,77 @@ public class ClassLoader {
         return currentSchedule;
     }
 
-    public static List<Schedule> loadSchedules(){
-        return schedules;
+    public static void saveSchedules(Context context){
+
+        try {
+            FileOutputStream fos = context.openFileOutput(schedulesFile, Context.MODE_PRIVATE);
+            ObjectOutputStream os = new ObjectOutputStream(fos);
+            os.writeObject(schedules);
+            os.close();
+            if (fos != null){
+                fos.close();
+            }
+            fos = context.openFileOutput(selectSchedulesFile, Context.MODE_PRIVATE);
+            os = new ObjectOutputStream(fos);
+            os.writeObject(selectSchedules);
+            os.close();
+            if (fos != null){
+                fos.close();
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println("FileNotFoundException: " + e.getMessage());
+        } catch (IOException e) {
+            System.out.println("IOException: " + e.getMessage());
+        }
+    }
+
+    public static List<Schedule> loadSchedules(Context context, int which){
+        if(!schedulesLoaded){
+            try {
+                FileInputStream fis = context.openFileInput(schedulesFile);
+                ObjectInputStream is = new ObjectInputStream(fis);
+                System.out.println(is.toString());
+
+                schedules = (List<Schedule>) is.readObject();
+                is.close();
+                if (fis!=null){
+                    fis.close();
+                }
+                fis = context.openFileInput(selectSchedulesFile);
+                is = new ObjectInputStream(fis);
+                System.out.println(is.toString());
+
+                selectSchedules = (List<Schedule>) is.readObject();
+                schedulesLoaded = true;
+                is.close();
+                if (fis!=null){
+                    fis.close();
+                }
+            } catch (FileNotFoundException e) {
+                System.out.println("FileNotFoundException: " + e.getMessage());
+            } catch (IOException e) {
+                System.out.println("IOException: " + e.getMessage());
+            } catch (ClassNotFoundException e) {
+                System.out.println("SystemNotFoundException: " + e.getMessage());
+            }
+        }
+
+        switch (which){
+            case ALL_SCHEDULES:
+                if (schedules==null){
+                    return new ArrayList<Schedule>();
+                }
+
+                return schedules;
+            case SELECT_SCHEDULES:
+                if (selectSchedules==null){
+                    return new ArrayList<>();
+                }
+                return selectSchedules;
+            default:
+                return null;
+        }
+
     }
 
     public static Hashtable<Schedule, Notebook> loadNotebooks(Context context){
@@ -450,6 +594,116 @@ public class ClassLoader {
             System.out.println("FileNotFoundException: " + e.getMessage());
         } catch (IOException e) {
             System.out.println("IOException: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Load all the colors from resources, then use the current classes to determine which colors
+     * are still available
+     * @param context
+     */
+    private static void loadColors(Context context, int which){
+        int[] colors = context.getResources().getIntArray(R.array.classCalendarColors);
+        switch (which) {
+            case DESIRED_CLASSES:
+                ArrayList<Integer> usedColors;
+                int offset = 0;
+                int multiplier = myClasses.size() / colors.length;
+                offset = colors.length * multiplier;
+                usedColors = new ArrayList<>(myClasses.size() - offset);
+                for (int i = 0; i < myClasses.size() - offset; i++) {
+                    usedColors.add(myClasses.get(i + offset).getColor());
+                }
+                availableColors = new ConcurrentLinkedDeque<>();
+                for (int i = 0; i < colors.length; i++) {
+                    if (!usedColors.contains(colors[i])) {
+                        availableColors.add(colors[i]);
+                    }
+                }
+                break;
+            case CURR_SCHEDULE:
+                if (!scheduleLoaded){
+                    loadCurrentSchedule(context);
+                }
+                ArrayList<Integer> usedColorsCurrSchedule;
+                multiplier = currentSchedule.getSections().size() / colors.length;
+                offset = colors.length * multiplier;
+                usedColorsCurrSchedule = new ArrayList<>(currentSchedule.getSections().size() - offset);
+                for (int i = 0; i < currentSchedule.getSections().size() - offset; i++) {
+                    usedColorsCurrSchedule.add(currentSchedule.getSections().get(i + offset).getContainingClass().getColor());
+                }
+                currScheduleAvailableColors = new ConcurrentLinkedDeque<>();
+                for (int i = 0; i < colors.length; i++) {
+                    if (!usedColorsCurrSchedule.contains(colors[i])) {
+                        currScheduleAvailableColors.add(colors[i]);
+                    }
+                }
+                break;
+        }
+    }
+
+    /**
+     * Retrieve the next color that is available
+     * @param context
+     * @return the next color that is not yet used
+     */
+    public static int getNextAvailableColor(Context context, int which){
+
+        switch (which){
+            case DESIRED_CLASSES:
+                if (availableColors == null){
+                    loadColors(context, which);
+                }
+                else if (availableColors.isEmpty()){
+                    loadColors(context, which);
+                }
+                return availableColors.pop();
+            case CURR_SCHEDULE:
+                if (currScheduleAvailableColors == null){
+                    loadColors(context, which);
+                }
+                else if (currScheduleAvailableColors.isEmpty()){
+                    loadColors(context, which);
+                }
+                return currScheduleAvailableColors.pop();
+        }
+        return -1;
+    }
+
+    /**
+     * Notify the color deque that this color is no longer in use
+     * @param color the color that is no longer in use
+     * @param which which color list to release from
+     */
+
+    private static void releaseColor(int color, int which){
+        switch (which){
+            case DESIRED_CLASSES:
+                if (!availableColors.contains(color)){
+                    availableColors.push(color);
+                }
+                break;
+            case CURR_SCHEDULE:
+                if (!currScheduleAvailableColors.contains(color)){
+                    currScheduleAvailableColors.push(color);
+                }
+                break;
+        }
+
+    }
+
+    private static void useColor(int color, int which){
+        switch (which){
+            case DESIRED_CLASSES:
+                if (availableColors.contains(color)){
+                    availableColors.remove(color);
+                }
+                break;
+            case CURR_SCHEDULE:
+                if (currScheduleAvailableColors.contains(color)){
+                    currScheduleAvailableColors.remove(color);
+                }
+                break;
         }
     }
 
