@@ -1,6 +1,8 @@
 package com.kmbapps.classscheduler;
 
 
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v4.content.AsyncTaskLoader;
 import android.content.Context;
 
@@ -80,12 +82,15 @@ public class ScheduleLoader extends AsyncTaskLoader<List<Schedule>> {
                         ClassLoader.getNewClass(), ClassLoader.getOldClass(), ClassLoader.getNewSection(), ClassLoader.getOldSection());
                 break;
             case SELECT_SCHEDULES_LOADER:
-                update(ClassLoader.getMinCreditHours(), ClassLoader.getMaxCreditHours(), ClassLoader.getMinNumClasses(), ClassLoader.getMaxNumClasses(),
+                SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getContext());
+                String minCreditHours = pref.getString("min_credit_hours",  getContext().getResources().getString(R.string.pref_min_credit_hours));
+                String maxCreditHours = pref.getString("max_credit_hours",  getContext().getResources().getString(R.string.pref_max_credit_hours));
+                String minNumClasses = pref.getString("min_num_classes",  getContext().getResources().getString(R.string.pref_min_num_classes));
+                String maxNumClasses = pref.getString("max_num_classes",  getContext().getResources().getString(R.string.pref_max_num_classes));
+                update(Integer.parseInt(minCreditHours), Integer.parseInt(maxCreditHours), Integer.parseInt(minNumClasses), Integer.parseInt((maxNumClasses)),
                         ClassLoader.getNewClass(), ClassLoader.getOldClass(), ClassLoader.getNewSection(), ClassLoader.getOldSection());
                 break;
         }
-        update(ClassLoader.getMinCreditHours(), ClassLoader.getMaxCreditHours(), ClassLoader.getMinNumClasses(), ClassLoader.getMaxNumClasses(),
-                ClassLoader.getNewClass(), ClassLoader.getOldClass(), ClassLoader.getNewSection(), ClassLoader.getOldSection());
         if (scheduleChanged) {
             if (newClass == null && oldClass == null && newSection == null && oldSection == null) {
                 currSchedules = Schedule.updateSchedules(minCreditHours, maxCreditHours, minNumClasses, maxNumClasses, currSchedules);
@@ -104,7 +109,6 @@ public class ScheduleLoader extends AsyncTaskLoader<List<Schedule>> {
                 ClassLoader.setSelectSchedules(currSchedules);
                 ClassLoader.save(getContext()); //TODO: save in in background thread?
         }
-        ClassLoader.setSchedules(currSchedules);
         return currSchedules;
     }
 

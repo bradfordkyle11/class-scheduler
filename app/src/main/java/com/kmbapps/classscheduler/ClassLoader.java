@@ -865,18 +865,27 @@ public class ClassLoader {
     }
 
     public static Class getNewClass() {
-        return newClass;
+        Class result = newClass;
+        newClass = null;
+        return result;
     }
 
     public static Class getOldClass() {
-        return oldClass;
+
+        Class result = oldClass;
+        oldClass = null;
+        return result;
     }
 
     public static Section getNewSection() {
-        return newSection;
+        Section result = newSection;
+        newSection = null;
+        return result;
     }
 
     public static Section getOldSection() {
-        return oldSection;
+        Section result = oldSection;
+        oldSection = null;
+        return result;
     }
 }

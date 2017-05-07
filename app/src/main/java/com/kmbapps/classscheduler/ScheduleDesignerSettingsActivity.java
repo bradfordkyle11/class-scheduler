@@ -97,7 +97,6 @@ public class ScheduleDesignerSettingsActivity extends AppCompatPreferenceActivit
 
     @Override
     protected void onPause() {
-        //ClassLoader.save(this);
         super.onPause();
     }
 
