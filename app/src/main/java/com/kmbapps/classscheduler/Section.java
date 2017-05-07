@@ -4,6 +4,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
@@ -19,8 +20,15 @@ public class Section implements Serializable {
     private String sectionNumber;
     private String notes;
     private Class containingClass;
+    private int numConflicts;
     final UUID ID;
     private static final long serialVersionUID = 4444446;
+
+    static final Comparator<Section> NUM_CONFLICTS= new Comparator<Section>(){
+        public int compare(Section s1, Section s2){
+            return Integer.compare(s1.getNumConflicts(), s2.getNumConflicts());
+        }
+    };
 
     @Override
     public boolean equals(Object object){
@@ -216,5 +224,13 @@ public class Section implements Serializable {
             default:
                 return "";
         }
+    }
+
+    public int getNumConflicts() {
+        return numConflicts;
+    }
+
+    public void setNumConflicts(int numConflicts) {
+        this.numConflicts = numConflicts;
     }
 }
