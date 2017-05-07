@@ -484,7 +484,8 @@ public class Schedule implements Serializable {
                 maxNumSections = c.getSections().size();
             }
         }
-        for (int i = 0; i < maxNumSections; i++){
+        int i;
+        for (i = 0; i < maxNumSections; i++){
             if (rebuiltSchedules.size() >= MAX_NUM_SCHEDULES){
                 break;
             }
@@ -493,8 +494,18 @@ public class Schedule implements Serializable {
                     Collections.sort(c.getSections(), Section.NUM_CONFLICTS);
                 }
                 if (i < c.getSections().size()) {
-                    rebuiltSchedules = updateSchedules(minCreditHours, maxCreditHours, minNumClasses, maxNumClasses, c.getSection(i), null, rebuiltSchedules, true, true);
+                    rebuiltSchedules = updateSchedules(Integer.MIN_VALUE, maxCreditHours, Integer.MIN_VALUE, maxNumClasses, c.getSection(i), null, rebuiltSchedules, true, true);
                 }
+            }
+        }
+        Schedule.minCreditHours = minCreditHours;
+        Schedule.maxCreditHours = maxCreditHours;
+        Schedule.minNumClasses = minNumClasses;
+        Schedule.maxNumClasses = maxNumClasses;
+        for (Iterator<Schedule> s = rebuiltSchedules.iterator(); s.hasNext();){
+            Schedule schedule = s.next();
+            if (!meetsSpecifications(schedule.getSections())){
+                s.remove();
             }
         }
         return rebuiltSchedules;
