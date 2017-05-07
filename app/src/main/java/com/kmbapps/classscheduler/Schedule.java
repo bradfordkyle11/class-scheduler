@@ -29,6 +29,7 @@ public class Schedule implements Serializable {
 
     private List<Section> sections;
     private int priorityScore;
+    private int deadTime;
     private static final long serialVersionUID = 1001;
     protected static List<List<Section>> staticSectionLists = Collections.synchronizedList( new ArrayList<List<Section>>());
     private final UUID ID;
@@ -46,9 +47,12 @@ public class Schedule implements Serializable {
 
     public Schedule(List<Section> sections) {
         this.sections = new ArrayList<Section>(sections);
+        ArrayList<MyTime> times = new ArrayList<>();
         for (Section s : this.sections){
+            times.addAll(s.getTimes());
             priorityScore += Class.NUM_PRIORITIES - 1 - s.getContainingClass().getPriority();
         }
+        deadTime = MyTime.getTotalDeadTime(times);
         ID = UUID.randomUUID();
     }
 
@@ -60,7 +64,12 @@ public class Schedule implements Serializable {
 
     static final Comparator<Schedule> NUM_AND_PRIORITY = new Comparator<Schedule>(){
         public int compare(Schedule s1, Schedule s2){
-            return Integer.compare(s2.getSections().size() + s2.getPriorityScore(), s1.getSections().size() + s1.getPriorityScore());
+            int compareResult = Integer.compare(s2.getSections().size() + s2.getPriorityScore(), s1.getSections().size() + s1.getPriorityScore());
+            if (compareResult == 0){
+                compareResult = Integer.compare(s1.getDeadTime(), s2.getDeadTime());
+            }
+            return compareResult;
+            //return Integer.compare(s2.getSections().size() + s2.getPriorityScore(), s1.getSections().size() + s1.getPriorityScore());
         }
     };
 
@@ -480,12 +489,19 @@ public class Schedule implements Serializable {
                 break;
             }
             for (Class c: classes){
+                if (i == 0){
+                    Collections.sort(c.getSections(), Section.NUM_CONFLICTS);
+                }
                 if (i < c.getSections().size()) {
                     rebuiltSchedules = updateSchedules(minCreditHours, maxCreditHours, minNumClasses, maxNumClasses, c.getSection(i), null, rebuiltSchedules, true, true);
                 }
             }
         }
         return rebuiltSchedules;
+    }
+
+    public int getDeadTime() {
+        return deadTime;
     }
 }
 

@@ -4,6 +4,8 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -24,6 +26,12 @@ public class MyTime implements Serializable {
     private boolean startTimeSet = true;
     private boolean endTimeSet = true;
     private static final long serialVersionUID = 55556;
+
+    static final Comparator<MyTime> START_TIME = new Comparator<MyTime>(){
+        public int compare(MyTime t1, MyTime t2){
+            return Integer.compare(toMinutes(t1.getStartHour(), t1.getStartMinute()), toMinutes(t2.getStartHour(), t2.getStartMinute()));
+        }
+    };
 
 
     MyTime(){
@@ -262,6 +270,40 @@ public class MyTime implements Serializable {
 
     }
 
+    public static int timeBetween (MyTime time1, MyTime time2){
+        if (timeOverlap(time1, time2)){
+            return 0;
+        }
+        else {
+            int startTime;
+            int endTime;
+            if (toMinutes(time1.getStartHour(), time1.getStartMinute()) < toMinutes(time2.getStartHour(), time2.getStartMinute())){
+                startTime = toMinutes(time1.getEndHour(), time1.getEndMinute());
+                endTime = toMinutes(time2.getStartHour(), time2.getStartMinute());
+            }
+            else {
+                startTime = toMinutes(time2.getEndHour(), time2.getEndMinute());
+                endTime = toMinutes(time1.getStartHour(), time1.getStartMinute());
+            }
+
+            return endTime - startTime;
+        }
+    }
+
+    public static int getTotalDeadTime (List<MyTime> times){
+        int totalDeadTime = 0;
+        Collections.sort(times, START_TIME);
+        for (int i = 0; i < times.size() - 1; i++){
+            for (int j = i + 1; j < times.size(); j++){
+                int numDaysInCommon = sameDays(times.get(i), times.get(j));
+                if (numDaysInCommon != 0) {
+                    totalDeadTime += numDaysInCommon * timeBetween(times.get(i), times.get(j));
+                }
+            }
+        }
+        return totalDeadTime;
+    }
+
     public static int toMinutes(int hour, int minute){
         return hour*60 + minute;
     }
@@ -285,6 +327,32 @@ public class MyTime implements Serializable {
             default:
                 return "";
         }
+    }
+
+    private static int sameDays(MyTime t1, MyTime t2){
+        int result = 0;
+        if (t1.getDays().contains("Su") && t2.getDays().contains("Su")){
+            result += 1;
+        }
+        if (t1.getDays().contains("M") && t2.getDays().contains("M")){
+            result += 1;
+        }
+        if (t1.getDays().contains("Tu") && t2.getDays().contains("Tu")){
+            result += 1;
+        }
+        if (t1.getDays().contains("W") && t2.getDays().contains("W")){
+            result += 1;
+        }
+        if (t1.getDays().contains("Th") && t2.getDays().contains("Th")){
+            result += 1;
+        }
+        if (t1.getDays().contains("F") && t2.getDays().contains("F")){
+            result += 1;
+        }
+        if (t1.getDays().contains("Sa") && t2.getDays().contains("Sa")){
+            result += 1;
+        }
+        return result;
     }
 
 

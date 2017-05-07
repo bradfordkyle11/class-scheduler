@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Set;
@@ -106,6 +107,7 @@ public class ClassLoader {
         if(!myClasses.contains(myClass)){
             myClass.setColor(getNextAvailableColor(context, DESIRED_CLASSES));
             myClasses.add(myClass);
+            Collections.sort(myClasses, Class.PRIORITY);
             classesChanged = true;
         }
         else{
@@ -137,6 +139,7 @@ public class ClassLoader {
         if(!myClasses.contains(updatedClass)){
             updatedClass.setColor(originalClass.getColor());
             myClasses.set(myClasses.indexOf(originalClass), updatedClass);
+            Collections.sort(myClasses, Class.PRIORITY);
             classesChanged = true;
         }
         else{
@@ -218,6 +221,22 @@ public class ClassLoader {
                 setCurrentSchedule(context, currentSchedule);
                 return true;
             case DESIRED_CLASSES:
+                for (Class c : myClasses){
+                    if (! c.equals(containingClass)){
+                        for (Section s : c.getSections()) {
+                            ArrayList<List<MyTime>> times = new ArrayList<>();
+                            times.add(s.getTimes());
+                            times.add(updatedSection.getTimes());
+                            if (!MyTime.noConflicts(times)){
+                                if (originalSection == null) {
+                                    s.setNumConflicts(s.getNumConflicts() + 1);
+                                }
+                                updatedSection.setNumConflicts(updatedSection.getNumConflicts() + 1);
+                            }
+                        }
+
+                    }
+                }
                 index = myClasses.indexOf(containingClass);
                 if (originalSection == null) {
                     containingClass.addSection(updatedSection);
@@ -271,7 +290,23 @@ public class ClassLoader {
 
     public static void removeClass(Context context, Class removeThis) {
         releaseColor(removeThis.getColor(), DESIRED_CLASSES);
+        for (Section section : removeThis.getSections()) {
+            for (Class c : myClasses) {
+                if (!c.equals(removeThis)) {
+                    for (Section s : c.getSections()) {
+                        ArrayList<List<MyTime>> times = new ArrayList<>();
+                        times.add(s.getTimes());
+                        times.add(section.getTimes());
+                        if (!MyTime.noConflicts(times)) {
+                            s.setNumConflicts(s.getNumConflicts() - 1); //decrease conflicts, since section is being removed
+                        }
+                    }
+
+                }
+            }
+        }
         myClasses.remove(removeThis);
+        Collections.sort(myClasses, Class.PRIORITY);
         classesChanged = true;
 
         /*try {
@@ -313,10 +348,28 @@ public class ClassLoader {
     }
 
     public static void removeClasses(Context context, ArrayList<Class> classesToRemove){
+        for (Class removeThis : classesToRemove) {
+            for (Section section : removeThis.getSections()) {
+                for (Class c : myClasses) {
+                    if (!c.equals(removeThis)) {
+                        for (Section s : c.getSections()) {
+                            ArrayList<List<MyTime>> times = new ArrayList<>();
+                            times.add(s.getTimes());
+                            times.add(section.getTimes());
+                            if (!MyTime.noConflicts(times)) {
+                                s.setNumConflicts(s.getNumConflicts() - 1); //decrease conflicts, since section is being removed
+                            }
+                        }
+
+                    }
+                }
+            }
+        }
         for(Class classToRemove : classesToRemove) {
             releaseColor(classToRemove.getColor(), DESIRED_CLASSES);
             myClasses.remove(classToRemove);
         }
+        Collections.sort(myClasses, Class.PRIORITY);
         classesChanged = true;
 
         /*try {
@@ -341,6 +394,19 @@ public class ClassLoader {
                 setCurrentSchedule(context, currentSchedule);
                 break;
             case DESIRED_CLASSES:
+                for (Class c : myClasses){
+                    if (! c.equals(removeThis.getContainingClass())){
+                        for (Section s : c.getSections()) {
+                            ArrayList<List<MyTime>> times = new ArrayList<>();
+                            times.add(s.getTimes());
+                            times.add(removeThis.getTimes());
+                            if (!MyTime.noConflicts(times)){
+                                s.setNumConflicts(s.getNumConflicts() - 1); //decrease conflicts, since section is being removed
+                            }
+                        }
+
+                    }
+                }
                 Class c = myClasses.get(myClasses.indexOf(removeThis.getContainingClass()));
                 c.getSections().remove(removeThis);
                 classesChanged = true;
