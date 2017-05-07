@@ -92,11 +92,11 @@ public class ScheduleLoader extends AsyncTaskLoader<List<Schedule>> {
                 break;
         }
         if (scheduleChanged) {
-            if (newClass == null && oldClass == null && newSection == null && oldSection == null) {
+            if (newClass == null && oldClass == null && newSection == null && oldSection == null && getId() == SELECT_SCHEDULES_LOADER) {
                 currSchedules = Schedule.updateSchedules(minCreditHours, maxCreditHours, minNumClasses, maxNumClasses, currSchedules);
-            } else if (newClass == null && oldClass == null) {
-                currSchedules = Schedule.updateSchedules(minCreditHours, maxCreditHours, minNumClasses, maxNumClasses, newSection, oldSection, currSchedules);
-            } else {
+            } else if ((newClass == null && oldClass == null) && (newSection != null || oldSection != null)) {
+                currSchedules = Schedule.updateSchedules(minCreditHours, maxCreditHours, minNumClasses, maxNumClasses, newSection, oldSection, currSchedules, false, true);
+            } else if ((newSection == null && oldSection == null) && (newClass != null || oldClass != null)){
                 currSchedules = Schedule.updateSchedules(minCreditHours, maxCreditHours, minNumClasses, maxNumClasses, newClass, oldClass, currSchedules);
             }
         }
