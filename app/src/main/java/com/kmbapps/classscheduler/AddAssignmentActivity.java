@@ -143,7 +143,7 @@ public class AddAssignmentActivity extends ActionBarActivity implements Confirma
 
     @Override
     protected void onPause() {
-        ClassLoader.save(this);
+        //ClassLoader.save(this);
         super.onPause();
     }
 

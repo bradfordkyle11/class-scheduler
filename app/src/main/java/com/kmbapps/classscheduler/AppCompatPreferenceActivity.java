@@ -35,7 +35,7 @@ public abstract class AppCompatPreferenceActivity extends PreferenceActivity {
 
     @Override
     protected void onPause() {
-        ClassLoader.save(this);
+        //ClassLoader.save(this);
         super.onPause();
     }
 

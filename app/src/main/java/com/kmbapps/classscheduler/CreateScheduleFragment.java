@@ -5,9 +5,12 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
 import android.support.v4.view.ViewPager;
 import android.support.v7.view.ActionMode;
 import android.view.LayoutInflater;
@@ -31,7 +34,7 @@ import java.util.List;
  */
 
 //TODO: toast when going from 0 to 1 schedules, telling the user they can swipe to see the schedules
-public class CreateScheduleFragment extends Fragment{
+public class CreateScheduleFragment extends Fragment implements LoaderManager.LoaderCallbacks<List<Schedule>>{
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final int DESIRED_CLASSES = 0;
     private static final int NUM_PAGES_OTHER_THAN_SCHEDULES = 1;
@@ -74,8 +77,14 @@ public class CreateScheduleFragment extends Fragment{
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
         setHasOptionsMenu(true);
+        getLoaderManager().initLoader(ScheduleLoader.ALL_SCHEDULES_LOADER, null, this).forceLoad();
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
@@ -108,6 +117,48 @@ public class CreateScheduleFragment extends Fragment{
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public Loader<List<Schedule>> onCreateLoader(int id, Bundle args) {
+        switch (id) {
+            case ScheduleLoader.ALL_SCHEDULES_LOADER:
+                return new ScheduleLoader(getActivity());
+            case ScheduleLoader.SELECT_SCHEDULES_LOADER:
+                return new ScheduleLoader(getActivity());
+        }
+
+        return null;
+    }
+
+    @Override
+    public void onLoadFinished(Loader<List<Schedule>> loader, List<Schedule> data) {
+        int id = loader.getId();
+        switch (id){
+            case ScheduleLoader.ALL_SCHEDULES_LOADER:
+                getLoaderManager().initLoader(ScheduleLoader.SELECT_SCHEDULES_LOADER, null, this).forceLoad();
+                break;
+            case ScheduleLoader.SELECT_SCHEDULES_LOADER:
+                int count;
+                potentialSchedules = data;
+                if(potentialSchedules==null){
+                    count = NUM_PAGES_OTHER_THAN_SCHEDULES;
+                }
+                else {
+                    count = potentialSchedules.size() + NUM_PAGES_OTHER_THAN_SCHEDULES;
+                }
+                mScheduleDesignerPagerAdapter.setCount(count);
+                mScheduleDesignerPagerAdapter.notifyDataSetChanged();
+
+                //set the current page once the schedules have been loaded
+                mViewPager.setCurrentItem(mCurrentPage);
+                break;
+        }
+    }
+
+    @Override
+    public void onLoaderReset(Loader<List<Schedule>> loader) {
+
     }
 
     public class ScheduleDesignerPagerAdapter extends FragmentStatePagerAdapter {
@@ -176,7 +227,7 @@ public class CreateScheduleFragment extends Fragment{
         mViewPager.setCurrentItem(mCurrentPage);
 
         //load the schedules
-        new LoadClassesAndCreateSchedulesTask().execute(new Void[1]);
+        //new LoadClassesAndCreateSchedulesTask().execute(new Void[1]);
 
         return view;
     }

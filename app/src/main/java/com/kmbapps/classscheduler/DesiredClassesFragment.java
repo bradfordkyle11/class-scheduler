@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.view.ActionMode;
 import android.view.LayoutInflater;
@@ -38,6 +39,7 @@ public class DesiredClassesFragment extends Fragment implements ConfirmationDial
     private static final String ARG_PARAM2 = "param2";
     private static final int MENU_EDIT = 0;
     private static final int MENU_DELETE = 1;
+
 
     private static final int CLASS_ACTION_MODE = 0;
     private static final int SECTION_ACTION_MODE = 1;
@@ -396,6 +398,7 @@ public class DesiredClassesFragment extends Fragment implements ConfirmationDial
         super.onDetach();
         mListener = null;
     }
+
 
     /**
      * This interface must be implemented by activities that contain this

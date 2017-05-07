@@ -51,6 +51,16 @@ public class ClassLoader {
     private static ConcurrentLinkedDeque<Integer> availableColors;
     private static ConcurrentLinkedDeque<Integer> currScheduleAvailableColors;
 
+    private static int minCreditHours = Integer.MIN_VALUE;
+    private static int maxCreditHours = Integer.MAX_VALUE;
+    private static int minNumClasses = Integer.MIN_VALUE;
+    private static int maxNumClasses = Integer.MAX_VALUE;
+    private static Class newClass;
+    private static Class oldClass;
+    private static Section newSection;
+    private static Section oldSection;
+
+
     public static final int CURR_SCHEDULE = 0;
     public static final int DESIRED_CLASSES = 1;
 
@@ -146,17 +156,27 @@ public class ClassLoader {
             return false;
         }*/
 
-        //update schedule
+
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
         String minCreditHours = pref.getString("min_credit_hours",  context.getResources().getString(R.string.pref_min_credit_hours));
         String maxCreditHours = pref.getString("max_credit_hours",  context.getResources().getString(R.string.pref_max_credit_hours));
         String minNumClasses = pref.getString("min_num_classes",  context.getResources().getString(R.string.pref_min_num_classes));
         String maxNumClasses = pref.getString("max_num_classes",  context.getResources().getString(R.string.pref_max_num_classes));
-        schedules = Schedule.updateSchedules(Integer.MIN_VALUE, Integer.MAX_VALUE,
-                Integer.MIN_VALUE, Integer.MAX_VALUE, updatedClass, originalClass, loadSchedules(context, ALL_SCHEDULES));
-        selectSchedules = Schedule.updateSchedules(Integer.parseInt(minCreditHours), Integer.parseInt(maxCreditHours),
-                Integer.parseInt(minNumClasses), Integer.parseInt((maxNumClasses)), updatedClass, originalClass, loadSchedules(context, ALL_SCHEDULES));
-        //saveSchedules(context);
+        //update schedule values
+        ClassLoader.minCreditHours = Integer.parseInt(minCreditHours);
+        ClassLoader.maxCreditHours = Integer.parseInt(maxCreditHours);
+        ClassLoader.minNumClasses = Integer.parseInt(minNumClasses);
+        ClassLoader.maxNumClasses = Integer.parseInt(maxNumClasses);
+        ClassLoader.newClass = updatedClass;
+        ClassLoader.oldClass = originalClass;
+        ClassLoader.newSection = null;
+        ClassLoader.oldSection = null;
+
+//        schedules = Schedule.updateSchedules(Integer.MIN_VALUE, Integer.MAX_VALUE,
+//                Integer.MIN_VALUE, Integer.MAX_VALUE, updatedClass, originalClass, loadSchedules(context, ALL_SCHEDULES));
+//        selectSchedules = Schedule.updateSchedules(Integer.parseInt(minCreditHours), Integer.parseInt(maxCreditHours),
+//                Integer.parseInt(minNumClasses), Integer.parseInt((maxNumClasses)), updatedClass, originalClass, loadSchedules(context, ALL_SCHEDULES));
+//        //saveSchedules(context);
         schedulesChange = true;
         selectSchedulesChanged = true;
         schedulesChanged = false;
@@ -226,10 +246,19 @@ public class ClassLoader {
                 String maxCreditHours = pref.getString("max_credit_hours",  context.getResources().getString(R.string.pref_max_credit_hours));
                 String minNumClasses = pref.getString("min_num_classes",  context.getResources().getString(R.string.pref_min_num_classes));
                 String maxNumClasses = pref.getString("max_num_classes",  context.getResources().getString(R.string.pref_max_num_classes));
-                schedules = Schedule.updateSchedules(Integer.MIN_VALUE, Integer.MAX_VALUE,
-                        Integer.MIN_VALUE, Integer.MAX_VALUE, updatedSection, originalSection, loadSchedules(context, ALL_SCHEDULES));
-                selectSchedules = Schedule.updateSchedules(Integer.parseInt(minCreditHours), Integer.parseInt(maxCreditHours),
-                        Integer.parseInt(minNumClasses), Integer.parseInt((maxNumClasses)), loadSchedules(context, ALL_SCHEDULES));
+                //update schedule values
+                ClassLoader.minCreditHours = Integer.parseInt(minCreditHours);
+                ClassLoader.maxCreditHours = Integer.parseInt(maxCreditHours);
+                ClassLoader.minNumClasses = Integer.parseInt(minNumClasses);
+                ClassLoader.maxNumClasses = Integer.parseInt(maxNumClasses);
+                ClassLoader.newClass = null;
+                ClassLoader.oldClass = null;
+                ClassLoader.newSection = updatedSection;
+                ClassLoader.oldSection = originalSection;
+//                schedules = Schedule.updateSchedules(Integer.MIN_VALUE, Integer.MAX_VALUE,
+//                        Integer.MIN_VALUE, Integer.MAX_VALUE, updatedSection, originalSection, loadSchedules(context, ALL_SCHEDULES));
+//                selectSchedules = Schedule.updateSchedules(Integer.parseInt(minCreditHours), Integer.parseInt(maxCreditHours),
+//                        Integer.parseInt(minNumClasses), Integer.parseInt((maxNumClasses)), loadSchedules(context, ALL_SCHEDULES));
                 schedulesChange = true;
                 selectSchedulesChanged = true;
                 schedulesChanged = false;
@@ -262,10 +291,20 @@ public class ClassLoader {
         String maxCreditHours = pref.getString("max_credit_hours",  context.getResources().getString(R.string.pref_max_credit_hours));
         String minNumClasses = pref.getString("min_num_classes",  context.getResources().getString(R.string.pref_min_num_classes));
         String maxNumClasses = pref.getString("max_num_classes",  context.getResources().getString(R.string.pref_max_num_classes));
-        schedules = Schedule.updateSchedules(Integer.MIN_VALUE, Integer.MAX_VALUE,
-                Integer.MIN_VALUE, Integer.MAX_VALUE, null, removeThis, loadSchedules(context, ALL_SCHEDULES));
-        selectSchedules = Schedule.updateSchedules(Integer.parseInt(minCreditHours), Integer.parseInt(maxCreditHours),
-                Integer.parseInt(minNumClasses), Integer.parseInt((maxNumClasses)), loadSchedules(context, ALL_SCHEDULES));
+
+        //update schedule values
+        ClassLoader.minCreditHours = Integer.parseInt(minCreditHours);
+        ClassLoader.maxCreditHours = Integer.parseInt(maxCreditHours);
+        ClassLoader.minNumClasses = Integer.parseInt(minNumClasses);
+        ClassLoader.maxNumClasses = Integer.parseInt(maxNumClasses);
+        ClassLoader.newClass = null;
+        ClassLoader.oldClass = removeThis;
+        ClassLoader.newSection = null;
+        ClassLoader.oldSection = null;
+//        schedules = Schedule.updateSchedules(Integer.MIN_VALUE, Integer.MAX_VALUE,
+//                Integer.MIN_VALUE, Integer.MAX_VALUE, null, removeThis, loadSchedules(context, ALL_SCHEDULES));
+//        selectSchedules = Schedule.updateSchedules(Integer.parseInt(minCreditHours), Integer.parseInt(maxCreditHours),
+//                Integer.parseInt(minNumClasses), Integer.parseInt((maxNumClasses)), loadSchedules(context, ALL_SCHEDULES));
 
         schedulesChange = true;
         selectSchedulesChanged = true;
@@ -322,10 +361,20 @@ public class ClassLoader {
                 String maxCreditHours = pref.getString("max_credit_hours",  context.getResources().getString(R.string.pref_max_credit_hours));
                 String minNumClasses = pref.getString("min_num_classes",  context.getResources().getString(R.string.pref_min_num_classes));
                 String maxNumClasses = pref.getString("max_num_classes",  context.getResources().getString(R.string.pref_max_num_classes));
-                schedules = Schedule.updateSchedules(Integer.MIN_VALUE, Integer.MAX_VALUE,
-                        Integer.MIN_VALUE, Integer.MAX_VALUE, null, removeThis, loadSchedules(context, ALL_SCHEDULES));
-                selectSchedules = Schedule.updateSchedules(Integer.parseInt(minCreditHours), Integer.parseInt(maxCreditHours),
-                        Integer.parseInt(minNumClasses), Integer.parseInt((maxNumClasses)), loadSchedules(context, ALL_SCHEDULES));
+                //update schedule values
+                ClassLoader.minCreditHours = Integer.parseInt(minCreditHours);
+                ClassLoader.maxCreditHours = Integer.parseInt(maxCreditHours);
+                ClassLoader.minNumClasses = Integer.parseInt(minNumClasses);
+                ClassLoader.maxNumClasses = Integer.parseInt(maxNumClasses);
+                ClassLoader.newClass = null;
+                ClassLoader.oldClass = null;
+                ClassLoader.newSection = null;
+                ClassLoader.oldSection = removeThis;
+
+//                schedules = Schedule.updateSchedules(Integer.MIN_VALUE, Integer.MAX_VALUE,
+//                        Integer.MIN_VALUE, Integer.MAX_VALUE, null, removeThis, loadSchedules(context, ALL_SCHEDULES));
+//                selectSchedules = Schedule.updateSchedules(Integer.parseInt(minCreditHours), Integer.parseInt(maxCreditHours),
+//                        Integer.parseInt(minNumClasses), Integer.parseInt((maxNumClasses)), loadSchedules(context, ALL_SCHEDULES));
                 schedulesChange = true;
                 selectSchedulesChanged = true;
                 //saveSchedules(context);
@@ -365,6 +414,14 @@ public class ClassLoader {
 
     static void setSchedulesOptionsChanged(boolean schedulesOptionsChanged){
         ClassLoader.schedulesOptionsChanged = schedulesOptionsChanged;
+    }
+
+    public static void setSchedules(List<Schedule> schedules){
+        ClassLoader.schedules = schedules;
+    }
+
+    public static void setSelectSchedules(List<Schedule> selectSchedules){
+        ClassLoader.selectSchedules = selectSchedules;
     }
 
     public static void updateSchedules(Context context){
@@ -483,6 +540,7 @@ public class ClassLoader {
 
     public static List<Schedule> loadSchedules(Context context, int which){
         if(!schedulesLoaded){
+            schedulesLoaded = true;
             try {
                 FileInputStream fis = context.openFileInput(schedulesFile);
                 ObjectInputStream is = new ObjectInputStream(fis);
@@ -498,7 +556,6 @@ public class ClassLoader {
                 System.out.println(is.toString());
 
                 selectSchedules = (List<Schedule>) is.readObject();
-                schedulesLoaded = true;
                 is.close();
                 if (fis!=null){
                     fis.close();
@@ -787,5 +844,39 @@ public class ClassLoader {
         }
     }
 
+    public static ArrayList<Class> getMyClasses() {
+        return myClasses;
+    }
 
+    public static int getMinCreditHours() {
+        return minCreditHours;
+    }
+
+    public static int getMaxCreditHours() {
+        return maxCreditHours;
+    }
+
+    public static int getMinNumClasses() {
+        return minNumClasses;
+    }
+
+    public static int getMaxNumClasses() {
+        return maxNumClasses;
+    }
+
+    public static Class getNewClass() {
+        return newClass;
+    }
+
+    public static Class getOldClass() {
+        return oldClass;
+    }
+
+    public static Section getNewSection() {
+        return newSection;
+    }
+
+    public static Section getOldSection() {
+        return oldSection;
+    }
 }

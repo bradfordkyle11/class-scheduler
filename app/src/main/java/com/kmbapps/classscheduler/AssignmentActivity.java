@@ -74,7 +74,7 @@ public class AssignmentActivity extends ActionBarActivity {
 
     @Override
     protected void onPause() {
-        ClassLoader.save(this);
+       //ClassLoader.save(this);
         super.onPause();
     }
 

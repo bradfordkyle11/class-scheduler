@@ -166,7 +166,7 @@ public class AddClassSectionActivity extends AppCompatActivity implements Confir
 
     @Override
     protected void onPause() {
-        ClassLoader.save(this);
+        //ClassLoader.save(this);
         super.onPause();
     }
 
