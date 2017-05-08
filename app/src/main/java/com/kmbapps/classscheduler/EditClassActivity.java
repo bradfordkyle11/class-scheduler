@@ -3,7 +3,8 @@ package com.kmbapps.classscheduler;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
@@ -12,7 +13,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 
-public class EditClassActivity extends ActionBarActivity implements ConfirmationDialogFragment.ConfirmationDialogListener{
+public class EditClassActivity extends AppCompatActivity implements ConfirmationDialogFragment.ConfirmationDialogListener{
 
     Class mClass;
     Class updatedClass;

@@ -1,6 +1,7 @@
 package com.kmbapps.classscheduler;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Build;
@@ -9,7 +10,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.Loader;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -109,12 +111,20 @@ public class DesiredClassesFragment extends Fragment implements ConfirmationDial
         TextView textview = (TextView) view.findViewById(R.id.no_classes);
         if(classes==null){
             textview.setVisibility(View.VISIBLE);
+            textview.setText(getString(R.string.text_no_classes));
         }
         else if(classes.isEmpty()) {
             textview.setVisibility(View.VISIBLE);
+            textview.setText(getString(R.string.text_no_classes));
         }
         else{
-            textview.setVisibility(View.GONE);
+            if (classes.size() == 1 && classes.get(0).getSections().size() == 0){
+                    textview.setVisibility(View.VISIBLE);
+                    textview.setText(getString(R.string.text_no_sections));
+            }
+            else {
+                textview.setVisibility(View.GONE);
+            }
             desiredClasses = ClassLoader.loadClasses(getActivity());
 
             //layout that will contain list of classes and sections
@@ -251,7 +261,7 @@ public class DesiredClassesFragment extends Fragment implements ConfirmationDial
                         }
 
                         //start new action mode
-                        ActionBarActivity activity = (ActionBarActivity) v.getContext();
+                        AppCompatActivity activity = (AppCompatActivity) v.getContext();
                         mActionMode = activity.startSupportActionMode(classActionModeCallback);
                         mActionMode.setTag(v);
                         mActionMode.setTitle("1");
@@ -325,7 +335,7 @@ public class DesiredClassesFragment extends Fragment implements ConfirmationDial
                         }
 
                         //start new action mode
-                        ActionBarActivity activity = (ActionBarActivity) v.getContext();
+                        AppCompatActivity activity = (AppCompatActivity) v.getContext();
                         mActionMode = activity.startSupportActionMode(classSectionActionModeCallback);
                         mActionMode.setTag(v);
                         mActionMode.setTitle("1");
@@ -403,14 +413,21 @@ public class DesiredClassesFragment extends Fragment implements ConfirmationDial
 
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        Activity activity = null;
+        if (context instanceof Activity){
+            activity = (Activity) context;
+        }
+        // Verify that the host activity implements the callback interface
+        if (activity != null) {
 
-        try {
-            mListener = (OnFragmentInteractionListener) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
-                    + " must implement OnFragmentInteractionListener");
+            try {
+                mListener = (OnFragmentInteractionListener) activity;
+            } catch (ClassCastException e) {
+                throw new ClassCastException(activity.toString()
+                        + " must implement OnFragmentInteractionListener");
+            }
         }
     }
 
@@ -433,11 +450,11 @@ public class DesiredClassesFragment extends Fragment implements ConfirmationDial
      */
     public interface OnFragmentInteractionListener {
 
-        public void onAddClassClick(View view);
+        void onAddClassClick(View view);
 
-        public void onSectionDeleted();
+        void onSectionDeleted();
 
-        public void onActionModeChanged(ActionMode actionMode);
+        void onActionModeChanged(ActionMode actionMode);
     }
 
 

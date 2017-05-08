@@ -5,8 +5,8 @@
     android:minWidth="@dimen/touchable_ui_component_min"
     android:minHeight="@dimen/touchable_ui_component_min"
     android:layout_gravity="start|center_vertical"
-    android:textColor="@color/primary_text_default_material_light"
-    android:textSize="@dimen/abc_text_size_medium_material"
+    android:textColor="@android:color/primary_text_light"
+    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
     android:padding="@dimen/activity_padding">
 
 </TextView>

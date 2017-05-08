@@ -1,6 +1,7 @@
 package com.kmbapps.classscheduler;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -8,6 +9,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -24,7 +26,7 @@ import com.google.android.gms.ads.AdView;
 //TODO: navdrawer accessible from other activities
 
 
-public class Home extends ActionBarActivity
+public class Home extends AppCompatActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks, ScheduleFragment.OnScheduleInteractionListener,
         DesiredClassesFragment.OnFragmentInteractionListener, MyClassesFragment.OnMyClassesFragmentInteractionListener{
 
@@ -260,10 +262,17 @@ public class Home extends ActionBarActivity
         }
 
         @Override
-        public void onAttach(Activity activity) {
-            super.onAttach(activity);
-            ((Home) activity).onSectionAttached(
-                    getArguments().getInt(ARG_SECTION_NUMBER));
+        public void onAttach(Context context) {
+            super.onAttach(context);
+            Activity activity = null;
+            if (context instanceof Activity){
+                activity = (Activity) context;
+            }
+            // Verify that the host activity implements the callback interface
+            if (activity != null) {
+                ((Home) activity).onSectionAttached(
+                        getArguments().getInt(ARG_SECTION_NUMBER));
+            }
         }
 
 

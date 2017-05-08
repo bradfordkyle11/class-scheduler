@@ -6,5 +6,5 @@
     android:id="@+id/classTime"
     android:gravity="center_horizontal"
     android:background="@color/app_background"
-    android:textColor="@color/primary_text_default_material_light">
+    android:textColor="@android:color/primary_text_light">
 </TextView>

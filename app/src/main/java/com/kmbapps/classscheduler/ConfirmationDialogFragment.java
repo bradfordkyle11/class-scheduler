@@ -3,6 +3,7 @@ package com.kmbapps.classscheduler;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -113,17 +114,24 @@ public class ConfirmationDialogFragment extends DialogFragment {
     }
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        Activity activity = null;
+        if (context instanceof Activity){
+            activity = (Activity) context;
+        }
+        // Verify that the host activity implements the callback interface
+        if (activity != null) {
 
-        mParent = getArguments().getInt("parent");
+            mParent = getArguments().getInt("parent");
 
-        if(mParent==ACTIVITY){
-            try{
-                mListener = (ConfirmationDialogListener) activity;
-            } catch (ClassCastException e) {
-                // The activity doesn't implement the interface, throw exception
-                throw new ClassCastException(activity.toString() + " must implement ConfirmationDialogListener");
+            if (mParent == ACTIVITY) {
+                try {
+                    mListener = (ConfirmationDialogListener) activity;
+                } catch (ClassCastException e) {
+                    // The activity doesn't implement the interface, throw exception
+                    throw new ClassCastException(activity.toString() + " must implement ConfirmationDialogListener");
+                }
             }
         }
     }
@@ -224,7 +232,7 @@ public class ConfirmationDialogFragment extends DialogFragment {
     }
 
     public interface ConfirmationDialogListener{
-        public void onConfirmationPositiveClick(ConfirmationDialogFragment dialog);
-        public void onConfirmationNegativeClick(ConfirmationDialogFragment dialog);
+        void onConfirmationPositiveClick(ConfirmationDialogFragment dialog);
+        void onConfirmationNegativeClick(ConfirmationDialogFragment dialog);
     }
 }

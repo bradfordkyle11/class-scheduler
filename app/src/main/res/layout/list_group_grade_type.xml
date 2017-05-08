@@ -18,7 +18,7 @@
         android:id="@+id/assignmentTypeLayout">
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="fill_parent"
             android:layout_weight="1"
             android:id="@+id/assignmentType"
@@ -27,12 +27,12 @@
             android:text="Test"
             android:textStyle="bold"
             android:gravity="center_vertical"
-            android:textColor="@color/primary_text_default_material_light"/>
+            android:textColor="@android:color/primary_text_light"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
-            android:singleLine="true"
+            android:maxLines="1"
             android:gravity="center_vertical"
             android:maxWidth="@dimen/touchable_ui_component_min"
             android:layout_marginTop="@dimen/activity_padding"
@@ -40,7 +40,7 @@
             android:textStyle="bold"
             android:text="99.999"
             android:id="@+id/grade"
-            android:textColor="@color/primary_text_default_material_light"/>
+            android:textColor="@android:color/primary_text_light"/>
 
     </LinearLayout>
 

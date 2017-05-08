@@ -11,10 +11,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
         fab:fab_colorNormal="@color/app_primary_color"
         fab:fab_colorPressed="@color/app_secondary_color" />
 

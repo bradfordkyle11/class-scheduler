@@ -22,7 +22,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/action_sort_by_due_date"
-            android:textSize="@dimen/abc_text_size_medium_material"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:paddingLeft="@dimen/activity_padding"
             android:paddingRight="@dimen/activity_padding"/>
 
@@ -44,7 +44,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/action_sort_by_type"
-            android:textSize="@dimen/abc_text_size_medium_material"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:paddingLeft="@dimen/activity_padding"
             android:paddingRight="@dimen/activity_padding"/>
 

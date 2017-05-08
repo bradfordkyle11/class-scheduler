@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,7 +18,7 @@ import android.widget.TimePicker;
 import java.util.Calendar;
 
 
-public class AddAssignmentActivity extends ActionBarActivity implements ConfirmationDialogFragment.ConfirmationDialogListener{
+public class AddAssignmentActivity extends AppCompatActivity implements ConfirmationDialogFragment.ConfirmationDialogListener{
 
     public static final int NEW_ASSIGNMENT = 100;
     public static final int EDITED_ASSIGNMENT = 101;

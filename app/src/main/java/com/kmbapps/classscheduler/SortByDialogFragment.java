@@ -3,6 +3,7 @@ package com.kmbapps.classscheduler;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -45,16 +46,22 @@ public class SortByDialogFragment extends DialogFragment {
     }
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        Activity activity = null;
+        if (context instanceof Activity){
+            activity = (Activity) context;
+        }
         // Verify that the host activity implements the callback interface
-        try {
-            // Instantiate the NoticeDialogListener so we can send events to the host
-            mListener = (SortByDialogListener) activity;
-        } catch (ClassCastException e) {
-            // The activity doesn't implement the interface, throw exception
-            throw new ClassCastException(activity.toString()
-                    + " must implement NoticeDialogListener");
+        if (activity != null) {
+            try {
+                // Instantiate the NoticeDialogListener so we can send events to the host
+                mListener = (SortByDialogListener) activity;
+            } catch (ClassCastException e) {
+                // The activity doesn't implement the interface, throw exception
+                throw new ClassCastException(activity.toString()
+                        + " must implement NoticeDialogListener");
+            }
         }
     }
 
@@ -65,6 +72,6 @@ public class SortByDialogFragment extends DialogFragment {
     }
 
     public interface SortByDialogListener{
-        public void onAssignmentsSortingKeySelected(int which);
+        void onAssignmentsSortingKeySelected(int which);
     }
 }

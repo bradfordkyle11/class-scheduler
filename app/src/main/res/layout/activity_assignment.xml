@@ -18,10 +18,10 @@
             android:layout_height="wrap_content"
             android:minHeight="@dimen/touchable_ui_component_min"
             android:text="Assignment type and name"
-            android:textSize="@dimen/abc_text_size_medium_material"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:id="@+id/assignmentTypeAndName"
             android:textStyle="bold"
-            android:textColor="@color/primary_text_default_material_light"
+            android:textColor="@android:color/primary_text_light"
             android:paddingTop="@dimen/activity_padding"
             android:paddingBottom="@dimen/activity_padding"
             android:paddingLeft="@dimen/activity_horizontal_margin"
@@ -39,7 +39,7 @@
             android:paddingRight="@dimen/activity_horizontal_margin"
             android:gravity="center_vertical"
             android:text="date"
-            android:textColor="@color/primary_text_default_material_light"/>
+            android:textColor="@android:color/primary_text_light"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -52,7 +52,7 @@
             android:paddingRight="@dimen/activity_horizontal_margin"
             android:gravity="center_vertical"
             android:text="Grade"
-            android:textColor="@color/primary_text_default_material_light"/>
+            android:textColor="@android:color/primary_text_light"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -65,7 +65,7 @@
             android:paddingLeft="@dimen/activity_horizontal_margin"
             android:paddingRight="@dimen/activity_horizontal_margin"
             android:gravity="center_vertical"
-            android:textColor="@color/primary_text_default_material_light"/>
+            android:textColor="@android:color/primary_text_light"/>
 
     </LinearLayout>
 
@@ -75,9 +75,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
         android:layout_marginBottom="@dimen/activity_padding"
-        android:layout_marginRight="@dimen/activity_padding"
         android:onClick="editAssignment"
         android:layout_marginEnd="@dimen/activity_padding"
         fab:fab_colorNormal="@color/app_primary_color"

@@ -49,17 +49,17 @@ public class ClassDetailsFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_class_details, container, false);
 
         TextView classTitle = (TextView) v.findViewById(R.id.classTitle);
-        classTitle.setText(Html.fromHtml("<b>Class:</b> " + mSection.getContainingClass().getDepartment() + " " + mSection.getContainingClass().getNumber() + " " + mSection.getContainingClass().getName()));
+        classTitle.setText(HtmlCompat.fromHtml("<b>Class:</b> " + mSection.getContainingClass().getDepartment() + " " + mSection.getContainingClass().getNumber() + " " + mSection.getContainingClass().getName()));
         TextView classSchedule = (TextView) v.findViewById(R.id.classSchedule);
 
         //TODO: HTML format time method so that line breaks are properly added
-        classSchedule.setText(Html.fromHtml("<b>Schedule:</b><br>" + mSection.formatTime()));
+        classSchedule.setText(HtmlCompat.fromHtml("<b>Schedule:</b><br>" + mSection.formatTime()));
         TextView professor = (TextView) v.findViewById(R.id.professor);
-        professor.setText(Html.fromHtml("<b>Professor:</b> " + mSection.getProfessor()));
+        professor.setText(HtmlCompat.fromHtml("<b>Professor:</b> " + mSection.getProfessor()));
         TextView uniqueNumber = (TextView) v.findViewById(R.id.uniqueNumber);
-        uniqueNumber.setText(Html.fromHtml("<b>Section number:</b> " + mSection.getSectionNumber()));
+        uniqueNumber.setText(HtmlCompat.fromHtml("<b>Section number:</b> " + mSection.getSectionNumber()));
         TextView creditHours = (TextView) v.findViewById(R.id.creditHours);
-        creditHours.setText(Html.fromHtml("<b>Credit hours:</b> " + mSection.getContainingClass().getCreditHours()));
+        creditHours.setText(HtmlCompat.fromHtml("<b>Credit hours:</b> " + mSection.getContainingClass().getCreditHours()));
         TextView otherInfo = (TextView) v.findViewById(R.id.otherInfo);
         otherInfo.setText(mSection.getNotes());
 

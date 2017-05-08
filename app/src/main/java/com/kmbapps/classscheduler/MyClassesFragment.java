@@ -1,12 +1,13 @@
 package com.kmbapps.classscheduler;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -105,13 +106,20 @@ public class MyClassesFragment extends Fragment implements ConfirmationDialogFra
 
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        try {
-            mListener = (OnMyClassesFragmentInteractionListener) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
-                    + " must implement OnFragmentInteractionListener");
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        Activity activity = null;
+        if (context instanceof Activity){
+            activity = (Activity) context;
+        }
+        // Verify that the host activity implements the callback interface
+        if (activity != null) {
+            try {
+                mListener = (OnMyClassesFragmentInteractionListener) activity;
+            } catch (ClassCastException e) {
+                throw new ClassCastException(activity.toString()
+                        + " must implement OnFragmentInteractionListener");
+            }
         }
     }
 
@@ -132,7 +140,7 @@ public class MyClassesFragment extends Fragment implements ConfirmationDialogFra
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnMyClassesFragmentInteractionListener {
-        public void onClassesDropped();
+        void onClassesDropped();
     }
 
     public View.OnClickListener classSelectedListener = new View.OnClickListener() {
@@ -273,7 +281,7 @@ public class MyClassesFragment extends Fragment implements ConfirmationDialogFra
     private void actionModeSetup(View v){
         if (!v.isSelected()) {
             v.setSelected(true);
-            ActionBarActivity activity = (ActionBarActivity) v.getContext();
+            AppCompatActivity activity = (AppCompatActivity) v.getContext();
 
             //selectin
             if(mActionMode==null) {

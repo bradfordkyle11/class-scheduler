@@ -14,23 +14,23 @@
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:layout_margin="@dimen/activity_padding"
-        android:textSize="@dimen/abc_text_size_small_material"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:gravity="center_vertical"
         android:id="@+id/assignmentName"
         android:ellipsize="end"
-        android:singleLine="true"
-        android:textColor="@color/primary_text_default_material_light"/>
+        android:maxLines="1"
+        android:textColor="@android:color/primary_text_light"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:textSize="@dimen/abc_text_size_small_material"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:gravity="center_vertical"
         android:id="@+id/assignmentGrade"
         android:maxWidth="@dimen/touchable_ui_component_min"
-        android:singleLine="true"
+        android:maxLines="1"
         android:layout_marginTop="@dimen/activity_padding"
         android:layout_marginBottom="@dimen/activity_padding"
-        android:textColor="@color/primary_text_default_material_light"/>
+        android:textColor="@android:color/primary_text_light"/>
 
 </LinearLayout>

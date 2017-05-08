@@ -23,7 +23,7 @@
             android:text="@string/sunday_abbreviation"
             android:layout_weight="1"
             android:gravity="center"
-            android:textColor="@color/primary_text_default_material_light"/>
+            android:textColor="@android:color/primary_text_light"/>
 
         <TextView
             android:layout_height="wrap_content"
@@ -31,7 +31,7 @@
             android:text="@string/monday_abbreviation"
             android:layout_weight="1"
             android:gravity="center"
-            android:textColor="@color/primary_text_default_material_light"/>
+            android:textColor="@android:color/primary_text_light"/>
 
         <TextView
             android:layout_width="0dp"
@@ -39,7 +39,7 @@
             android:text="@string/tuesday_abbreviation"
             android:layout_weight="1"
             android:gravity="center"
-            android:textColor="@color/primary_text_default_material_light"/>
+            android:textColor="@android:color/primary_text_light"/>
 
         <TextView
             android:layout_width="0dp"
@@ -47,7 +47,7 @@
             android:text="@string/wednesday_abbreviation"
             android:layout_weight="1"
             android:gravity="center"
-            android:textColor="@color/primary_text_default_material_light"/>
+            android:textColor="@android:color/primary_text_light"/>
 
         <TextView
             android:layout_width="0dp"
@@ -55,7 +55,7 @@
             android:text="@string/thursday_abbreviation"
             android:layout_weight="1"
             android:gravity="center"
-            android:textColor="@color/primary_text_default_material_light"/>
+            android:textColor="@android:color/primary_text_light"/>
 
         <TextView
             android:layout_width="0dp"
@@ -63,7 +63,7 @@
             android:text="@string/friday_abbreviation"
             android:layout_weight="1"
             android:gravity="center"
-            android:textColor="@color/primary_text_default_material_light"/>
+            android:textColor="@android:color/primary_text_light"/>
 
         <TextView
             android:layout_height="wrap_content"
@@ -71,7 +71,7 @@
             android:text="@string/saturday_abbreviation"
             android:layout_weight="1"
             android:gravity="center"
-            android:textColor="@color/primary_text_default_material_light"/>
+            android:textColor="@android:color/primary_text_light"/>
     </LinearLayout>
 
     <ScrollView
@@ -82,7 +82,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:baselineAligned="false">
 
 
 
@@ -91,8 +92,8 @@
                 android:layout_height="720dp"
                 android:layout_weight="1"
                 android:id="@+id/sunday"
-                android:layout_marginRight="1dp"
-                android:layout_marginLeft="2dp"
+                android:layout_marginEnd="1dp"
+                android:layout_marginStart="2dp"
                 android:background="@drawable/calendar_background">
 
             </RelativeLayout>
@@ -102,8 +103,8 @@
                 android:layout_height="720dp"
                 android:layout_weight="1"
                 android:id="@+id/monday"
-                android:layout_marginRight="1dp"
-                android:layout_marginLeft="1dp"
+                android:layout_marginEnd="1dp"
+                android:layout_marginStart="1dp"
                 android:background="@drawable/calendar_background">
 
             </RelativeLayout>
@@ -113,8 +114,8 @@
                 android:layout_height="720dp"
                 android:layout_weight="1"
                 android:id="@+id/tuesday"
-                android:layout_marginRight="1dp"
-                android:layout_marginLeft="1dp"
+                android:layout_marginEnd="1dp"
+                android:layout_marginStart="1dp"
                 android:background="@drawable/calendar_background">
 
             </RelativeLayout>
@@ -124,8 +125,8 @@
                 android:layout_height="720dp"
                 android:layout_weight="1"
                 android:id="@+id/wednesday"
-                android:layout_marginRight="1dp"
-                android:layout_marginLeft="1dp"
+                android:layout_marginEnd="1dp"
+                android:layout_marginStart="1dp"
                 android:background="@drawable/calendar_background">
 
             </RelativeLayout>
@@ -135,8 +136,8 @@
                 android:layout_height="720dp"
                 android:layout_weight="1"
                 android:id="@+id/thursday"
-                android:layout_marginRight="1dp"
-                android:layout_marginLeft="1dp"
+                android:layout_marginStart="1dp"
+                android:layout_marginEnd="1dp"
                 android:background="@drawable/calendar_background">
 
             </RelativeLayout>
@@ -146,8 +147,8 @@
                 android:layout_height="720dp"
                 android:layout_weight="1"
                 android:id="@+id/friday"
-                android:layout_marginRight="1dp"
-                android:layout_marginLeft="1dp"
+                android:layout_marginStart="1dp"
+                android:layout_marginEnd="1dp"
                 android:background="@drawable/calendar_background">
 
             </RelativeLayout>
@@ -157,8 +158,8 @@
                 android:layout_height="720dp"
                 android:layout_weight="1"
                 android:id="@+id/saturday"
-                android:layout_marginRight="2dp"
-                android:layout_marginLeft="1dp"
+                android:layout_marginEnd="2dp"
+                android:layout_marginStart="1dp"
                 android:background="@drawable/calendar_background">
 
             </RelativeLayout>
@@ -183,10 +184,8 @@
         android:layout_alignWithParentIfMissing="true"
         android:layout_above="@+id/classInfoAndAd"
         android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
         android:layout_marginBottom="@dimen/activity_padding"
         android:layout_marginEnd="@dimen/activity_padding"
-        android:layout_marginRight="@dimen/activity_padding"
         android:visibility="visible"
         fab:fab_colorNormal="@color/app_primary_color"
         fab:fab_colorPressed="@color/app_secondary_color"

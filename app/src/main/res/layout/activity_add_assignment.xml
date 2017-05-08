@@ -22,7 +22,7 @@
             android:hint="@string/hint_assignment_type"
             android:id="@+id/assignmentType"
             android:inputType="textCapWords"
-            android:textSize="@dimen/abc_text_size_small_material"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
             android:imeOptions="flagNoExtractUi"/>
 
         </LinearLayout>
@@ -40,7 +40,7 @@
             android:layout_weight="1"
             android:layout_height="wrap_content"
             android:hint="@string/hint_assignment_name"
-            android:textSize="@dimen/abc_text_size_small_material"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
             android:inputType="textCapWords"
             android:id="@+id/assignmentName"
             android:imeOptions="flagNoExtractUi"
@@ -61,7 +61,7 @@
             android:layout_weight="1"
             android:layout_height="wrap_content"
             android:hint="@string/hint_assignment_due_date"
-            android:textSize="@dimen/abc_text_size_small_material"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
             android:id="@+id/assignmentDueDate"
             android:onClick="selectDate"
             android:focusable="false"
@@ -72,7 +72,7 @@
             android:layout_weight="1"
             android:layout_height="wrap_content"
             android:hint="@string/hint_assignment_due_time"
-            android:textSize="@dimen/abc_text_size_small_material"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
             android:id="@+id/assignmentDueTime"
             android:onClick="selectTime"
             android:focusable="false"
@@ -93,7 +93,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:textSize="@dimen/abc_text_size_small_material"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
             android:id="@+id/assignmentGrade"
             android:hint="@string/hint_assignment_grade"
             android:inputType="numberDecimal"
@@ -115,7 +115,7 @@
             android:layout_weight="1"
             android:layout_height="wrap_content"
             android:hint="@string/hint_assignment_details"
-            android:textSize="@dimen/abc_text_size_small_material"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
             android:inputType="textCapSentences"
             android:id="@+id/assignmentDetails"/>
 

@@ -1,6 +1,7 @@
 package com.kmbapps.classscheduler;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -10,6 +11,7 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -22,7 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class MyClassActivity extends ActionBarActivity implements ClassAssignmentsFragment.OnAssignmentFragmentInteractionListener,
+public class MyClassActivity extends AppCompatActivity implements ClassAssignmentsFragment.OnAssignmentFragmentInteractionListener,
         SortByDialogFragment.SortByDialogListener, ClassGradesFragment.OnGradesFragmentInteractionListener, ShowDialog, ConfirmationDialogFragment.ConfirmationDialogListener {
 
     private final static int DETAILS = 0;
@@ -214,8 +216,8 @@ public class MyClassActivity extends ActionBarActivity implements ClassAssignmen
         }
 
         @Override
-        public void onAttach(Activity activity) {
-            super.onAttach(activity);
+        public void onAttach(Context context) {
+            super.onAttach(context);
         }
 
     }

@@ -12,11 +12,11 @@
         android:id="@+id/schedule"
         android:layout_width="wrap_content"
         android:layout_height="fill_parent"
-        android:textSize="@dimen/abc_text_size_small_material"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
         android:layout_margin="@dimen/activity_padding"
-        android:textColor="@color/primary_text_default_material_light"/>
+        android:textColor="@android:color/primary_text_light"/>
 
 
 </LinearLayout>

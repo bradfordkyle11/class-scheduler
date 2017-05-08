@@ -87,6 +87,7 @@
 
     <!--Text-->
     <string name="text_no_classes">You have no classes. Tap + to add one.</string>
+    <string name="text_no_sections">Use a class\'s + button to create a section with a specific schedule.</string>
     <string name="text_credit_hours">Credit Hours:</string>
     <string name="text_days_and_times">Days and Times</string>
     <string name="text_from">From: </string>

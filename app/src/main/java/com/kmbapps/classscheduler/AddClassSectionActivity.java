@@ -3,7 +3,9 @@ package com.kmbapps.classscheduler;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
@@ -23,6 +25,8 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 
 public class AddClassSectionActivity extends AppCompatActivity implements ConfirmationDialogFragment.ConfirmationDialogListener {
@@ -154,8 +158,7 @@ public class AddClassSectionActivity extends AppCompatActivity implements Confir
                 if (dayChecked) {
                     View startAndEndTimes = dayTimeLocationPickers.get(i).findViewById(R.id.startAndEndTimes);
                     startAndEndTimes.setVisibility(View.VISIBLE);
-                    View room = dayTimeLocationPickers.get(i).findViewById(R.id.edit_room_number);
-                    room.setVisibility(View.VISIBLE);
+                    roomNumber.setVisibility(View.VISIBLE);
                 }
                 newDayTimeLocationPicker();
             }
@@ -335,14 +338,15 @@ public class AddClassSectionActivity extends AppCompatActivity implements Confir
                     //add another dayTimeLocation picker so the class can have more than one time
 
                     boolean valid = true;
-                    Time sTime = new Time();
+                    GregorianCalendar sTime = new GregorianCalendar();
+                    sTime.setTimeInMillis(0);
+                    sTime.set(Calendar.HOUR_OF_DAY, findHour(startTime.getText().toString()));
+                    sTime.set(Calendar.MINUTE, findMinute(startTime.getText().toString()));
 
-                    sTime.hour = findHour(startTime.getText().toString());
-                    sTime.minute = findMinute(startTime.getText().toString());
-
-                    Time eTime = new Time();
-                    eTime.hour = findHour(endTime.getText().toString());
-                    eTime.minute = findMinute(endTime.getText().toString());
+                    GregorianCalendar eTime = new GregorianCalendar();
+                    eTime.setTimeInMillis(0);
+                    eTime.set(Calendar.HOUR_OF_DAY, findHour(endTime.getText().toString()));
+                    eTime.set(Calendar.MINUTE, findMinute(endTime.getText().toString()));
 
                     if (eTime.before(sTime)) {
 
@@ -351,13 +355,14 @@ public class AddClassSectionActivity extends AppCompatActivity implements Confir
                             toast.show();
                         }
 
-                        endTime.setTextColor(getResources().getColor(R.color.red03));
+                        endTime.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.red03));
+
                         valid = false;
                     }
 
                     if(valid){
-                        startTime.setTextColor(getResources().getColor(R.color.primary_text_default_material_light));
-                        endTime.setTextColor(getResources().getColor(R.color.primary_text_default_material_light));
+                        startTime.setTextColor(ContextCompat.getColor(getApplicationContext(), android.R.color.primary_text_light));
+                        endTime.setTextColor(ContextCompat.getColor(getApplicationContext(), android.R.color.primary_text_light));
                     }
 
                     Integer position = (Integer) dayTimeLocationPickerLayout.getTag();
@@ -397,14 +402,15 @@ public class AddClassSectionActivity extends AppCompatActivity implements Confir
                 if (!startTime.getText().toString().equals("") && !endTime.getText().toString().equals("")) {
                     //add another dayTimeLocation picker so the class can have more than one time
                     boolean valid = true;
-                    Time sTime = new Time();
+                    GregorianCalendar sTime = new GregorianCalendar();
+                    sTime.setTimeInMillis(0);
+                    sTime.set(Calendar.HOUR_OF_DAY, findHour(startTime.getText().toString()));
+                    sTime.set(Calendar.MINUTE, findMinute(startTime.getText().toString()));
 
-                    sTime.hour = findHour(startTime.getText().toString());
-                    sTime.minute = findMinute(startTime.getText().toString());
-
-                    Time eTime = new Time();
-                    eTime.hour = findHour(endTime.getText().toString());
-                    eTime.minute = findMinute(endTime.getText().toString());
+                    GregorianCalendar eTime = new GregorianCalendar();
+                    eTime.setTimeInMillis(0);
+                    eTime.set(Calendar.HOUR_OF_DAY, findHour(endTime.getText().toString()));
+                    eTime.set(Calendar.MINUTE, findMinute(endTime.getText().toString()));
 
                     if (eTime.before(sTime)) {
 
@@ -413,13 +419,13 @@ public class AddClassSectionActivity extends AppCompatActivity implements Confir
                             toast.show();
                         }
 
-                        startTime.setTextColor(getResources().getColor(R.color.red03));
+                        startTime.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.red03));
                         valid = false;
                     }
 
                     if(valid){
-                        startTime.setTextColor(getResources().getColor(R.color.abc_primary_text_material_light));
-                        endTime.setTextColor(getResources().getColor(R.color.abc_primary_text_material_light));
+                        startTime.setTextColor(ContextCompat.getColor(getApplicationContext(), android.R.color.primary_text_light));
+                        endTime.setTextColor(ContextCompat.getColor(getApplicationContext(), android.R.color.primary_text_light));
                     }
 
                     Integer position = (Integer) dayTimeLocationPickerLayout.getTag();
@@ -642,7 +648,7 @@ public class AddClassSectionActivity extends AppCompatActivity implements Confir
                         return null;
 
                     }
-                    else if(startTime.getCurrentTextColor()==getResources().getColor(R.color.red03)){
+                    else if(startTime.getCurrentTextColor() == ContextCompat.getColor(getApplicationContext(), R.color.red03)){
                         Toast toast = Toast.makeText(getApplicationContext(), getString(R.string.toast_invalid_starting_time), Toast.LENGTH_SHORT);
                         toast.show();
                         validSchedule = false;
@@ -664,7 +670,7 @@ public class AddClassSectionActivity extends AppCompatActivity implements Confir
 
                     }
 
-                    else if(endTime.getCurrentTextColor()==getResources().getColor(R.color.red03)){
+                    else if(endTime.getCurrentTextColor( )== ContextCompat.getColor(getApplicationContext(), R.color.red03)){
                         Toast toast = Toast.makeText(getApplicationContext(), getString(R.string.toast_invalid_ending_time), Toast.LENGTH_SHORT);
                         toast.show();
                         validSchedule = false;

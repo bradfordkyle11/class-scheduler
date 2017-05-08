@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -14,7 +15,7 @@ import android.widget.Toast;
 import java.util.Calendar;
 
 
-public class AssignmentActivity extends ActionBarActivity {
+public class AssignmentActivity extends AppCompatActivity {
 
     public final static int EDITED_ASSIGNMENT = 100;
     public final static int DELETE_ASSIGNMENT = 101;
@@ -48,9 +49,9 @@ public class AssignmentActivity extends ActionBarActivity {
             if (dueDate != null) {
                 String dueDateString = (dueDate.get(Calendar.MONTH) + 1) + "/" + dueDate.get(Calendar.DAY_OF_MONTH) + "/" + dueDate.get(Calendar.YEAR)
                         + " at " + MyTime.to12HourFormat(dueDate.get(Calendar.HOUR_OF_DAY), dueDate.get(Calendar.MINUTE));
-                dueDateTV.setText(Html.fromHtml("<b>Due:</b> " + dueDateString));
+                dueDateTV.setText(HtmlCompat.fromHtml("<b>Due:</b> " + dueDateString));
             } else {
-                dueDateTV.setText(Html.fromHtml("<i>No due date</i>"));
+                dueDateTV.setText(HtmlCompat.fromHtml("<i>No due date</i>"));
             }
 
             //hide unneeded views
@@ -62,14 +63,14 @@ public class AssignmentActivity extends ActionBarActivity {
             if (completionDate != null) {
                 String completionDateString = (completionDate.get(Calendar.MONTH) + 1) + "/" + completionDate.get(Calendar.DAY_OF_MONTH) + "/" + completionDate.get(Calendar.YEAR)
                         + " at " + MyTime.to12HourFormat(completionDate.get(Calendar.HOUR_OF_DAY), completionDate.get(Calendar.MINUTE));
-                dueDateTV.setText(Html.fromHtml("<b>Completed:</b> " + completionDateString));
+                dueDateTV.setText(HtmlCompat.fromHtml("<b>Completed:</b> " + completionDateString));
             }
 
             TextView gradeTV = (TextView) findViewById(R.id.assignmentGrade);
-            gradeTV.setText(Html.fromHtml("<b>Grade:</b> " + mAssignment.getGrade()));
+            gradeTV.setText(HtmlCompat.fromHtml("<b>Grade:</b> " + mAssignment.getGrade()));
         }
         TextView details = (TextView) findViewById(R.id.assignmentDetails);
-        details.setText(Html.fromHtml("<b>Details:</b> " + mAssignment.getDetails()));
+        details.setText(HtmlCompat.fromHtml("<b>Details:</b> " + mAssignment.getDetails()));
     }
 
     @Override
@@ -174,7 +175,7 @@ public class AssignmentActivity extends ActionBarActivity {
 
 
         TextView details = (TextView) findViewById(R.id.assignmentDetails);
-        details.setText(Html.fromHtml("<b>Details:</b> " + newAssignment.getDetails()));
+        details.setText(HtmlCompat.fromHtml("<b>Details:</b> " + newAssignment.getDetails()));
 
         if(mode==UPCOMING_ASSIGNMENT) {
             TextView dueDateTV = (TextView) findViewById(R.id.assignmentDueDate);
@@ -182,12 +183,12 @@ public class AssignmentActivity extends ActionBarActivity {
             if(dueDate!=null) {
                 String dueDateString = (dueDate.get(Calendar.MONTH) + 1) + "/" + dueDate.get(Calendar.DAY_OF_MONTH) + "/" + dueDate.get(Calendar.YEAR)
                         + " at " + MyTime.to12HourFormat(dueDate.get(Calendar.HOUR_OF_DAY), dueDate.get(Calendar.MINUTE));
-                dueDateTV.setText(Html.fromHtml("<b>Due:</b> " + dueDateString));
+                dueDateTV.setText(HtmlCompat.fromHtml("<b>Due:</b> " + dueDateString));
             }
         }
         else if(mode==GRADED_ASSIGNMENT){
             TextView gradeTV = (TextView) findViewById(R.id.assignmentGrade);
-            gradeTV.setText(Html.fromHtml("<b>Grade:</b> " + mAssignment.getGrade()));
+            gradeTV.setText(HtmlCompat.fromHtml("<b>Grade:</b> " + mAssignment.getGrade()));
         }
 
 

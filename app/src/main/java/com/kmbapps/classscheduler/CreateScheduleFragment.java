@@ -1,6 +1,7 @@
 package com.kmbapps.classscheduler;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -265,13 +266,20 @@ public class CreateScheduleFragment extends Fragment implements LoaderManager.Lo
     }
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        try {
-           // mListener = (OnFragmentInteractionListener) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
-                    + " must implement OnFragmentInteractionListener");
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        Activity activity = null;
+        if (context instanceof Activity){
+            activity = (Activity) context;
+        }
+        // Verify that the host activity implements the callback interface
+        if (activity != null) {
+            try {
+                // mListener = (OnFragmentInteractionListener) activity;
+            } catch (ClassCastException e) {
+                throw new ClassCastException(activity.toString()
+                        + " must implement OnFragmentInteractionListener");
+            }
         }
     }
 
@@ -292,7 +300,7 @@ public class CreateScheduleFragment extends Fragment implements LoaderManager.Lo
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        public void onAddClassClick(View view);
+        void onAddClassClick(View view);
     }
 
     private class LoadClassesAndCreateSchedulesTask extends AsyncTask<Void, Void, Void> {

@@ -79,7 +79,7 @@ public class SetGradeDialogFragment extends DialogFragment {
     }
 
     public interface SetGradeDialogListener{
-        public void onSetGradePositiveClick(String grade, Assignment assignment);
-        public void onSetGradeNegativeClick();
+        void onSetGradePositiveClick(String grade, Assignment assignment);
+        void onSetGradeNegativeClick();
     }
 }

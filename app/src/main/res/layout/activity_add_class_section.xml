@@ -19,17 +19,17 @@
             android:focusableInTouchMode="false"
             android:paddingLeft="0px"
             android:paddingRight="0px"
-            android:visibility="gone">
+            android:visibility="visible">
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/text_class_details"
-                android:textSize="@dimen/abc_text_size_large_material"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
                 android:layout_marginTop="@dimen/activity_padding"
                 android:paddingTop="@dimen/padding_inside_view"
                 android:paddingLeft="@dimen/padding_inside_view"
                 android:paddingRight="@dimen/padding_inside_view"
-                android:textColor="@color/primary_text_default_material_light"
+                android:textColor="@android:color/primary_text_light"
                 android:textStyle="bold"/>
 
             <include layout="@layout/class_edit_layout"/>
@@ -43,12 +43,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/text_section_details"
-                android:textSize="@dimen/abc_text_size_large_material"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
                 android:layout_marginTop="@dimen/activity_padding"
                 android:paddingTop="@dimen/activity_padding"
                 android:paddingLeft="@dimen/padding_inside_view"
                 android:paddingRight="@dimen/padding_inside_view"
-                android:textColor="@color/primary_text_default_material_light"
+                android:textColor="@android:color/primary_text_light"
                 android:textStyle="bold"/>
         </LinearLayout>
 
@@ -65,7 +65,7 @@
                 android:id="@+id/edit_professor"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="@dimen/abc_text_size_small_material"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                 android:hint="@string/hint_professor"
                 android:inputType="textCapWords"
                 android:imeOptions="flagNoExtractUi"/>
@@ -84,7 +84,7 @@
                 android:id="@+id/edit_section_number"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="@dimen/abc_text_size_small_material"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                 android:hint="@string/hint_section_number"
                 android:inputType="textCapWords"
                 android:imeOptions="flagNoExtractUi"/>
@@ -95,11 +95,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/text_set_schedule"
-            android:textSize="@dimen/abc_text_size_medium_material"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:paddingTop="@dimen/padding_inside_view"
             android:paddingLeft="@dimen/padding_inside_view"
             android:paddingRight="@dimen/padding_inside_view"
-            android:textColor="@color/primary_text_default_material_light"/>
+            android:textColor="@android:color/primary_text_light"/>
 
         <LinearLayout
             android:orientation="vertical"
@@ -124,7 +124,7 @@
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:inputType="textCapSentences"
-                android:textSize="@dimen/abc_text_size_small_material"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                 android:hint="@string/hint_notes"/>
         </LinearLayout>
 

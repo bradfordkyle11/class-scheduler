@@ -1,12 +1,13 @@
 package com.kmbapps.classscheduler;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -163,13 +164,20 @@ public class ClassGradesFragment extends Fragment implements ConfirmationDialogF
     }
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        try {
-            mListener = (OnGradesFragmentInteractionListener) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
-                    + " must implement OnFragmentInteractionListener");
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        Activity activity = null;
+        if (context instanceof Activity){
+            activity = (Activity) context;
+        }
+        // Verify that the host activity implements the callback interface
+        if (activity != null) {
+            try {
+                mListener = (OnGradesFragmentInteractionListener) activity;
+            } catch (ClassCastException e) {
+                throw new ClassCastException(activity.toString()
+                        + " must implement OnFragmentInteractionListener");
+            }
         }
     }
 
@@ -198,8 +206,8 @@ public class ClassGradesFragment extends Fragment implements ConfirmationDialogF
     }
 
     public interface OnGradesFragmentInteractionListener {
-        public void onActionModeChanged(ActionMode actionMode);
-        public void onGradesChanged();
+        void onActionModeChanged(ActionMode actionMode);
+        void onGradesChanged();
     }
 
     @Override
@@ -451,7 +459,7 @@ public class ClassGradesFragment extends Fragment implements ConfirmationDialogF
     private void actionModeSetup(View v){
         if (!v.isSelected()) {
             v.setSelected(true);
-            ActionBarActivity activity = (ActionBarActivity) v.getContext();
+            AppCompatActivity activity = (AppCompatActivity) v.getContext();
             if(mActionMode==null) {
                 mActionMode = activity.startSupportActionMode(gradeActionModeCallback);
                 mActionMode.setTag(v);

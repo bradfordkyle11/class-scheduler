@@ -1,6 +1,7 @@
 package com.kmbapps.classscheduler;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -76,7 +77,7 @@ public class ScheduleFragment extends Fragment implements ConfirmationDialogFrag
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Resources r = getResources();
-        SCROLL_VIEW_TOP_PADDING_DP = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, SCROLL_VIEW_TOP_PADDING, r.getDisplayMetrics());;
+        SCROLL_VIEW_TOP_PADDING_DP = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, SCROLL_VIEW_TOP_PADDING, r.getDisplayMetrics());
         if (getArguments() != null) {
             schedule = (Schedule) getArguments().getSerializable(ARG_SCHEDULE);
             mainSchedule = getArguments().getBoolean(ARG_IS_MAIN_SCHEDULE);
@@ -292,15 +293,20 @@ public class ScheduleFragment extends Fragment implements ConfirmationDialogFrag
     }
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-
-
-        try {
-            mListener = (OnScheduleInteractionListener) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
-                    + " must implement OnFragmentInteractionListener");
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        Activity activity = null;
+        if (context instanceof Activity){
+            activity = (Activity) context;
+        }
+        // Verify that the host activity implements the callback interface
+        if (activity != null) {
+            try {
+                mListener = (OnScheduleInteractionListener) activity;
+            } catch (ClassCastException e) {
+                throw new ClassCastException(activity.toString()
+                        + " must implement OnFragmentInteractionListener");
+            }
         }
     }
 
@@ -322,9 +328,9 @@ public class ScheduleFragment extends Fragment implements ConfirmationDialogFrag
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnScheduleInteractionListener {
-        public void onCreateScheduleClick(View view);
+        void onCreateScheduleClick(View view);
 
-        public void onSetScheduleClick();
+        void onSetScheduleClick();
     }
 
     View.OnClickListener createScheduleListener = new View.OnClickListener() {
