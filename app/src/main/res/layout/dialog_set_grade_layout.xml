@@ -4,7 +4,8 @@
     android:layout_height="wrap_content"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
-    android:id="@+id/setGradeLayout">
+    android:id="@+id/setGradeLayout"
+    android:background="@color/app_background">
 
     <EditText
         android:layout_width="fill_parent"

@@ -29,7 +29,8 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:id="@+id/classes_and_sections_scroll_view">
 
         <LinearLayout
             android:id="@+id/classes_and_sections"

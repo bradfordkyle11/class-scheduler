@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.kmbapps.classscheduler.MyClassesFragment"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@color/app_background">
 
     <com.getbase.floatingactionbutton.AddFloatingActionButton
         android:id="@+id/add_class"
@@ -20,7 +21,8 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@color/app_background">
 
         <LinearLayout
             android:id="@+id/classes"

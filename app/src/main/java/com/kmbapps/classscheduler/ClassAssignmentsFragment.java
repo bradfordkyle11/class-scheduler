@@ -3,8 +3,10 @@ package com.kmbapps.classscheduler;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.view.ActionMode;
 import android.view.LayoutInflater;
@@ -13,6 +15,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -170,6 +174,12 @@ public class ClassAssignmentsFragment extends Fragment implements SetGradeDialog
 
                 //show the number of selected items
                 mActionMode.setTitle("1");
+                Window window = getActivity().getWindow();
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+                    window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+                    window.setStatusBarColor(ContextCompat.getColor(getContext(), R.color.highlight_status_bar));
+                }
             }
             else{
                 //if more than one were selected
@@ -397,6 +407,12 @@ public class ClassAssignmentsFragment extends Fragment implements SetGradeDialog
                 for(View view : views){
                     view.setSelected(false);
                 }
+            }
+            Window window = getActivity().getWindow();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+                window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+                window.setStatusBarColor(ContextCompat.getColor(getContext(), R.color.highlight_status_bar));
             }
             mActionMode = null;
         }

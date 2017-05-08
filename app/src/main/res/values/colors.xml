@@ -15,6 +15,16 @@
     <color name="blue13">#C5EAF8</color>
     <color name="blue14">#E2F4FB</color>
 
+    <color name="blue_gray01">#263238</color>
+    <color name="blue_gray02">#37474F</color>
+    <color name="blue_gray03">#455A64</color>
+    <color name="blue_gray04">#546E7A</color>
+    <color name="blue_gray05">#607D8B</color>
+    <color name="blue_gray06">#78909C</color>
+    <color name="blue_gray07">#90A4AE</color>
+    <color name="blue_gray08">#B0BEC5</color>
+    <color name="blue_gray10">#ECEFF1</color>
+
     <color name="purple01">#9933CC</color>
     <color name="purple02">#A041D0</color>
     <color name="purple03">#A750D3</color>
@@ -114,13 +124,16 @@
 
 
     <color name="black">#000000</color>
+    <color name="off_white">#f9f9f9</color>
     <color name="white">#FFFFFF</color>
 
     <color name="app_primary_color">@color/blue08</color>
     <color name="app_secondary_color">@color/blue01</color>
-    <color name="app_accent">@color/teal07</color>
+    <color name="app_accent">@color/blue_gray03</color>
     <color name="highlight">@color/gray07</color>
     <color name="highlight_accent">@color/gray04</color>
+    <color name="highlight_status_bar">@color/gray03</color>
+    <color name="app_background">@color/off_white</color>
 
     <color name="class_info_background">#55ffffff</color>
 

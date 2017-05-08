@@ -79,13 +79,11 @@ public class ClassLoader {
                 ObjectInputStream is = new ObjectInputStream(fis);
                 System.out.println(is.toString());
                 myClasses = (ArrayList<Class>) is.readObject();
-                if (myClasses == null){
-                    myClasses = new ArrayList<>();
-                    classesChanged = true;
-                }
-                loadColors(context, DESIRED_CLASSES);
-                classesLoaded = true;
+
                 is.close();
+                if (fis != null){
+                    fis.close();
+                }
             } catch (FileNotFoundException e) {
                 System.out.println("FileNotFoundException: " + e.getMessage());
             } catch (IOException e) {
@@ -94,8 +92,12 @@ public class ClassLoader {
                 System.out.println("SystemNotFoundException: " + e.getMessage());
             }
         }
-
-
+        if (myClasses == null){
+            myClasses = new ArrayList<>();
+            classesChanged = true;
+        }
+        classesLoaded = true;
+        loadColors(context, DESIRED_CLASSES);
         return myClasses;
     }
 
@@ -553,10 +555,11 @@ public class ClassLoader {
                 FileInputStream fis = context.openFileInput(currentScheduleFile);
                 ObjectInputStream is = new ObjectInputStream(fis);
                 System.out.println(is.toString());
-
                 currentSchedule = (Schedule) is.readObject();
-                scheduleLoaded = true;
                 is.close();
+                if (fis != null){
+                    fis.close();
+                }
             } catch (FileNotFoundException e) {
                 System.out.println("FileNotFoundException: " + e.getMessage());
             } catch (IOException e) {
@@ -565,6 +568,7 @@ public class ClassLoader {
                 System.out.println("SystemNotFoundException: " + e.getMessage());
             }
         }
+        scheduleLoaded = true;
         if (currentSchedule==null){
             return new Schedule();
         }
@@ -662,6 +666,9 @@ public class ClassLoader {
                 mNotebooks = (Hashtable<Schedule, Notebook>) is.readObject();
                 notebooksLoaded = true;
                 is.close();
+                if (fis != null){
+                    fis.close();
+                }
             } catch (FileNotFoundException e) {
                 System.out.println("FileNotFoundException: " + e.getMessage());
             } catch (IOException e) {

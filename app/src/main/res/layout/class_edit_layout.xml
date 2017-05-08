@@ -7,7 +7,8 @@
     android:focusableInTouchMode="false"
     android:showDividers="middle"
     android:paddingLeft="0px"
-    android:paddingRight="0px">
+    android:paddingRight="0px"
+    android:background="@color/app_background">
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:orientation="vertical"

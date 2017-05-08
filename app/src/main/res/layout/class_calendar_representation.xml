@@ -5,6 +5,6 @@
     android:layout_width="wrap_content"
     android:id="@+id/classTime"
     android:gravity="center_horizontal"
-    android:background="@color/white"
+    android:background="@color/app_background"
     android:textColor="@color/primary_text_default_material_light">
 </TextView>

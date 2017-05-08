@@ -4,7 +4,8 @@
     tools:context="com.kmbapps.classscheduler.ClassDetailsFragment"
     android:orientation="vertical"
     android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin">
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:background="@color/app_background">
 
     <TextView
         android:layout_width="wrap_content"

@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     tools:context="com.kmbapps.classscheduler.AssignmentActivity"
     android:id="@+id/assignmentActivityLayout"
+    android:background="@color/app_background"
     >
 
     <LinearLayout

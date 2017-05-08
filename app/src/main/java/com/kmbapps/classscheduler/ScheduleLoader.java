@@ -14,8 +14,8 @@ import java.util.List;
  */
 
 public class ScheduleLoader extends AsyncTaskLoader<List<Schedule>> {
-    public static final int ALL_SCHEDULES_LOADER = 0;
-    public static final int SELECT_SCHEDULES_LOADER = 1;
+    public static final int ALL_SCHEDULES_LOADER = 1;
+    public static final int SELECT_SCHEDULES_LOADER = 0;
     private Context context;
     private int minCreditHours;
     private int maxCreditHours;
@@ -76,9 +76,10 @@ public class ScheduleLoader extends AsyncTaskLoader<List<Schedule>> {
         Process.setThreadPriority(Process.THREAD_PRIORITY_BACKGROUND + Process.THREAD_PRIORITY_MORE_FAVORABLE);
         //just options updated
         //if (currSchedules == null){
-            currSchedules = ClassLoader.loadSchedules(getContext(), ClassLoader.ALL_SCHEDULES);
+            //currSchedules = ClassLoader.loadSchedules(getContext(), ClassLoader.ALL_SCHEDULES);
         //}
-        switch(getId()){
+        int id = getId();
+        switch(id){
             case ALL_SCHEDULES_LOADER:
                 update(Integer.MIN_VALUE, Integer.MAX_VALUE, Integer.MIN_VALUE, Integer.MAX_VALUE,
                         ClassLoader.getNewClass(), ClassLoader.getOldClass(), ClassLoader.getNewSection(), ClassLoader.getOldSection());

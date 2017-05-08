@@ -2,6 +2,7 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:paddingLeft="@dimen/activity_padding"
-    android:paddingRight="@dimen/activity_padding">
+    android:paddingRight="@dimen/activity_padding"
+    android:background="@color/app_background">
     <include layout="@layout/class_edit_layout"/>
 </ScrollView>

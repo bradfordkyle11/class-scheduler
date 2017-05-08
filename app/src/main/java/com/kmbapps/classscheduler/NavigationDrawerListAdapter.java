@@ -37,19 +37,19 @@ public class NavigationDrawerListAdapter extends ArrayAdapter<String> {
         //set icons for the nav drawer
         switch(position){
             case SCHEDULE:
-                icon.setBackgroundResource(R.drawable.ic_view_week_white_24dp);
+                icon.setBackgroundResource(R.drawable.ic_view_week_black_24dp);
                 break;
             case SCHEDULE_DESIGNER:
-                icon.setBackgroundResource(R.drawable.ic_create_white_24dp);
+                icon.setBackgroundResource(R.drawable.ic_create_black_24dp);
                 break;
             case MY_CLASSES:
-                icon.setBackgroundResource(R.drawable.ic_class_white_24dp);
+                icon.setBackgroundResource(R.drawable.ic_class_black_24dp);
                 break;
             case MY_CALENDAR:
-                icon.setBackgroundResource(R.drawable.ic_today_white_24dp);
+                icon.setBackgroundResource(R.drawable.ic_today_black_24dp);
                 break;
             case MY_ASSIGNMENTS:
-                icon.setBackgroundResource(R.drawable.ic_assignment_white_24dp);
+                icon.setBackgroundResource(R.drawable.ic_assignment_black_24dp);
         }
 
         TextView textView = (TextView) rowView.findViewById(R.id.text1);

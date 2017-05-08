@@ -17,7 +17,9 @@
         android:layout_height="fill_parent"
         android:id="@+id/text1"
         android:gravity="center"
-        android:textSize="16sp">
+        android:textSize="16sp"
+        android:text="filler"
+        android:textColor="@android:color/primary_text_light">
 
     </TextView>
 

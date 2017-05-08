@@ -2,9 +2,12 @@ package com.kmbapps.classscheduler;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.Loader;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.view.ActionMode;
@@ -14,8 +17,11 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -121,6 +127,7 @@ public class DesiredClassesFragment extends Fragment implements ConfirmationDial
 
                 //layout for an individual class and its sections
                 View v = inflater.inflate(R.layout.class_and_section_layout, null);
+                v.findViewById(R.id.classColorBar).setBackgroundColor(desiredClasses.get(i).getColor());
                 TextView classInfo = (TextView) v.findViewById(R.id.classInfo);
                 classInfo.setText(desiredClasses.get(i).getDepartment() + " " + desiredClasses.get(i).getNumber() + "\n" + desiredClasses.get(i).getName());
 
@@ -249,6 +256,12 @@ public class DesiredClassesFragment extends Fragment implements ConfirmationDial
                         mActionMode.setTag(v);
                         mActionMode.setTitle("1");
                         onActionModeChanged();
+                        Window window = getActivity().getWindow();
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+                            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+                            window.setStatusBarColor(ContextCompat.getColor(getContext(), R.color.highlight_status_bar));
+                        }
                     }
                     //something was already selected and is the same type
                     else{
@@ -317,6 +330,13 @@ public class DesiredClassesFragment extends Fragment implements ConfirmationDial
                         mActionMode.setTag(v);
                         mActionMode.setTitle("1");
                         onActionModeChanged();
+                        Window window = getActivity().getWindow();
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+                            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+                            window.setStatusBarColor(ContextCompat.getColor(getContext(), R.color.highlight_status_bar));
+                        }
+
                     }
                     //something was already selected and is the same type
                     else{
@@ -494,6 +514,12 @@ public class DesiredClassesFragment extends Fragment implements ConfirmationDial
                     mode.finish();
                     return true;
                 default:
+                    Window window = getActivity().getWindow();
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+                        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+                        window.setStatusBarColor(ContextCompat.getColor(getContext(), R.color.app_secondary_color));
+                    }
                     return false;
             }
         }
@@ -510,6 +536,12 @@ public class DesiredClassesFragment extends Fragment implements ConfirmationDial
                 for(View view : selectedViews){
                     view.setSelected(false);
                 }
+            }
+            Window window = getActivity().getWindow();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+                window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+                window.setStatusBarColor(ContextCompat.getColor(getContext(), R.color.app_secondary_color));
             }
             mActionMode = null;
         }
@@ -575,6 +607,12 @@ public class DesiredClassesFragment extends Fragment implements ConfirmationDial
                     mode.finish();
                     return true;
                 default:
+                    Window window = getActivity().getWindow();
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+                        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+                        window.setStatusBarColor(ContextCompat.getColor(getContext(), R.color.app_secondary_color));
+                    }
                     return false;
             }
         }
@@ -592,6 +630,13 @@ public class DesiredClassesFragment extends Fragment implements ConfirmationDial
                     view.setSelected(false);
                 }
             }
+            Window window = getActivity().getWindow();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+                window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+                window.setStatusBarColor(ContextCompat.getColor(getContext(), R.color.app_secondary_color));
+            }
+            mActionMode = null;
             mActionMode = null;
         }
     };
@@ -665,10 +710,11 @@ public class DesiredClassesFragment extends Fragment implements ConfirmationDial
 
     public void setLoading(boolean loading) {
         this.loading = loading;
-        if (loading) {
+        View v = getView();
+        if (loading && v != null) {
             getView().findViewById(R.id.progress_loader).setVisibility(View.VISIBLE);
         }
-        else {
+        else if (v != null) {
             getView().findViewById(R.id.progress_loader).setVisibility(View.GONE);
         }
     }

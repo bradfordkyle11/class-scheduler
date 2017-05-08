@@ -3,7 +3,8 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:visibility="visible"
-    android:id="@+id/scheduleClassInfoLayout">
+    android:id="@+id/scheduleClassInfoLayout"
+    android:background="@color/app_background">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -18,7 +19,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/class_info_background"
+        android:background="@color/app_background"
         android:paddingLeft="@dimen/activity_padding"
         android:paddingRight="@dimen/activity_padding"
         android:paddingTop="@dimen/padding_inside_view"

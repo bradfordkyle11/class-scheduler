@@ -3,7 +3,8 @@
     android:id="@+id/classPager"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.kmbapps.classscheduler.CreateScheduleFragment">
+    tools:context="com.kmbapps.classscheduler.CreateScheduleFragment"
+    android:background="@color/app_background">
 
     <android.support.v4.view.PagerTitleStrip
         android:id="@+id/pager_title_strip"

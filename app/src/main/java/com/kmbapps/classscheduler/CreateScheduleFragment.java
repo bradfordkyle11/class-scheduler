@@ -82,8 +82,7 @@ public class CreateScheduleFragment extends Fragment implements LoaderManager.Lo
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         setHasOptionsMenu(true);
-        getLoaderManager().initLoader(ScheduleLoader.ALL_SCHEDULES_LOADER, null, this).forceLoad();
-        loading = true;
+
     }
 
     @Override
@@ -98,6 +97,8 @@ public class CreateScheduleFragment extends Fragment implements LoaderManager.Lo
         if(savedInstanceState!=null){
             mCurrentPage = savedInstanceState.getInt(CURRENT_PAGE);
         }
+        getLoaderManager().initLoader(ScheduleLoader.SELECT_SCHEDULES_LOADER, null, this).forceLoad();
+        loading = true;
 
 
     }
@@ -152,13 +153,13 @@ public class CreateScheduleFragment extends Fragment implements LoaderManager.Lo
                     count = potentialSchedules.size() + NUM_PAGES_OTHER_THAN_SCHEDULES;
                 }
                 loading = false;
-                DesiredClassesFragment dcf = (DesiredClassesFragment) mViewPager.getAdapter().instantiateItem(mViewPager, mViewPager.getCurrentItem());
+                DesiredClassesFragment dcf = (DesiredClassesFragment) mViewPager.getAdapter().instantiateItem(mViewPager, DESIRED_CLASSES);
                 dcf.setLoading(loading);
                 mScheduleDesignerPagerAdapter.setCount(count);
                 mScheduleDesignerPagerAdapter.notifyDataSetChanged();
 
                 //set the current page once the schedules have been loaded
-                //mViewPager.setCurrentItem(mCurrentPage);
+                mViewPager.setCurrentItem(mCurrentPage);
                 break;
         }
     }

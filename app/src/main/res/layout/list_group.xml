@@ -7,11 +7,20 @@
     android:orientation="horizontal"
     android:background="@drawable/selector_course_header"
     android:longClickable="true"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingLeft="0dp"
 
     android:clickable="true"
     android:elevation="2dp"
     android:id="@+id/course">
+
+    <TextView
+        android:layout_width="@dimen/activity_padding"
+        android:layout_height="match_parent"
+        android:id="@id/classColorBar"/>
+    <TextView
+        android:layout_width="@dimen/activity_padding"
+        android:layout_height="match_parent"
+        android:id="@id/spacer"/>
 
 
     <TextView
