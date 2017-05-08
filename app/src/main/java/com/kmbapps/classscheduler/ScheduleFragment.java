@@ -18,6 +18,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 
 import java.util.Hashtable;
 
@@ -47,6 +50,7 @@ public class ScheduleFragment extends Fragment implements ConfirmationDialogFrag
 
     private Schedule schedule;
     private boolean mainSchedule;
+    private AdView mAdView;
 
     private OnScheduleInteractionListener mListener;
 
@@ -90,6 +94,10 @@ public class ScheduleFragment extends Fragment implements ConfirmationDialogFrag
             View fab = view.findViewById(R.id.select_schedule);
             fab.setVisibility(View.VISIBLE);
             fab.setOnClickListener(setScheduleListener);
+        }
+        else{
+            View fab = view.findViewById(R.id.select_schedule);
+            fab.setVisibility(View.GONE);
         }
 
         //gray out fab if this is the current schedule
@@ -352,6 +360,10 @@ public class ScheduleFragment extends Fragment implements ConfirmationDialogFrag
     };
 
     public void selectClass(View view){
+//        View ad = getView().findViewById(R.id.adView);
+//        if (ad != null) {
+//            ad.setVisibility(View.GONE);
+//        }
         View layout = getView().findViewById(R.id.scheduleClassInfoLayout);
         layout.setVisibility(View.VISIBLE);
 
@@ -376,6 +388,10 @@ public class ScheduleFragment extends Fragment implements ConfirmationDialogFrag
     public void hideClassInfo(){
         View classInfo = getView().findViewById(R.id.scheduleClassInfoLayout);
         classInfo.setVisibility(View.GONE);
+//        View ad = getView().findViewById(R.id.adView);
+//        if (ad != null) {
+//            ad.setVisibility(View.VISIBLE);
+//        }
 
     }
 

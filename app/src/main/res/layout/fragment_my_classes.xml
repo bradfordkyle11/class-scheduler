@@ -6,19 +6,6 @@
     android:orientation="vertical"
     android:background="@color/app_background">
 
-    <com.getbase.floatingactionbutton.AddFloatingActionButton
-        android:id="@+id/add_class"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        fab:fab_colorNormal="@color/blue08"
-        fab:fab_colorPressed="@color/blue01" />
-
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -33,6 +20,19 @@
             android:showDividers="middle">
         </LinearLayout>
     </ScrollView>
+
+    <com.getbase.floatingactionbutton.AddFloatingActionButton
+        android:id="@+id/add_class"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        fab:fab_colorNormal="@color/blue08"
+        fab:fab_colorPressed="@color/blue01" />
 
 
 </RelativeLayout>

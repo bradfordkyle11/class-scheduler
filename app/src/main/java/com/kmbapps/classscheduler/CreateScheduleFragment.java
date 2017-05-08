@@ -21,6 +21,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+
 import java.util.List;
 
 
@@ -57,6 +61,7 @@ public class CreateScheduleFragment extends Fragment implements LoaderManager.Lo
 
     private OnFragmentInteractionListener mListener;
     private boolean loading = true;
+    private AdView mAdView;
 
     /**
      * Use this factory method to create a new instance of

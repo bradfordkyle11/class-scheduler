@@ -5,13 +5,17 @@
     android:layout_height="match_parent"
     tools:context="com.kmbapps.classscheduler.ScheduleFragment"
     android:orientation="vertical"
-    android:id="@+id/schedule_layout">
+    android:id="@+id/schedule_layout"
+    xmlns:ads="http://schemas.android.com/apk/res-auto">
+
 
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:id="@+id/dayHeaders">
+
+
 
         <TextView
             android:layout_height="wrap_content"
@@ -172,29 +176,32 @@
         android:layout_centerHorizontal="true"
         android:visibility="visible"/>
 
-
-
-    <include layout="@layout/class_info"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:visibility="gone"/>
-
     <com.getbase.floatingactionbutton.FloatingActionButton
         android:id="@+id/select_schedule"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignWithParentIfMissing="true"
-        android:layout_above="@id/scheduleClassInfoLayout"
+        android:layout_above="@+id/classInfoAndAd"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_marginBottom="@dimen/activity_padding"
         android:layout_marginEnd="@dimen/activity_padding"
         android:layout_marginRight="@dimen/activity_padding"
-        android:visibility="gone"
+        android:visibility="visible"
         fab:fab_colorNormal="@color/app_primary_color"
         fab:fab_colorPressed="@color/app_secondary_color"
         fab:fab_colorDisabled="@color/highlight"
         fab:fab_icon="@drawable/ic_save_white_48dp"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@id/classInfoAndAd"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true">
+        <include layout="@layout/class_info"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"/>
+    </RelativeLayout>
 
 </RelativeLayout>

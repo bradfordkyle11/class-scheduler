@@ -15,6 +15,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+
 //TODO: make new app icon (this needs to be saved as ic_launcher.png in the drawable folders)
 //TODO: put list TextViews in LinearLayouts and give them padding inside view
 //TODO: navdrawer accessible from other activities
@@ -40,6 +44,7 @@ public class Home extends ActionBarActivity
 
 
     private final String CURRENT_PAGE = "currentPage";
+    private AdView mAdView;
 
     private Schedule currentSchedule;
 
@@ -58,6 +63,23 @@ public class Home extends ActionBarActivity
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
        // mTitle = getTitle();
+        mAdView = (AdView) findViewById(R.id.adView);
+        mAdView.setAdListener(new AdListener() {
+            @Override
+            public void onAdFailedToLoad(int i) {
+                super.onAdFailedToLoad(i);
+                mAdView.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onAdLoaded() {
+                super.onAdLoaded();
+                mAdView.setVisibility(View.VISIBLE);
+                findViewById(R.id.close_ad).setVisibility(View.VISIBLE);
+            }
+        });
+        AdRequest adRequest = new AdRequest.Builder().addTestDevice("A127310EFE19D504207566F24866F68C").build();
+        mAdView.loadAd(adRequest);
 
         // Set up the drawer.
         mNavigationDrawerFragment.setUp(
@@ -267,6 +289,12 @@ public class Home extends ActionBarActivity
                 createScheduleFragment.onActionModeChanged(actionMode);
             }
         }
+    }
+
+    public void closeAd(View v){
+        v.setVisibility(View.GONE);
+        mAdView.destroy();
+        mAdView.setVisibility(View.GONE);
     }
 
     @Override
