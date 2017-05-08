@@ -2,6 +2,7 @@ package com.kmbapps.classscheduler;
 
 
 import android.content.SharedPreferences;
+import android.os.Process;
 import android.preference.PreferenceManager;
 import android.support.v4.content.AsyncTaskLoader;
 import android.content.Context;
@@ -72,6 +73,7 @@ public class ScheduleLoader extends AsyncTaskLoader<List<Schedule>> {
 //    }
 
     @Override public List<Schedule> loadInBackground(){
+        Process.setThreadPriority(Process.THREAD_PRIORITY_BACKGROUND + Process.THREAD_PRIORITY_MORE_FAVORABLE);
         //just options updated
         //if (currSchedules == null){
             currSchedules = ClassLoader.loadSchedules(getContext(), ClassLoader.ALL_SCHEDULES);
@@ -93,11 +95,11 @@ public class ScheduleLoader extends AsyncTaskLoader<List<Schedule>> {
         }
         if (scheduleChanged) {
             if (newClass == null && oldClass == null && newSection == null && oldSection == null && getId() == SELECT_SCHEDULES_LOADER) {
-                currSchedules = Schedule.updateSchedules(minCreditHours, maxCreditHours, minNumClasses, maxNumClasses, currSchedules);
+                currSchedules = Schedule.updateSchedules(getContext(), minCreditHours, maxCreditHours, minNumClasses, maxNumClasses, currSchedules);
             } else if ((newClass == null && oldClass == null) && (newSection != null || oldSection != null)) {
-                currSchedules = Schedule.updateSchedules(minCreditHours, maxCreditHours, minNumClasses, maxNumClasses, newSection, oldSection, currSchedules, false, true);
+                currSchedules = Schedule.updateSchedules(getContext(), minCreditHours, maxCreditHours, minNumClasses, maxNumClasses, newSection, oldSection, currSchedules, false, true);
             } else if ((newSection == null && oldSection == null) && (newClass != null || oldClass != null)){
-                currSchedules = Schedule.updateSchedules(minCreditHours, maxCreditHours, minNumClasses, maxNumClasses, newClass, oldClass, currSchedules);
+                currSchedules = Schedule.updateSchedules(getContext(), minCreditHours, maxCreditHours, minNumClasses, maxNumClasses, newClass, oldClass, currSchedules);
             }
         }
         scheduleChanged = false;

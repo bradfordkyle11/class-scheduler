@@ -1,5 +1,7 @@
 package com.kmbapps.classscheduler;
 
+import android.content.Context;
+
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import java.io.Serializable;
@@ -26,6 +28,7 @@ public class Schedule implements Serializable {
     public static final int PRIORITY_CHANGE = 1;
 
     private static final int MAX_NUM_SCHEDULES = 250;
+    private static final int MAX_SECTIONS_TO_CONSIDER = 24;
 
     private List<Section> sections;
     private int priorityScore;
@@ -225,18 +228,18 @@ public class Schedule implements Serializable {
         return schedules;
     }
 
-    public static List<Schedule> updateSchedules(int minCreditHours, int maxCreditHours, int minNumClasses, int maxNumClasses, List<Schedule> currSchedule){
+    public static List<Schedule> updateSchedules(Context context, int minCreditHours, int maxCreditHours, int minNumClasses, int maxNumClasses, List<Schedule> currSchedule){
         Schedule.minCreditHours = minCreditHours;
         Schedule.maxCreditHours = maxCreditHours;
         Schedule.minNumClasses = minNumClasses;
         Schedule.maxNumClasses = maxNumClasses;
         List<Schedule> mCurrSchedule = new ArrayList<>();
-        if (currSchedule.size() < MAX_NUM_SCHEDULES){
-            mCurrSchedule.addAll(currSchedule);
-        }
-        else {
-            mCurrSchedule = rebuildSchedules(ClassLoader.getMyClasses(), minCreditHours, maxCreditHours, minNumClasses, maxNumClasses);
-        }
+//        if (currSchedule.size() < MAX_NUM_SCHEDULES){
+//            mCurrSchedule.addAll(currSchedule);
+//        }
+//        else {
+            mCurrSchedule = rebuildSchedules(context, ClassLoader.loadClasses(context), minCreditHours, maxCreditHours, minNumClasses, maxNumClasses);
+//        }
 
         for (Iterator<Schedule> i = mCurrSchedule.iterator(); i.hasNext();){
             Schedule s = i.next();
@@ -256,13 +259,13 @@ public class Schedule implements Serializable {
 
     }
 
-    public static List<Schedule> updateSchedules(int minCreditHours, int maxCreditHours, int minNumClasses, int maxNumClasses,
+    public static List<Schedule> updateSchedules(Context context, int minCreditHours, int maxCreditHours, int minNumClasses, int maxNumClasses,
                                                  Class newClass, Class oldClass, List<Schedule> currSchedules){
         Schedule.minCreditHours = minCreditHours;
         Schedule.maxCreditHours = maxCreditHours;
         Schedule.minNumClasses = minNumClasses;
         Schedule.maxNumClasses = maxNumClasses;
-        updateSchedules(newClass, oldClass, currSchedules);
+        updateSchedules(context, newClass, oldClass, currSchedules);
         // ArrayList<Schedule> schedules = new ArrayList<>();
         Set<Schedule> schedules = new HashSet<>();
         for (List<Section> schedule : staticSectionLists){
@@ -274,18 +277,22 @@ public class Schedule implements Serializable {
         return scheduleList;
     }
 
-    public static List<Schedule> updateSchedules(int minCreditHours, int maxCreditHours, int minNumClasses, int maxNumClasses,
+    public static List<Schedule> updateSchedules(Context context, int minCreditHours, int maxCreditHours, int minNumClasses, int maxNumClasses,
                                                  Section newSection, Section oldSection, List<Schedule> currSchedules, boolean ignoreMaxSchedules, boolean sort){
         Schedule.minCreditHours = minCreditHours;
         Schedule.maxCreditHours = maxCreditHours;
         Schedule.minNumClasses = minNumClasses;
         Schedule.maxNumClasses = maxNumClasses;
         List<Schedule> mCurrSchedules = new ArrayList<>();
-        if (currSchedules.size() <= MAX_NUM_SCHEDULES){
-            mCurrSchedules.addAll(currSchedules);
+//        if (currSchedules.size() <= MAX_NUM_SCHEDULES){
+//            mCurrSchedules.addAll(currSchedules);
+//        }
+//        if (!ignoreMaxSchedules && currSchedules.size() == MAX_NUM_SCHEDULES){
+        if (!ignoreMaxSchedules){
+            mCurrSchedules = rebuildSchedules(context, ClassLoader.loadClasses(context), Integer.MIN_VALUE, Integer.MAX_VALUE, Integer.MIN_VALUE, Integer.MAX_VALUE);
         }
-        if (!ignoreMaxSchedules && currSchedules.size() == MAX_NUM_SCHEDULES){
-            mCurrSchedules = rebuildSchedules(ClassLoader.getMyClasses(), Integer.MIN_VALUE, Integer.MAX_VALUE, Integer.MIN_VALUE, Integer.MAX_VALUE);
+        else {
+            mCurrSchedules.addAll(currSchedules);
         }
         updateSchedules(newSection, oldSection, mCurrSchedules);
        // ArrayList<Schedule> schedules = new ArrayList<>();
@@ -452,31 +459,35 @@ public class Schedule implements Serializable {
 
     }
 
-    private static void updateSchedules(Class newClass, Class oldClass, List<Schedule> currSchedules){
+    private static void updateSchedules(Context context, Class newClass, Class oldClass, List<Schedule> currSchedules){
         staticSectionLists.clear();
-        for (Schedule schedule : currSchedules){
+//        for (Schedule schedule : currSchedules){
+//            staticSectionLists.add(schedule.getSections());
+//        }
+
+        List<Schedule> mSchedules = rebuildSchedules(context, ClassLoader.loadClasses(context), minCreditHours, maxCreditHours, minNumClasses, maxNumClasses);
+        for (Schedule schedule : mSchedules){
             staticSectionLists.add(schedule.getSections());
         }
-
-        if (oldClass != null){
-            for (Iterator<List<Section>> i = staticSectionLists.iterator(); i.hasNext();){
-                List<Section> schedule = i.next();
-                for (Iterator<Section> si = schedule.iterator(); si.hasNext();){
-                    Section s = si.next();
-                    if (s.getContainingClass().equals(oldClass)){
-                        if (newClass == null){
-                            si.remove();
-                        }
-                        else {
-                            s.setContainingClass(newClass);
-                        }
-                    }
-                }
-            }
-        }
+//        if (oldClass != null){
+//            for (Iterator<List<Section>> i = staticSectionLists.iterator(); i.hasNext();){
+//                List<Section> schedule = i.next();
+//                for (Iterator<Section> si = schedule.iterator(); si.hasNext();){
+//                    Section s = si.next();
+//                    if (s.getContainingClass().equals(oldClass)){
+//                        if (newClass == null){
+//                            si.remove();
+//                        }
+//                        else {
+//                            s.setContainingClass(newClass);
+//                        }
+//                    }
+//                }
+//            }
+//        }
     }
 
-    private static List<Schedule> rebuildSchedules(List<Class> classes, int minCreditHours, int maxCreditHours, int minNumClasses, int maxNumClasses){
+    private static List<Schedule> rebuildSchedules(Context context, List<Class> classes, int minCreditHours, int maxCreditHours, int minNumClasses, int maxNumClasses){
         List<Schedule> rebuiltSchedules = new ArrayList<Schedule>();
         int maxNumSections = 0;
         for (Class c : classes){
@@ -485,16 +496,24 @@ public class Schedule implements Serializable {
             }
         }
         int i;
+        int j = 0;
         for (i = 0; i < maxNumSections; i++){
-            if (rebuiltSchedules.size() >= MAX_NUM_SCHEDULES){
+//            if (rebuiltSchedules.size() >= MAX_NUM_SCHEDULES){
+//                break;
+//            }
+            if (j >= MAX_SECTIONS_TO_CONSIDER){
                 break;
             }
             for (Class c: classes){
+                j++;
                 if (i == 0){
                     Collections.sort(c.getSections(), Section.NUM_CONFLICTS);
                 }
                 if (i < c.getSections().size()) {
-                    rebuiltSchedules = updateSchedules(Integer.MIN_VALUE, maxCreditHours, Integer.MIN_VALUE, maxNumClasses, c.getSection(i), null, rebuiltSchedules, true, true);
+                    rebuiltSchedules = updateSchedules(context, Integer.MIN_VALUE, maxCreditHours, Integer.MIN_VALUE, maxNumClasses, c.getSection(i), null, rebuiltSchedules, true, true);
+                }
+                if (j >= MAX_SECTIONS_TO_CONSIDER){
+                    break;
                 }
             }
         }

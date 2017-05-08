@@ -69,7 +69,7 @@ public class ClassLoader {
     public static void save(Context context){
         saveCurrentSchedule(context);
         saveClasses(context);
-        saveSchedules(context);
+        //saveSchedules(context);
     }
 
     public static ArrayList<Class> loadClasses(Context context) {
@@ -504,7 +504,7 @@ public class ClassLoader {
             schedulesChanged = false;
         }
         else if (schedulesOptionsChanged){
-            selectSchedules = Schedule.updateSchedules(Integer.parseInt(minCreditHours), Integer.parseInt(maxCreditHours),
+            selectSchedules = Schedule.updateSchedules(context, Integer.parseInt(minCreditHours), Integer.parseInt(maxCreditHours),
                     Integer.parseInt(minNumClasses), Integer.parseInt((maxNumClasses)), loadSchedules(context, ClassLoader.ALL_SCHEDULES));
             selectSchedulesChanged = true;
            // saveSchedules(context);
@@ -605,42 +605,41 @@ public class ClassLoader {
     }
 
     public static List<Schedule> loadSchedules(Context context, int which){
-        if(!schedulesLoaded){
-            schedulesLoaded = true;
-            try {
-                FileInputStream fis = context.openFileInput(schedulesFile);
-                ObjectInputStream is = new ObjectInputStream(fis);
-                System.out.println(is.toString());
-
-                schedules = (List<Schedule>) is.readObject();
-                is.close();
-                if (fis!=null){
-                    fis.close();
-                }
-                fis = context.openFileInput(selectSchedulesFile);
-                is = new ObjectInputStream(fis);
-                System.out.println(is.toString());
-
-                selectSchedules = (List<Schedule>) is.readObject();
-                is.close();
-                if (fis!=null){
-                    fis.close();
-                }
-            } catch (FileNotFoundException e) {
-                System.out.println("FileNotFoundException: " + e.getMessage());
-            } catch (IOException e) {
-                System.out.println("IOException: " + e.getMessage());
-            } catch (ClassNotFoundException e) {
-                System.out.println("SystemNotFoundException: " + e.getMessage());
-            }
-        }
+//        if(!schedulesLoaded){
+//            schedulesLoaded = true;
+//            try {
+//                FileInputStream fis = context.openFileInput(schedulesFile);
+//                ObjectInputStream is = new ObjectInputStream(fis);
+//                System.out.println(is.toString());
+//
+//                schedules = (List<Schedule>) is.readObject();
+//                is.close();
+//                if (fis!=null){
+//                    fis.close();
+//                }
+//                fis = context.openFileInput(selectSchedulesFile);
+//                is = new ObjectInputStream(fis);
+//                System.out.println(is.toString());
+//
+//                selectSchedules = (List<Schedule>) is.readObject();
+//                is.close();
+//                if (fis!=null){
+//                    fis.close();
+//                }
+//            } catch (FileNotFoundException e) {
+//                System.out.println("FileNotFoundException: " + e.getMessage());
+//            } catch (IOException e) {
+//                System.out.println("IOException: " + e.getMessage());
+//            } catch (ClassNotFoundException e) {
+//                System.out.println("SystemNotFoundException: " + e.getMessage());
+//            }
+//        }
 
         switch (which){
             case ALL_SCHEDULES:
                 if (schedules==null){
                     return new ArrayList<Schedule>();
                 }
-
                 return schedules;
             case SELECT_SCHEDULES:
                 if (selectSchedules==null){

@@ -19,6 +19,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import java.util.List;
 
@@ -55,6 +56,7 @@ public class CreateScheduleFragment extends Fragment implements LoaderManager.Lo
     private ActionMode currentActionMode;
 
     private OnFragmentInteractionListener mListener;
+    private boolean loading = true;
 
     /**
      * Use this factory method to create a new instance of
@@ -81,6 +83,7 @@ public class CreateScheduleFragment extends Fragment implements LoaderManager.Lo
         super.onActivityCreated(savedInstanceState);
         setHasOptionsMenu(true);
         getLoaderManager().initLoader(ScheduleLoader.ALL_SCHEDULES_LOADER, null, this).forceLoad();
+        loading = true;
     }
 
     @Override
@@ -140,6 +143,7 @@ public class CreateScheduleFragment extends Fragment implements LoaderManager.Lo
                 break;
             case ScheduleLoader.SELECT_SCHEDULES_LOADER:
                 int count;
+                //getView().findViewById(R.id.progress_loader).setVisibility(View.GONE);
                 potentialSchedules = data;
                 if(potentialSchedules==null){
                     count = NUM_PAGES_OTHER_THAN_SCHEDULES;
@@ -147,11 +151,14 @@ public class CreateScheduleFragment extends Fragment implements LoaderManager.Lo
                 else {
                     count = potentialSchedules.size() + NUM_PAGES_OTHER_THAN_SCHEDULES;
                 }
+                loading = false;
+                DesiredClassesFragment dcf = (DesiredClassesFragment) mViewPager.getAdapter().instantiateItem(mViewPager, mViewPager.getCurrentItem());
+                dcf.setLoading(loading);
                 mScheduleDesignerPagerAdapter.setCount(count);
                 mScheduleDesignerPagerAdapter.notifyDataSetChanged();
 
                 //set the current page once the schedules have been loaded
-                mViewPager.setCurrentItem(mCurrentPage);
+                //mViewPager.setCurrentItem(mCurrentPage);
                 break;
         }
     }
@@ -176,7 +183,7 @@ public class CreateScheduleFragment extends Fragment implements LoaderManager.Lo
 
             switch(i) {
                 case DESIRED_CLASSES:
-                    return DesiredClassesFragment.newInstance("hello", "world");
+                    return DesiredClassesFragment.newInstance(loading);
 
                 default:
                     return ScheduleFragment.newInstance(potentialSchedules.get(i-1), false);
@@ -225,6 +232,8 @@ public class CreateScheduleFragment extends Fragment implements LoaderManager.Lo
         mViewPager.setAdapter(mScheduleDesignerPagerAdapter);
         mViewPager.setOnPageChangeListener(myOnPageChangeListener);
         mViewPager.setCurrentItem(mCurrentPage);
+
+        //.findViewById(R.id.progress_loader).setVisibility(View.VISIBLE);
 
         //load the schedules
         //new LoadClassesAndCreateSchedulesTask().execute(new Void[1]);
@@ -307,7 +316,7 @@ public class CreateScheduleFragment extends Fragment implements LoaderManager.Lo
             mScheduleDesignerPagerAdapter.notifyDataSetChanged();
 
             //set the current page once the schedules have been loaded
-            mViewPager.setCurrentItem(mCurrentPage);
+
         }
     }
 

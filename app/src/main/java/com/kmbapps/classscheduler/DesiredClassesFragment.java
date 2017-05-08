@@ -50,29 +50,24 @@ public class DesiredClassesFragment extends Fragment implements ConfirmationDial
     LinearLayout classesAndSections;
     List<Class> desiredClasses;
 
-    private String mParam1;
-    private String mParam2;
-
     //used to remove a view when returning from confirmation dialog
     private View selectedView;
     private ArrayList<View> selectedViews;
 
     private OnFragmentInteractionListener mListener;
     private List<Class> classes;
+    private boolean loading;
 
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
      * @return A new instance of fragment DesiredClassesFragment.
      */
-    public static DesiredClassesFragment newInstance(String param1, String param2) {
+    public static DesiredClassesFragment newInstance(Boolean loading) {
         DesiredClassesFragment fragment = new DesiredClassesFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putBoolean("loading", loading);
         fragment.setArguments(args);
         return fragment;
     }
@@ -84,8 +79,7 @@ public class DesiredClassesFragment extends Fragment implements ConfirmationDial
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            loading = getArguments().getBoolean("loading");
         }
     }
 
@@ -97,7 +91,14 @@ public class DesiredClassesFragment extends Fragment implements ConfirmationDial
         classes = ClassLoader.loadClasses(getActivity());
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_desired_classes, container, false);
-
+        View progressIndicator = view.findViewById(R.id.progress_loader);
+        progressIndicator.bringToFront();
+        if (loading){
+           progressIndicator.setVisibility(View.VISIBLE);
+        }
+        else{
+            progressIndicator.setVisibility(View.GONE);
+        }
         //show/hide "you have no classes text"
         TextView textview = (TextView) view.findViewById(R.id.no_classes);
         if(classes==null){
@@ -659,6 +660,16 @@ public class DesiredClassesFragment extends Fragment implements ConfirmationDial
                 }
                 break;
 
+        }
+    }
+
+    public void setLoading(boolean loading) {
+        this.loading = loading;
+        if (loading) {
+            getView().findViewById(R.id.progress_loader).setVisibility(View.VISIBLE);
+        }
+        else {
+            getView().findViewById(R.id.progress_loader).setVisibility(View.GONE);
         }
     }
 
