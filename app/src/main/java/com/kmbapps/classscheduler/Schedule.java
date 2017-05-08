@@ -289,7 +289,7 @@ public class Schedule implements Serializable {
 //        }
 //        if (!ignoreMaxSchedules && currSchedules.size() == MAX_NUM_SCHEDULES){
         if (!ignoreMaxSchedules){
-            mCurrSchedules = rebuildSchedules(context, ClassLoader.loadClasses(context), Integer.MIN_VALUE, Integer.MAX_VALUE, Integer.MIN_VALUE, Integer.MAX_VALUE);
+            mCurrSchedules = rebuildSchedules(context, ClassLoader.loadClasses(context), minCreditHours, maxCreditHours, minNumClasses, maxNumClasses);
         }
         else {
             mCurrSchedules.addAll(currSchedules);
