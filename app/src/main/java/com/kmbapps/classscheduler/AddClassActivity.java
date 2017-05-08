@@ -26,6 +26,7 @@ public class AddClassActivity extends ActionBarActivity {
         //adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Apply the adapter to the spinner
         spinner.setAdapter(adapter);
+        spinner.setSelection(Class.DEFAULT_CREDIT_HOURS - 1); //shift DEFAULT_CREDIT_HOURS to match credit hour list index
 
         Spinner priority = (Spinner) findViewById(R.id.priority);
         ArrayAdapter<CharSequence> priorityAdapter = ArrayAdapter.createFromResource(this,
@@ -34,7 +35,7 @@ public class AddClassActivity extends ActionBarActivity {
         //adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Apply the adapter to the spinner
         priority.setAdapter(priorityAdapter);
-        priority.setSelection(Class.HIGH);
+        priority.setSelection(Class.DEFAULT_PRIORITY);
 
     }
     @Override
@@ -62,9 +63,11 @@ public class AddClassActivity extends ActionBarActivity {
         Intent intent = new Intent(this, Home.class);
         switch (item.getItemId()) {
             case R.id.action_save:
-                createClass();
+                if(createClass()) {
+                    startActivity(intent);
+                }
                 //return
-                startActivity(intent);
+
                 break;
             default:
                 break;
@@ -73,7 +76,7 @@ public class AddClassActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void createClass() {
+    public boolean createClass() {
         EditText classDepartment = (EditText) findViewById(R.id.classDepartment);
         String department = classDepartment.getText().toString();
 
@@ -97,7 +100,9 @@ public class AddClassActivity extends ActionBarActivity {
         if(!classSaved){
             Toast toast = Toast.makeText(getApplicationContext(), getString(R.string.toast_class_already_exists), Toast.LENGTH_SHORT);
             toast.show();
+            return false;
         }
+        return true;
 
     }
 

@@ -3,10 +3,18 @@
     android:orientation="horizontal" android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:minHeight="@dimen/touchable_ui_component_min"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingLeft="0dp"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:background="@drawable/selector_list_item"
     android:clickable="true">
+    <TextView
+        android:layout_width="@dimen/activity_padding"
+        android:layout_height="match_parent"
+        android:id="@id/classColorBar"/>
+    <TextView
+        android:layout_width="@dimen/activity_padding"
+        android:layout_height="match_parent"
+        android:id="@id/spacer"/>
 
     <TextView
         android:layout_width="wrap_content"

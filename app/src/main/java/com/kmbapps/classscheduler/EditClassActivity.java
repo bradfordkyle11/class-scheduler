@@ -86,9 +86,9 @@ public class EditClassActivity extends ActionBarActivity implements Confirmation
 
                 break;
             case R.id.action_save:
-                saveClass();
-                //return
-                startActivity(intent);
+                if (saveClass()){
+                    startActivity(intent);
+                }
                 break;
             default:
                 break;
@@ -97,7 +97,7 @@ public class EditClassActivity extends ActionBarActivity implements Confirmation
         return super.onOptionsItemSelected(item);
     }
 
-    public void saveClass() {
+    public boolean saveClass() {
         updatedClass = new Class();
         EditText classDepartment = (EditText) findViewById(R.id.classDepartment);
         updatedClass.setDepartment(classDepartment.getText().toString());
@@ -120,11 +120,13 @@ public class EditClassActivity extends ActionBarActivity implements Confirmation
 
 
         //save the changes
-        ClassLoader.saveClass(this.getApplicationContext(), updatedClass, mClass, where);
+        if (ClassLoader.saveClass(this.getApplicationContext(), updatedClass, mClass, where)){
+            return true;
+        }
 
-        //return
-        Intent intent = new Intent(this, Home.class);
-        startActivity(intent);
+        Toast toast = Toast.makeText(getApplicationContext(), getString(R.string.toast_class_already_exists), Toast.LENGTH_SHORT);
+        toast.show();
+        return false;
 
     }
 

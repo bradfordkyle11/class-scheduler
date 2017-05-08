@@ -82,6 +82,8 @@ public class MyClassesFragment extends Fragment implements ConfirmationDialogFra
 
         for (Section section : mSchedule.getSections()) {
             View v = inflater.inflate(R.layout.list_item_my_classes, null);
+            View colorBar = v.findViewById(R.id.classColorBar);
+            colorBar.setBackgroundColor(section.getContainingClass().getColor());
             TextView classDetails = (TextView) v.findViewById(R.id.classTextView);
             classDetails.setText(section.getContainingClass().getDepartment() + " " + section.getContainingClass().getNumber() + " " + section.getContainingClass().getName());
             v.setTag(section);

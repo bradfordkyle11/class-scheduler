@@ -82,7 +82,8 @@
     <string name="toast_grade_edited">Changes saved</string>
     <string name="toast_class_dropped">Class dropped</string>
     <string name="toast_classes_dropped">Classes dropped</string>
-    <string name="toast_class_already_exists">That class already exists</string>
+    <string name="toast_class_already_exists">A class with this department, number, and name already exists</string>
+    <string name="toast_section_already_exists">This section already exists</string>
 
     <!--Text-->
     <string name="text_no_classes">You have no classes. Tap + to add one.</string>

@@ -24,6 +24,8 @@ public class Class implements Serializable {
     public static final int MEDIUM = 2;
     public static final int LOW = 3;
     public static final int NUM_PRIORITIES = 4;
+    public static final int DEFAULT_PRIORITY = MEDIUM;
+    public static final int DEFAULT_CREDIT_HOURS = 3;
     private final UUID ID;
     private String department;
     private String number;
@@ -136,6 +138,10 @@ public class Class implements Serializable {
         this.number = number;
     }
 
+    public String getIdentifierString(){
+        return department + number + name;
+    }
+
     public int getPriority() {
         return priority;
     }
@@ -169,10 +175,12 @@ public class Class implements Serializable {
 
 
 
-    public void addSection(Section s) {
+    public boolean addSection(Section s) {
         if(!sections.contains(s)){
             sections.add(s);
+            return true;
         }
+        return false;
 
     }
 

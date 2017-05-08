@@ -106,15 +106,22 @@ public class ClassLoader {
             myClasses = new ArrayList<Class>();
         }
 
-        if(!myClasses.contains(myClass)){
-            myClass.setColor(getNextAvailableColor(context, DESIRED_CLASSES));
-            myClasses.add(myClass);
-            Collections.sort(myClasses, Class.PRIORITY);
-            classesChanged = true;
+        boolean classExists = false;
+        for (Class c : myClasses){
+            if (c.getIdentifierString().equals(myClass.getIdentifierString())){
+                return false;
+            }
         }
-        else{
-            return false;
-        }
+        myClass.setColor(getNextAvailableColor(context, DESIRED_CLASSES));
+        myClasses.add(myClass);
+        Collections.sort(myClasses, Class.PRIORITY);
+        classesChanged = true;
+//        if(!myClasses.contains(myClass)){
+//
+//        }
+//        else{
+//            return false;
+//        }
 
         /*try {
             FileOutputStream fos = context.openFileOutput(savedClassesFile, Context.MODE_PRIVATE);
@@ -223,6 +230,7 @@ public class ClassLoader {
                 setCurrentSchedule(context, currentSchedule);
                 return true;
             case DESIRED_CLASSES:
+
                 for (Class c : myClasses){
                     if (! c.equals(containingClass)){
                         for (Section s : c.getSections()) {
@@ -241,7 +249,10 @@ public class ClassLoader {
                 }
                 index = myClasses.indexOf(containingClass);
                 if (originalSection == null) {
-                    containingClass.addSection(updatedSection);
+                    boolean ableToAdd = containingClass.addSection(updatedSection);
+                    if (!ableToAdd){
+                        return ableToAdd;
+                    }
                 } else {
                     int replaceIndex = containingClass.getSections().indexOf(originalSection);
                     containingClass.getSections().set(replaceIndex, updatedSection);

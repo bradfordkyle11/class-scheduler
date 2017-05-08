@@ -214,19 +214,25 @@ public class AddClassSectionActivity extends AppCompatActivity implements Confir
                 Class updatedClass = new Class();
 
                 if (newSection != null) {
-                    if (mSection == null) {
-                        myClass.addSection(newSection);
+//                    if (mSection == null) {
+//                        myClass.addSection(newSection);
+//                    }
+
+                    if(ClassLoader.saveSection(this, newSection, mSection, myClass, where)){
+                        Intent intent = new Intent(this, Home.class);
+                        startActivity(intent);
+                        return true;
                     }
 
-                    ClassLoader.saveSection(this, newSection, mSection, myClass, where);
+                    Toast toast = Toast.makeText(getApplicationContext(), getString(R.string.toast_section_already_exists), Toast.LENGTH_SHORT);
+                    toast.show();
                     //ClassLoader.updateSchedules(this);
 
 
                     //return
-                    Intent intent = new Intent(this, Home.class);
-                    startActivity(intent);
+
                 }
-                return true;
+                return false;
 
             case R.id.action_delete:
                 deleteSectionAndReturn();
@@ -889,6 +895,7 @@ public class AddClassSectionActivity extends AppCompatActivity implements Confir
         //adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Apply the adapter to the spinner
         spinner.setAdapter(adapter);
+        spinner.setSelection(Class.DEFAULT_CREDIT_HOURS - 1); //shift DEFAULT_CREDIT_HOURS to match index in the credit hours list
 
 
         Spinner priority = (Spinner) findViewById(R.id.priority);
@@ -898,6 +905,7 @@ public class AddClassSectionActivity extends AppCompatActivity implements Confir
         //adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Apply the adapter to the spinner
         priority.setAdapter(priorityAdapter);
+        priority.setSelection(Class.DEFAULT_PRIORITY);
         if (mClass != null) {
             spinner.setSelection(mClass.getCreditHours() - 1);
             priority.setSelection(mClass.getPriority());
@@ -910,9 +918,6 @@ public class AddClassSectionActivity extends AppCompatActivity implements Confir
 
             EditText name = (EditText) findViewById(R.id.className);
             name.setText(mClass.getName());
-        }
-        else {
-            priority.setSelection(mClass.HIGH);
         }
     }
 }
