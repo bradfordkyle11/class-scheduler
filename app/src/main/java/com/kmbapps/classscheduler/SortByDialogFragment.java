@@ -6,6 +6,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.view.View;
 
@@ -24,11 +25,12 @@ public class SortByDialogFragment extends DialogFragment {
         return f;
     }
 
+    @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // Use the Builder class for convenient dialog construction
-        View myView = View.inflate(getActivity().getApplicationContext(), R.layout.dialog_sort_by_layout, null);
+        //View myView = View.inflate(getActivity().getApplicationContext(), R.layout.dialog_sort_by_layout, null);
 
         int itemSelected = getArguments().getInt("itemSelected");
 

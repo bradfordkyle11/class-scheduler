@@ -3,7 +3,6 @@ package com.kmbapps.classscheduler;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -51,7 +50,9 @@ public class AddClassActivity extends AppCompatActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.add_class, menu);
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setTitle(getString(R.string.header_add_class));
+        if (actionBar != null) {
+            actionBar.setTitle(getString(R.string.header_add_class));
+        }
         return true;
     }
 

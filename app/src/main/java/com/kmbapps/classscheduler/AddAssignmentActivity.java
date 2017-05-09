@@ -5,7 +5,6 @@ import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -110,11 +109,12 @@ public class AddAssignmentActivity extends AppCompatActivity implements Confirma
 
         //set action bar title
         ActionBar actionBar = getSupportActionBar();
-        if(mode==EDIT_ASSIGNMENT||mode==EDIT_GRADED_ASSIGNMENT){
-            actionBar.setTitle(getString(R.string.header_edit_assignment));
-        }
-        else{
-            actionBar.setTitle(getString(R.string.header_add_assignment));
+        if (actionBar != null) {
+            if (mode == EDIT_ASSIGNMENT || mode == EDIT_GRADED_ASSIGNMENT) {
+                actionBar.setTitle(getString(R.string.header_edit_assignment));
+            } else {
+                actionBar.setTitle(getString(R.string.header_add_assignment));
+            }
         }
 
 
@@ -150,7 +150,6 @@ public class AddAssignmentActivity extends AppCompatActivity implements Confirma
 
     public void selectDate(View view){
         Calendar calendar = Calendar.getInstance();
-        TextView dateTV = (TextView) view;
 
         if(dueDate==null) {
             DatePickerDialog dpd = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {

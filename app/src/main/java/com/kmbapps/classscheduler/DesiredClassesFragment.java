@@ -3,14 +3,10 @@ package com.kmbapps.classscheduler;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.LoaderManager;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.content.Loader;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ActionMode;
 import android.view.LayoutInflater;
@@ -23,7 +19,6 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -263,8 +258,10 @@ public class DesiredClassesFragment extends Fragment implements ConfirmationDial
                         //start new action mode
                         AppCompatActivity activity = (AppCompatActivity) v.getContext();
                         mActionMode = activity.startSupportActionMode(classActionModeCallback);
-                        mActionMode.setTag(v);
-                        mActionMode.setTitle("1");
+                        if (mActionMode != null) {
+                            mActionMode.setTag(v);
+                            mActionMode.setTitle("1");
+                        }
                         onActionModeChanged();
                         Window window = getActivity().getWindow();
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -337,8 +334,10 @@ public class DesiredClassesFragment extends Fragment implements ConfirmationDial
                         //start new action mode
                         AppCompatActivity activity = (AppCompatActivity) v.getContext();
                         mActionMode = activity.startSupportActionMode(classSectionActionModeCallback);
-                        mActionMode.setTag(v);
-                        mActionMode.setTitle("1");
+                        if (mActionMode != null) {
+                            mActionMode.setTag(v);
+                            mActionMode.setTitle("1");
+                        }
                         onActionModeChanged();
                         Window window = getActivity().getWindow();
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -695,7 +694,6 @@ public class DesiredClassesFragment extends Fragment implements ConfirmationDial
                 if(dialog.getExtra() instanceof Section) {
                     //remove the section
                     Section sectionToRemove = (Section) dialog.getExtra();
-                    Class c = sectionToRemove.getContainingClass();
                     ClassLoader.removeSection(getActivity(), sectionToRemove, ClassLoader.DESIRED_CLASSES);
 
                     //remove the view

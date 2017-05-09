@@ -13,6 +13,8 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
+import android.support.v7.view.ActionBarPolicy;
 import android.support.v7.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -20,10 +22,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
 
-import com.google.android.gms.ads.AdListener;
-import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 
 import java.util.List;
@@ -226,7 +225,10 @@ public class CreateScheduleFragment extends Fragment implements LoaderManager.Lo
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        ((Home)getActivity()).getSupportActionBar().setTitle(getString(R.string.header_design_a_schedule));
+        ActionBar actionBar = ((Home)getActivity()).getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setTitle(getString(R.string.header_design_a_schedule));
+        }
 
 
 
@@ -237,7 +239,7 @@ public class CreateScheduleFragment extends Fragment implements LoaderManager.Lo
                         getFragmentManager());
         mViewPager = (ViewPager) view.findViewById(R.id.createSchedulePager);
         mViewPager.setAdapter(mScheduleDesignerPagerAdapter);
-        mViewPager.setOnPageChangeListener(myOnPageChangeListener);
+        mViewPager.addOnPageChangeListener(myOnPageChangeListener);
         mViewPager.setCurrentItem(mCurrentPage);
 
         //.findViewById(R.id.progress_loader).setVisibility(View.VISIBLE);
@@ -262,7 +264,10 @@ public class CreateScheduleFragment extends Fragment implements LoaderManager.Lo
     public void onResume(){
         //set the actionbar title
         super.onResume();
-        ((Home)getActivity()).getSupportActionBar().setTitle(getString(R.string.header_design_a_schedule));
+        ActionBar actionBar = ((Home)getActivity()).getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setTitle(getString(R.string.header_design_a_schedule));
+        }
     }
 
     @Override

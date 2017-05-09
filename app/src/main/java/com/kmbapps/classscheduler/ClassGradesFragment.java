@@ -462,10 +462,12 @@ public class ClassGradesFragment extends Fragment implements ConfirmationDialogF
             AppCompatActivity activity = (AppCompatActivity) v.getContext();
             if(mActionMode==null) {
                 mActionMode = activity.startSupportActionMode(gradeActionModeCallback);
-                mActionMode.setTag(v);
+                if (mActionMode != null) {
+                    mActionMode.setTag(v);
 
-                //show the number of selected items
-                mActionMode.setTitle("1");
+                    //show the number of selected items
+                    mActionMode.setTitle("1");
+                }
                 Window window = getActivity().getWindow();
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);

@@ -229,7 +229,6 @@ public class MyTime implements Serializable {
 
     //test for conflicts between schedules
     public static boolean noConflicts(List<List<MyTime>> schedules){
-        boolean noConflicts;
         for (int i = 0; i < schedules.size(); i++){
             List<MyTime> schedule1 = schedules.get(i);
             for(int j = i + 1; j < schedules.size(); j++){

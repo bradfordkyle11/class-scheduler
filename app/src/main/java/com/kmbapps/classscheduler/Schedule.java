@@ -212,7 +212,7 @@ public class Schedule implements Serializable {
         }
         es.shutdown();
         try {
-            boolean finshed = es.awaitTermination(1, TimeUnit.MINUTES);
+            boolean finished = es.awaitTermination(1, TimeUnit.MINUTES);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -419,9 +419,6 @@ public class Schedule implements Serializable {
                     i.remove();
                 }
             }
-            if (newSection == null){
-                return;
-            }
         }
 
         List<List<Section>> newSchedules = new ArrayList<List<Section>>();
@@ -432,15 +429,17 @@ public class Schedule implements Serializable {
         }
         //newSchedules.addAll(staticSectionLists);
 
-        ExecutorService es = Executors.newCachedThreadPool();
-        for (int i = 0; i < newSchedules.size(); i++){
-            es.execute(new createScheduleFromSection(Integer.toString(i), newSection, newSchedules.get(i)));
-        }
-        es.shutdown();
-        try {
-            boolean finshed = es.awaitTermination(1, TimeUnit.MINUTES);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        if (newSection != null) {
+            ExecutorService es = Executors.newCachedThreadPool();
+            for (int i = 0; i < newSchedules.size(); i++) {
+                es.execute(new createScheduleFromSection(Integer.toString(i), newSection, newSchedules.get(i)));
+            }
+            es.shutdown();
+            try {
+                boolean finished = es.awaitTermination(1, TimeUnit.MINUTES);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
 
         for (List<Section> schedule : mCurrSchedules){
@@ -451,7 +450,7 @@ public class Schedule implements Serializable {
 
 
 
-        if (currSchedules.size() <= MAX_NUM_SCHEDULES) {
+        if (currSchedules.size() <= MAX_NUM_SCHEDULES && newSection != null) {
             ArrayList<Section> solo = new ArrayList<>();
             solo.add(newSection);
             staticSectionLists.add(solo);

@@ -3,14 +3,11 @@ package com.kmbapps.classscheduler;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
-import android.text.format.Time;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -196,10 +193,12 @@ public class AddClassSectionActivity extends AppCompatActivity implements Confir
             getMenuInflater().inflate(R.menu.edit_class_section, menu);
         }
         ActionBar actionBar = getSupportActionBar();
-        if (newClass) {
-            actionBar.setTitle(getString(R.string.header_add_class_section));
-        } else {
-            actionBar.setTitle(getString(R.string.header_edit_class_section));
+        if (actionBar != null) {
+            if (newClass) {
+                actionBar.setTitle(getString(R.string.header_add_class_section));
+            } else {
+                actionBar.setTitle(getString(R.string.header_edit_class_section));
+            }
         }
         return true;
     }
@@ -209,12 +208,10 @@ public class AddClassSectionActivity extends AppCompatActivity implements Confir
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
 
         switch (item.getItemId()) {
             case R.id.action_save:
                 Section newSection = createSection(SAVE_SECTION);
-                Class updatedClass = new Class();
 
                 if (newSection != null) {
 //                    if (mSection == null) {
@@ -365,7 +362,6 @@ public class AddClassSectionActivity extends AppCompatActivity implements Confir
                         endTime.setTextColor(ContextCompat.getColor(getApplicationContext(), android.R.color.primary_text_light));
                     }
 
-                    Integer position = (Integer) dayTimeLocationPickerLayout.getTag();
                     if (!loadingSection) {
                         if (valid && (dayTimeLocationPickers.indexOf(dayTimeLocationPickerLayout) == dayTimeLocationPickers.size() - 1)) {
                             newDayTimeLocationPicker();
@@ -428,7 +424,6 @@ public class AddClassSectionActivity extends AppCompatActivity implements Confir
                         endTime.setTextColor(ContextCompat.getColor(getApplicationContext(), android.R.color.primary_text_light));
                     }
 
-                    Integer position = (Integer) dayTimeLocationPickerLayout.getTag();
                     if (!loadingSection) {
                         if (valid && (dayTimeLocationPickers.indexOf(dayTimeLocationPickerLayout) == dayTimeLocationPickers.size() - 1)) {
                             newDayTimeLocationPicker();
@@ -644,14 +639,14 @@ public class AddClassSectionActivity extends AppCompatActivity implements Confir
                         Toast toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT);
                         toast.show();
 
-                        validSchedule = false;
+
                         return null;
 
                     }
                     else if(startTime.getCurrentTextColor() == ContextCompat.getColor(getApplicationContext(), R.color.red03)){
                         Toast toast = Toast.makeText(getApplicationContext(), getString(R.string.toast_invalid_starting_time), Toast.LENGTH_SHORT);
                         toast.show();
-                        validSchedule = false;
+
                         return null;
                     }
                 }
@@ -665,7 +660,7 @@ public class AddClassSectionActivity extends AppCompatActivity implements Confir
                         Toast toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT);
                         toast.show();
 
-                        validSchedule = false;
+
                         return null;
 
                     }
@@ -673,7 +668,7 @@ public class AddClassSectionActivity extends AppCompatActivity implements Confir
                     else if(endTime.getCurrentTextColor( )== ContextCompat.getColor(getApplicationContext(), R.color.red03)){
                         Toast toast = Toast.makeText(getApplicationContext(), getString(R.string.toast_invalid_ending_time), Toast.LENGTH_SHORT);
                         toast.show();
-                        validSchedule = false;
+
                         return null;
                     }
                 }
@@ -703,7 +698,7 @@ public class AddClassSectionActivity extends AppCompatActivity implements Confir
                 String text = getString(R.string.toast_no_schedule);
                 Toast toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT);
                 toast.show();
-                validSchedule = false;
+
                 return null;
             }
         }
@@ -806,7 +801,7 @@ public class AddClassSectionActivity extends AppCompatActivity implements Confir
         String colon = ":";
         String amOrPm = " AM";
 
-        StringBuilder time = new StringBuilder();
+        StringBuilder time;
 
         for (hour = 1; hour < 13; hour++) {
             for (minute = 0; minute < 60; minute++) {

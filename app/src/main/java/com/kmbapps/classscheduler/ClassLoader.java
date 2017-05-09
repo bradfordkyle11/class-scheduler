@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Hashtable;
 import java.util.List;
-import java.util.Set;
 import java.util.concurrent.ConcurrentLinkedDeque;
 
 /**
@@ -106,7 +105,6 @@ public class ClassLoader {
             myClasses = new ArrayList<Class>();
         }
 
-        boolean classExists = false;
         for (Class c : myClasses){
             if (c.getIdentifierString().equals(myClass.getIdentifierString())){
                 return false;
@@ -827,7 +825,7 @@ public class ClassLoader {
         switch (which) {
             case DESIRED_CLASSES:
                 ArrayList<Integer> usedColors;
-                int offset = 0;
+                int offset;
                 int multiplier = myClasses.size() / colors.length;
                 offset = colors.length * multiplier;
                 usedColors = new ArrayList<>(myClasses.size() - offset);

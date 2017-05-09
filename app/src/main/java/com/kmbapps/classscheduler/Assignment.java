@@ -1,5 +1,7 @@
 package com.kmbapps.classscheduler;
 
+import android.support.annotation.NonNull;
+
 import java.io.Serializable;
 import java.util.Calendar;
 
@@ -48,8 +50,7 @@ public class Assignment implements Serializable, Comparable{
     }
 
     @Override
-    public int compareTo(Object object){
-        boolean yes = object instanceof Assignment;
+    public int compareTo(@NonNull Object object){
         Assignment a = (Assignment) object;
         final int BEFORE = -1;
         final int EQUAL = 0;

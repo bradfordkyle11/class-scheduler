@@ -137,7 +137,7 @@ public class Section implements Serializable {
 
     public String formatTime(){
 
-        String result = new String();
+        String result = "";
         for (int i = 0; i < times.size(); i++){
 
             //format the time

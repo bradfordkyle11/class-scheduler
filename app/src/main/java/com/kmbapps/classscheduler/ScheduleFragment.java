@@ -2,7 +2,6 @@ package com.kmbapps.classscheduler;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -19,8 +18,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
-import com.google.android.gms.ads.AdListener;
-import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 
 import java.util.Hashtable;
@@ -111,7 +108,6 @@ public class ScheduleFragment extends Fragment implements ConfirmationDialogFrag
         }
 
         Button noSchedule = (Button) view.findViewById(R.id.noSchedules);
-        boolean hasSchedule = false;
         if (schedule.isEmpty()) {
             noSchedule.setVisibility(View.VISIBLE);
             noSchedule.setOnClickListener(createScheduleListener);
@@ -163,7 +159,7 @@ public class ScheduleFragment extends Fragment implements ConfirmationDialogFrag
 
                     params.setMargins(0, (int) posInPx, 0, 0);
 
-                    LinearLayout.LayoutParams calendarParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, calendarHeight, 1);
+                    //LinearLayout.LayoutParams calendarParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, calendarHeight, 1);
 
 
 
@@ -370,8 +366,12 @@ public class ScheduleFragment extends Fragment implements ConfirmationDialogFrag
 //        if (ad != null) {
 //            ad.setVisibility(View.GONE);
 //        }
-        View layout = getView().findViewById(R.id.scheduleClassInfoLayout);
-        layout.setVisibility(View.VISIBLE);
+        View totalView = getView();
+        if (totalView != null) {
+            View layout = totalView.findViewById(R.id.scheduleClassInfoLayout);
+            layout.setVisibility(View.VISIBLE);
+        }
+
 
         Section section = (Section) view.getTag(R.id.TAG_SECTION);
         Class mClass = section.getContainingClass();
@@ -392,8 +392,11 @@ public class ScheduleFragment extends Fragment implements ConfirmationDialogFrag
     }
 
     public void hideClassInfo(){
-        View classInfo = getView().findViewById(R.id.scheduleClassInfoLayout);
-        classInfo.setVisibility(View.GONE);
+        View totalView = getView();
+        if (totalView != null) {
+            View classInfo = getView().findViewById(R.id.scheduleClassInfoLayout);
+            classInfo.setVisibility(View.GONE);
+        }
 //        View ad = getView().findViewById(R.id.adView);
 //        if (ad != null) {
 //            ad.setVisibility(View.VISIBLE);
@@ -404,18 +407,20 @@ public class ScheduleFragment extends Fragment implements ConfirmationDialogFrag
     public void setAsSchedule(){
         Schedule currentSchedule = new Schedule(schedule.getSections());
         ClassLoader.setCurrentSchedule(getActivity().getApplicationContext(), currentSchedule);
-        ViewPager pager = (ViewPager) getView().getParent();
-        Toast toast = Toast.makeText(getActivity().getApplicationContext(), getText(R.string.toast_set_current_schedule), Toast.LENGTH_SHORT);
-        toast.show();
-
+        View scheduleView = getView();
         Hashtable<Schedule, Notebook> notebooks = ClassLoader.loadNotebooks(getActivity().getApplicationContext());
 
-        if(!notebooks.containsKey(currentSchedule)){
+        if (!notebooks.containsKey(currentSchedule)) {
             notebooks.put(currentSchedule, new Notebook(currentSchedule.getSections()));
             ClassLoader.saveNotebooks(getActivity().getApplicationContext(), notebooks);
         }
+        if (scheduleView != null) {
+            ViewPager pager = (ViewPager) scheduleView.getParent();
+            Toast toast = Toast.makeText(getActivity().getApplicationContext(), getText(R.string.toast_set_current_schedule), Toast.LENGTH_SHORT);
+            toast.show();
+            pager.getAdapter().notifyDataSetChanged();
+        }
 
-        pager.getAdapter().notifyDataSetChanged();
 
 
     }
