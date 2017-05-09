@@ -89,7 +89,7 @@
 
             <RelativeLayout
                 android:layout_width="0dp"
-                android:layout_height="720dp"
+                android:layout_height="@dimen/schedule_height"
                 android:layout_weight="1"
                 android:id="@+id/sunday"
                 android:layout_marginEnd="1dp"
@@ -100,7 +100,7 @@
 
             <RelativeLayout
                 android:layout_width="0dp"
-                android:layout_height="720dp"
+                android:layout_height="@dimen/schedule_height"
                 android:layout_weight="1"
                 android:id="@+id/monday"
                 android:layout_marginEnd="1dp"
@@ -111,7 +111,7 @@
 
             <RelativeLayout
                 android:layout_width="0dp"
-                android:layout_height="720dp"
+                android:layout_height="@dimen/schedule_height"
                 android:layout_weight="1"
                 android:id="@+id/tuesday"
                 android:layout_marginEnd="1dp"
@@ -122,7 +122,7 @@
 
             <RelativeLayout
                 android:layout_width="0dp"
-                android:layout_height="720dp"
+                android:layout_height="@dimen/schedule_height"
                 android:layout_weight="1"
                 android:id="@+id/wednesday"
                 android:layout_marginEnd="1dp"
@@ -133,7 +133,7 @@
 
             <RelativeLayout
                 android:layout_width="0dp"
-                android:layout_height="720dp"
+                android:layout_height="@dimen/schedule_height"
                 android:layout_weight="1"
                 android:id="@+id/thursday"
                 android:layout_marginStart="1dp"
@@ -144,7 +144,7 @@
 
             <RelativeLayout
                 android:layout_width="0dp"
-                android:layout_height="720dp"
+                android:layout_height="@dimen/schedule_height"
                 android:layout_weight="1"
                 android:id="@+id/friday"
                 android:layout_marginStart="1dp"
@@ -155,7 +155,7 @@
 
             <RelativeLayout
                 android:layout_width="0dp"
-                android:layout_height="720dp"
+                android:layout_height="@dimen/schedule_height"
                 android:layout_weight="1"
                 android:id="@+id/saturday"
                 android:layout_marginEnd="2dp"

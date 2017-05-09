@@ -307,6 +307,11 @@ public class MyTime implements Serializable {
         return hour*60 + minute;
     }
 
+    public static double toHours(int hour, int minute){
+        double minutes = toMinutes(hour, minute);
+        return minutes / 60.d;
+    }
+
     private String intToWeekDay(int weekday){
         switch(weekday){
             case 0:

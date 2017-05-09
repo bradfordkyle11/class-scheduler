@@ -33,7 +33,7 @@
         android:layout_marginTop="@dimen/activity_padding"
         android:layout_marginBottom="@dimen/activity_padding"
         android:textColor="@android:color/primary_text_light"
-        android:layout_weight=".8"/>
+        android:layout_weight=".8" />
 
 
     <!--<ImageButton-->

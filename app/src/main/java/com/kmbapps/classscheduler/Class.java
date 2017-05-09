@@ -1,6 +1,7 @@
 package com.kmbapps.classscheduler;
 
 import android.content.Context;
+import android.text.Spanned;
 
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
@@ -140,6 +141,11 @@ public class Class implements Serializable {
 
     public String getIdentifierString(){
         return department + number + name;
+    }
+
+    public Spanned getHtmlScheduleOverview (MyTime time){
+        return HtmlCompat.fromHtml("<b>" + MyTime.to12HourFormat(time.getStartHour(), time.getStartMinute()) + "</b><br>" +
+                department + " " + number + " " + name);
     }
 
     public int getPriority() {

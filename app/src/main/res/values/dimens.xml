@@ -16,4 +16,7 @@
 
     <dimen name="class_info_color_bar_height">8dp</dimen>
     <dimen name="class_info_height">96dp</dimen>
+
+    <dimen name="schedule_text_size">11sp</dimen>
+    <dimen name="schedule_height">1080dp</dimen>
 </resources>

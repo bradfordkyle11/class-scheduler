@@ -58,13 +58,7 @@
     <string name="action_sort_by_type">Type</string>
 
     <!--Toasts-->
-    <string name="toast_invalid_ending_time">End time must be after the start time</string>
-    <string name="toast_invalid_starting_time">Start time must be before the end time</string>
-    <string name="toast_no_start_time">You must enter a start time</string>
-    <string name="toast_no_end_time">You must enter an end time</string>
-    <string name="toast_conflicting_schedules">Schedules cannot overlap</string>
-    <string name="toast_no_schedule">You must set a schedule</string>
-    <string name="toast_other_sections_conflict">This class\'s schedule conflicts with your other class schedules</string>
+
     <string name="toast_set_current_schedule">Saved as current schedule</string>
     <string name="toast_class_deleted">Class deleted</string>
     <string name="toast_classes_deleted">Classes deleted</string>
@@ -82,8 +76,7 @@
     <string name="toast_grade_edited">Changes saved</string>
     <string name="toast_class_dropped">Class dropped</string>
     <string name="toast_classes_dropped">Classes dropped</string>
-    <string name="toast_class_already_exists">A class with this department, number, and name already exists</string>
-    <string name="toast_section_already_exists">This section already exists</string>
+
 
     <!--Text-->
     <string name="text_no_classes">You have no classes. Tap + to add one.</string>
@@ -139,6 +132,15 @@
     <string name="thursday_abbreviation">Th</string>
     <string name="friday_abbreviation">F</string>
     <string name="saturday_abbreviation">Sa</string>
+    <string-array name= "day_abbreviation_array">
+        <item name="sunday_abbreviation">@string/sunday_abbreviation</item>
+        <item name="monday_abbreviation">@string/monday_abbreviation</item>
+        <item name="tuesday_abbreviation">@string/tuesday_abbreviation</item>
+        <item name="wednesday_abbreviation">@string/wednesday_abbreviation</item>
+        <item name="thursday_abbreviation">@string/thursday_abbreviation</item>
+        <item name="friday_abbreviation">@string/friday_abbreviation</item>
+        <item name="saturday_abbreviation">@string/saturday_abbreviation</item>
+    </string-array>
     <string name="abbreviation_am">a</string>
     <string name="abbreviation_pm">p</string>
 
@@ -271,6 +273,18 @@
     <string name="pref_title_vibrate">Vibrate</string>
 
     <string name="banner_ad_unit_id">ca-app-pub-1809615004520302/2828947077</string>
+
+    <!-- Exceptions and warnings -->
+    <string name="toast_invalid_ending_time">End time must be after the start time</string>
+    <string name="toast_invalid_starting_time">Start time must be before the end time</string>
+    <string name="toast_no_start_time">You must enter a start time</string>
+    <string name="toast_no_end_time">You must enter an end time</string>
+    <string name="toast_conflicting_schedules">Schedules cannot overlap</string>
+    <string name="toast_no_schedule">You must set a schedule</string>
+    <string name="toast_other_sections_conflict">This class\'s schedule conflicts with your other class schedules</string>
+    <string name="toast_class_already_exists">A class with this department, number, and name already exists</string>
+    <string name="toast_section_already_exists">This section already exists</string>
+    <string name="exception_no_such_day">There is no day with the abbreviation %1$s</string>
 
 
 </resources>

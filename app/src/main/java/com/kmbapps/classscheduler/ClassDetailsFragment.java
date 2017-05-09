@@ -52,7 +52,7 @@ public class ClassDetailsFragment extends Fragment {
         TextView classSchedule = (TextView) v.findViewById(R.id.classSchedule);
 
         //TODO: HTML format time method so that line breaks are properly added
-        classSchedule.setText(HtmlCompat.fromHtml("<b>Schedule:</b><br>" + mSection.formatTime()));
+        classSchedule.setText(HtmlCompat.fromHtml("<b>Schedule:</b><br>" + mSection.formatTimeHtml()));
         TextView professor = (TextView) v.findViewById(R.id.professor);
         professor.setText(HtmlCompat.fromHtml("<b>Professor:</b> " + mSection.getProfessor()));
         TextView uniqueNumber = (TextView) v.findViewById(R.id.uniqueNumber);

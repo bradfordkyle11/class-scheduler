@@ -41,8 +41,14 @@ public class ScheduleFragment extends Fragment implements ConfirmationDialogFrag
     private final int SCROLL_VIEW_TOP_PADDING = 5;
     private int lowestPosition = 10000000;
 
-    private static final int CALENDAR_SCALE = 2; //the larger the number, the shorter the class blocks on the calendar
+    private static final int NUM_HOURS_TO_DISPLAY = 24;
+
+    private double HOUR_DP_SCALE;
+
+    private static int CALENDAR_SCALE = 1; //the larger the number, the shorter the class blocks on the calendar
     //CAUTION: you must change the height of the calendar itself in xml if you change this
+    private static final double LINES_PER_HOUR_BASE = 27.d/8.d;
+    private static final double HEIGHT_USED_TO_CALCULATE_LINES_PER_HOUR = 1080;
 
 
 
@@ -86,7 +92,7 @@ public class ScheduleFragment extends Fragment implements ConfirmationDialogFrag
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_schedule, container, false);
-
+        HOUR_DP_SCALE = (double) getResources().getDimension(R.dimen.schedule_height) / NUM_HOURS_TO_DISPLAY;
         //show fab if not on the main schedule
         if(!mainSchedule){
             View fab = view.findViewById(R.id.select_schedule);
@@ -143,116 +149,168 @@ public class ScheduleFragment extends Fragment implements ConfirmationDialogFrag
                 for(MyTime time: section.getTimes()) {
 
                     Resources r = getResources();
-                    int height = (MyTime.toMinutes(time.getEndHour(), time.getEndMinute()) - MyTime.toMinutes(time.getStartHour(), time.getStartMinute()))/CALENDAR_SCALE;
-                    float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, height, r.getDisplayMetrics());
+
+                    double height = (MyTime.toHours(time.getEndHour(), time.getEndMinute()) - MyTime.toHours(time.getStartHour(), time.getStartMinute()))
+                            * HOUR_DP_SCALE;
+                    double scheduleHeight = (double) getResources().getDimension(R.dimen.schedule_height);
+                    double baseScheduleHeightDp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, (float) HEIGHT_USED_TO_CALCULATE_LINES_PER_HOUR, getResources().getDisplayMetrics());
+                    int maxLines = (int) ((MyTime.toHours(time.getEndHour(), time.getEndMinute()) - MyTime.toHours(time.getStartHour(), time.getStartMinute()))
+                        * LINES_PER_HOUR_BASE * (scheduleHeight / baseScheduleHeightDp));
+                    //float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, (float) height, r.getDisplayMetrics());
                     RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
                             RelativeLayout.LayoutParams.MATCH_PARENT,
-                            (int) px
+                            (int) height
                     );
-                    int pos = MyTime.toMinutes(time.getStartHour(), time.getStartMinute())/CALENDAR_SCALE;
-                    float posInPx = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, pos, r.getDisplayMetrics());
+                    double pos = MyTime.toHours(time.getStartHour(), time.getStartMinute()) * HOUR_DP_SCALE;
+                    //float posInPx = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, (float) pos, r.getDisplayMetrics());
+
+
 
                     //set lowest position allowing the view to be scrolled to the earliest thing on the schedule
-                    if ((int) posInPx < lowestPosition){
-                        lowestPosition = (int) posInPx;
+                    if ((int) pos < lowestPosition){
+                        lowestPosition = (int) pos;
                     }
 
-                    params.setMargins(0, (int) posInPx, 0, 0);
+                    String suAbbrev = getResources().getString(R.string.sunday_abbreviation);
+                    String mAbbrev = getResources().getString(R.string.monday_abbreviation);
+                    String tuAbbrev = getResources().getString(R.string.tuesday_abbreviation);
+                    String wAbbrev = getResources().getString(R.string.wednesday_abbreviation);
+                    String thAbbrev = getResources().getString(R.string.thursday_abbreviation);
+                    String fAbbrev = getResources().getString(R.string.friday_abbreviation);
+                    String saAbbrev = getResources().getString(R.string.saturday_abbreviation);
+
+                    params.setMargins(0, (int) pos, 0, 0);
 
                     //LinearLayout.LayoutParams calendarParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, calendarHeight, 1);
 
-
-
-                    if(time.getDays().contains("Su")){
-                        TextView tv = (TextView) inflater.inflate(R.layout.class_calendar_representation, null);
-                        tv.setText(MyTime.to12HourFormat(time.getStartHour(), time.getStartMinute()));
-                        tv.setLayoutParams(params);
-                        tv.setBackgroundColor(section.getContainingClass().getColor());
-                        tv.setTag(R.id.TAG_SECTION, section);
-                        tv.setTag(R.id.TAG_COLOR, section.getContainingClass().getColor());
-                        tv.setOnClickListener(selectClassListener);
-                        //su.setLayoutParams(calendarParams);
-                        su.addView(tv);
-
-
-                    }
-                    if(time.getDays().contains("M")){
-                        TextView tv = (TextView) inflater.inflate(R.layout.class_calendar_representation, null);
-                        tv.setText(MyTime.to12HourFormat(time.getStartHour(), time.getStartMinute()));
-                        tv.setLayoutParams(params);
-                        tv.setBackgroundColor(section.getContainingClass().getColor());
-                        tv.setTag(R.id.TAG_SECTION, section);
-                        tv.setTag(R.id.TAG_COLOR, section.getContainingClass().getColor());
-                        tv.setOnClickListener(selectClassListener);
-                        //m.setLayoutParams(calendarParams);
-                        m.addView(tv);
-
-                    }
-
-                    if(time.getDays().contains("Tu")){
-                        TextView tv = (TextView) inflater.inflate(R.layout.class_calendar_representation, null);
-                        tv.setText(MyTime.to12HourFormat(time.getStartHour(), time.getStartMinute()));
-                        tv.setLayoutParams(params);
-                        tv.setBackgroundColor(section.getContainingClass().getColor());
-                        tv.setTag(R.id.TAG_SECTION, section);
-                        tv.setTag(R.id.TAG_COLOR, section.getContainingClass().getColor());
-                        tv.setOnClickListener(selectClassListener);
-                        //tu.setLayoutParams(calendarParams);
-                        tu.addView(tv);
-
+                    String[] days = getResources().getStringArray(R.array.day_abbreviation_array);
+                    for (String day : days){
+                        if (time.getDays().contains(day)){
+                            TextView tv = (TextView) inflater.inflate(R.layout.class_calendar_representation, null);
+                            tv.setText(section.getContainingClass().getHtmlScheduleOverview(time));
+                            tv.setLayoutParams(params);
+                            tv.setBackgroundColor(section.getContainingClass().getColor());
+                            tv.setTag(R.id.TAG_SECTION, section);
+                            tv.setTag(R.id.TAG_COLOR, section.getContainingClass().getColor());
+                            tv.setOnClickListener(selectClassListener);
+                            tv.setMaxLines(maxLines);
+                            if (day.equals(suAbbrev)) {
+                                su.addView(tv);
+                            }
+                            else if (day.equals(mAbbrev)){
+                                m.addView(tv);
+                            }
+                            else if (day.equals(tuAbbrev)){
+                                tu.addView(tv);
+                            }
+                            else if (day.equals(wAbbrev)){
+                                w.addView(tv);
+                            }
+                            else if (day.equals(thAbbrev)){
+                                th.addView(tv);
+                            }
+                            else if (day.equals(fAbbrev)){
+                                f.addView(tv);
+                            }
+                            else if (day.equals(saAbbrev)){
+                                sa.addView(tv);
+                            }
+                            else {
+                                throw new NullPointerException(getResources().getString(R.string.exception_no_such_day, day));
+                            }
+                        }
                     }
 
-                    if(time.getDays().contains("W")){
-                        TextView tv = (TextView) inflater.inflate(R.layout.class_calendar_representation, null);
-                        tv.setText(MyTime.to12HourFormat(time.getStartHour(), time.getStartMinute()));
-                        tv.setLayoutParams(params);
-                        tv.setBackgroundColor(section.getContainingClass().getColor());
-                        tv.setTag(R.id.TAG_SECTION, section);
-                        tv.setTag(R.id.TAG_COLOR, section.getContainingClass().getColor());
-                        tv.setOnClickListener(selectClassListener);
-                        //w.setLayoutParams(calendarParams);
-                        w.addView(tv);
-
-                    }
-
-                    if(time.getDays().contains("Th")){
-                        TextView tv = (TextView) inflater.inflate(R.layout.class_calendar_representation, null);
-                        tv.setText(MyTime.to12HourFormat(time.getStartHour(), time.getStartMinute()));
-                        tv.setLayoutParams(params);
-                        tv.setBackgroundColor(section.getContainingClass().getColor());
-                        tv.setTag(R.id.TAG_SECTION, section);
-                        tv.setTag(R.id.TAG_COLOR, section.getContainingClass().getColor());
-                        tv.setOnClickListener(selectClassListener);
-                        //th.setLayoutParams(calendarParams);
-                        th.addView(tv);
-
-                    }
-
-                    if(time.getDays().contains("F")){
-                        TextView tv = (TextView) inflater.inflate(R.layout.class_calendar_representation, null);
-                        tv.setText(MyTime.to12HourFormat(time.getStartHour(), time.getStartMinute()));
-                        tv.setLayoutParams(params);
-                        tv.setBackgroundColor(section.getContainingClass().getColor());
-                        tv.setTag(R.id.TAG_SECTION, section);
-                        tv.setTag(R.id.TAG_COLOR, section.getContainingClass().getColor());
-                        tv.setOnClickListener(selectClassListener);
-                        //f.setLayoutParams(calendarParams);
-                        f.addView(tv);
-
-                    }
-
-                    if(time.getDays().contains("Sa")){
-                        TextView tv = (TextView) inflater.inflate(R.layout.class_calendar_representation, null);
-                        tv.setText(MyTime.to12HourFormat(time.getStartHour(), time.getStartMinute()));
-                        tv.setLayoutParams(params);
-                        tv.setBackgroundColor(section.getContainingClass().getColor());
-                        tv.setTag(R.id.TAG_SECTION, section);
-                        tv.setTag(R.id.TAG_COLOR, section.getContainingClass().getColor());
-                        tv.setOnClickListener(selectClassListener);
-                        //sa.setLayoutParams(calendarParams);
-                        sa.addView(tv);
-
-                    }
+//                    if(time.getDays().contains("Su")){
+//                        TextView tv = (TextView) inflater.inflate(R.layout.class_calendar_representation, null);
+//                        tv.setText(section.getContainingClass().getHtmlScheduleOverview(time));
+//                        tv.setLayoutParams(params);
+//                        tv.setBackgroundColor(section.getContainingClass().getColor());
+//                        tv.setTag(R.id.TAG_SECTION, section);
+//                        tv.setTag(R.id.TAG_COLOR, section.getContainingClass().getColor());
+//                        tv.setOnClickListener(selectClassListener);
+//                        //su.setLayoutParams(calendarParams);
+//                        su.addView(tv);
+//
+//
+//                    }
+//                    if(time.getDays().contains("M")){
+//                        TextView tv = (TextView) inflater.inflate(R.layout.class_calendar_representation, null);
+//                        tv.setText(section.getContainingClass().getHtmlScheduleOverview(time));
+//                        tv.setLayoutParams(params);
+//                        tv.setBackgroundColor(section.getContainingClass().getColor());
+//                        tv.setTag(R.id.TAG_SECTION, section);
+//                        tv.setTag(R.id.TAG_COLOR, section.getContainingClass().getColor());
+//                        tv.setOnClickListener(selectClassListener);
+//                        //m.setLayoutParams(calendarParams);
+//                        m.addView(tv);
+//
+//                    }
+//
+//                    if(time.getDays().contains("Tu")){
+//                        TextView tv = (TextView) inflater.inflate(R.layout.class_calendar_representation, null);
+//                        tv.setText(section.getContainingClass().getHtmlScheduleOverview(time));
+//                        tv.setLayoutParams(params);
+//                        tv.setBackgroundColor(section.getContainingClass().getColor());
+//                        tv.setTag(R.id.TAG_SECTION, section);
+//                        tv.setTag(R.id.TAG_COLOR, section.getContainingClass().getColor());
+//                        tv.setOnClickListener(selectClassListener);
+//                        //tu.setLayoutParams(calendarParams);
+//                        tu.addView(tv);
+//
+//                    }
+//
+//                    if(time.getDays().contains("W")){
+//                        TextView tv = (TextView) inflater.inflate(R.layout.class_calendar_representation, null);
+//                        tv.setText(section.getContainingClass().getHtmlScheduleOverview(time));
+//                        tv.setLayoutParams(params);
+//                        tv.setBackgroundColor(section.getContainingClass().getColor());
+//                        tv.setTag(R.id.TAG_SECTION, section);
+//                        tv.setTag(R.id.TAG_COLOR, section.getContainingClass().getColor());
+//                        tv.setOnClickListener(selectClassListener);
+//                        //w.setLayoutParams(calendarParams);
+//                        w.addView(tv);
+//
+//                    }
+//
+//                    if(time.getDays().contains("Th")){
+//                        TextView tv = (TextView) inflater.inflate(R.layout.class_calendar_representation, null);
+//                        tv.setText(section.getContainingClass().getHtmlScheduleOverview(time));
+//                        tv.setLayoutParams(params);
+//                        tv.setBackgroundColor(section.getContainingClass().getColor());
+//                        tv.setTag(R.id.TAG_SECTION, section);
+//                        tv.setTag(R.id.TAG_COLOR, section.getContainingClass().getColor());
+//                        tv.setOnClickListener(selectClassListener);
+//                        //th.setLayoutParams(calendarParams);
+//                        th.addView(tv);
+//
+//                    }
+//
+//                    if(time.getDays().contains("F")){
+//                        TextView tv = (TextView) inflater.inflate(R.layout.class_calendar_representation, null);
+//                        tv.setText(section.getContainingClass().getHtmlScheduleOverview(time));
+//                        tv.setLayoutParams(params);
+//                        tv.setBackgroundColor(section.getContainingClass().getColor());
+//                        tv.setTag(R.id.TAG_SECTION, section);
+//                        tv.setTag(R.id.TAG_COLOR, section.getContainingClass().getColor());
+//                        tv.setOnClickListener(selectClassListener);
+//                        //f.setLayoutParams(calendarParams);
+//                        f.addView(tv);
+//
+//                    }
+//
+//                    if(time.getDays().contains("Sa")){
+//                        TextView tv = (TextView) inflater.inflate(R.layout.class_calendar_representation, null);
+//                        tv.setText(section.getContainingClass().getHtmlScheduleOverview(time));
+//                        tv.setLayoutParams(params);
+//                        tv.setBackgroundColor(section.getContainingClass().getColor());
+//                        tv.setTag(R.id.TAG_SECTION, section);
+//                        tv.setTag(R.id.TAG_COLOR, section.getContainingClass().getColor());
+//                        tv.setOnClickListener(selectClassListener);
+//                        //sa.setLayoutParams(calendarParams);
+//                        sa.addView(tv);
+//
+//                    }
                 }
 
                 colorPosition += 1;

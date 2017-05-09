@@ -205,6 +205,30 @@ public class Section implements Serializable {
 //        return result;
     }
 
+    public String formatTimeHtml(){
+
+        String result = "";
+        for (int i = 0; i < times.size(); i++){
+
+            //format the time
+            result += times.get(i).getFormattedDays() + " from " + MyTime.to12HourFormat(times.get(i).getStartHour(),times.get(i).getStartMinute()) + " to " +
+                    MyTime.to12HourFormat(times.get(i).getEndHour(), times.get(i).getEndMinute());
+
+            //format the room number
+            if(!times.get(i).getRoomNumber().equals("")) {
+                result += " in " + times.get(i).getRoomNumber();
+            }
+
+            //add new line unless this is the last line
+            if (i < times.size()-1){
+                result += "<br>";
+            }
+
+        }
+
+        return result;
+    }
+
     private String intToWeekDay(int weekday){
         switch(weekday){
             case 0:

@@ -218,7 +218,7 @@ public class AddClassSectionActivity extends AppCompatActivity implements Confir
 //                        myClass.addSection(newSection);
 //                    }
 
-                    if(ClassLoader.saveSection(this, newSection, mSection, myClass, where)){
+                    if(ClassLoader.saveSection(this, newSection, mSection, myClass, where) || newSection.equals(mSection)){
                         Intent intent = new Intent(this, Home.class);
                         startActivity(intent);
                         return true;
