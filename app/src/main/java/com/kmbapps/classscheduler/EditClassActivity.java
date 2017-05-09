@@ -121,7 +121,7 @@ public class EditClassActivity extends AppCompatActivity implements Confirmation
 
 
         //save the changes
-        if (ClassLoader.saveClass(this.getApplicationContext(), updatedClass, mClass, where)){
+        if (ClassLoader.saveClass(this.getApplicationContext(), updatedClass, mClass, where) || updatedClass.equals(mClass)){
             return true;
         }
 

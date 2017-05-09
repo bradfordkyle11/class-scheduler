@@ -13,9 +13,10 @@ import android.widget.TextView;
  * Created by Kyle on 3/4/2015.
  */
 public class NavigationDrawerListAdapter extends ArrayAdapter<String> {
-    public final static int SCHEDULE = 0;
+
     //TODO: make sure these are still accurate when adding features
-    public final static int SCHEDULE_DESIGNER = 1;
+    public final static int SCHEDULE_DESIGNER = 0;
+    public final static int SCHEDULE = 1;
     public final static int MY_CLASSES = 2;
     public final static int MY_CALENDAR = 3;
     public final static int MY_ASSIGNMENTS = 4;

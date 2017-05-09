@@ -272,6 +272,7 @@
             android:minHeight="@dimen/touchable_ui_component_min"
             android:hint="@string/hint_room_number"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:inputType="textCapWords"
             android:visibility="gone"
             android:saveEnabled="false"
             android:imeOptions="flagNoExtractUi"/>

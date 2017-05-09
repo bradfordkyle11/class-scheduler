@@ -111,7 +111,7 @@
     <string name="text_assignment_details">Details: </string>
     <string name="text_no_grades_for_type">N/A</string>
     <string name="text_priority">Priority:</string>
-    <string name="text_priority_0">Necessary</string>
+    <string name="text_priority_0">Max</string>
     <string name="text_priority_1">High</string>
     <string name="text_priority_2">Medium</string>
     <string name="text_priority_3">Low</string>

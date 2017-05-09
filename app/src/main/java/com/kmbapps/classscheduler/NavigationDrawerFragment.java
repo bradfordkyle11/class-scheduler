@@ -68,7 +68,7 @@ public class NavigationDrawerFragment extends Fragment {
         // drawer. See PREF_USER_LEARNED_DRAWER for details.
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
         mUserLearnedDrawer = sp.getBoolean(PREF_USER_LEARNED_DRAWER, false);
-        mCurrentSelectedPosition = sp.getInt(STATE_SELECTED_POSITION, -1);
+        mCurrentSelectedPosition = sp.getInt(STATE_SELECTED_POSITION, 0);
 //        if (savedInstanceState != null) {
 //            mCurrentSelectedPosition = savedInstanceState.getInt(STATE_SELECTED_POSITION);
 //            mFromSavedInstanceState = true;
@@ -108,10 +108,11 @@ public class NavigationDrawerFragment extends Fragment {
                 getActionBar().getThemedContext(),
                 R.layout.list_item_nav_drawer,
                 new String[]{
+                        getString(R.string.title_design_a_schedule),
                         getString(R.string.title_schedule),
                         /*getString(R.string.title_my_assignments),
                         getString(R.string.title_my_calendar),*/ //TODO re-add these features
-                        getString(R.string.title_design_a_schedule),
+
                         getString(R.string.title_my_classes)
                 }));
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);

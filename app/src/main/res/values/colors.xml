@@ -131,7 +131,7 @@
     <color name="app_secondary_color">@color/blue01</color>
     <color name="app_accent">@color/blue_gray03</color>
     <color name="highlight">@color/gray07</color>
-    <color name="highlight_accent">@color/gray04</color>
+    <color name="highlight_accent">@color/gray06</color>
     <color name="highlight_status_bar">@color/gray03</color>
     <color name="app_background">@color/off_white</color>
 

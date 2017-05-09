@@ -459,12 +459,13 @@ public class Schedule implements Serializable {
     }
 
     private static void updateSchedules(Context context, Class newClass, Class oldClass, List<Schedule> currSchedules){
-        staticSectionLists.clear();
+
 //        for (Schedule schedule : currSchedules){
 //            staticSectionLists.add(schedule.getSections());
 //        }
 
         List<Schedule> mSchedules = rebuildSchedules(context, ClassLoader.loadClasses(context), minCreditHours, maxCreditHours, minNumClasses, maxNumClasses);
+        staticSectionLists.clear();
         for (Schedule schedule : mSchedules){
             staticSectionLists.add(schedule.getSections());
         }

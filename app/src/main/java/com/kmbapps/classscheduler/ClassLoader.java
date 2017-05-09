@@ -249,9 +249,12 @@ public class ClassLoader {
                 if (originalSection == null) {
                     boolean ableToAdd = containingClass.addSection(updatedSection);
                     if (!ableToAdd){
-                        return ableToAdd;
+                        return false;
                     }
                 } else {
+                    if (containingClass.getSections().contains(updatedSection)){
+                        return false;
+                    }
                     int replaceIndex = containingClass.getSections().indexOf(originalSection);
                     containingClass.getSections().set(replaceIndex, updatedSection);
                 }

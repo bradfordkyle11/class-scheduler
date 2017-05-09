@@ -362,10 +362,16 @@ public class ScheduleFragment extends Fragment implements ConfirmationDialogFrag
     };
 
     public void selectClass(View view){
-//        View ad = getView().findViewById(R.id.adView);
-//        if (ad != null) {
-//            ad.setVisibility(View.GONE);
-//        }
+        View parent = getView();
+        View adClose =  null;
+        while (parent != null && adClose == null){
+            parent = (View) parent.getParent();
+            adClose = parent.findViewById(R.id.close_ad);
+        }
+
+        if (adClose != null){
+            adClose.setVisibility(View.GONE);
+        }
         View totalView = getView();
         if (totalView != null) {
             View layout = totalView.findViewById(R.id.scheduleClassInfoLayout);
@@ -383,7 +389,11 @@ public class ScheduleFragment extends Fragment implements ConfirmationDialogFrag
 
         //set class title
         TextView title = (TextView) getView().findViewById(R.id.classTitle);
-        title.setText(mClass.getDepartment() + " " + mClass.getNumber() + " - " + mClass.getName());
+        String classInfo = mClass.getDepartment() + " " + mClass.getNumber();
+        if (!mClass.getName().equals("")){
+            classInfo += " - " + mClass.getName();
+        }
+        title.setText(classInfo);
 
         //set class info
         TextView info = (TextView) getView().findViewById(R.id.classInfo);
@@ -397,10 +407,20 @@ public class ScheduleFragment extends Fragment implements ConfirmationDialogFrag
             View classInfo = getView().findViewById(R.id.scheduleClassInfoLayout);
             classInfo.setVisibility(View.GONE);
         }
-//        View ad = getView().findViewById(R.id.adView);
-//        if (ad != null) {
-//            ad.setVisibility(View.VISIBLE);
-//        }
+        View parent = getView();
+        View adClose =  null;
+        View ad = null;
+        while (parent != null && adClose == null){
+            parent = (View) parent.getParent();
+            adClose = parent.findViewById(R.id.close_ad);
+            ad = parent.findViewById(R.id.adView);
+        }
+
+        if (adClose != null && ad != null){
+            if (ad.getVisibility() == View.VISIBLE) {
+                adClose.setVisibility(View.VISIBLE);
+            }
+        }
 
     }
 
