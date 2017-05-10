@@ -218,10 +218,18 @@ public class AddClassSectionActivity extends AppCompatActivity implements Confir
 //                    if (mSection == null) {
 //                        myClass.addSection(newSection);
 //                    }
-                    if(ClassLoader.saveSection(this, newSection, mSection, myClass, where) || newSection.equals(mSection)){
+
+                    if(ClassLoader.saveSection(this, newSection, mSection, myClass, where)){
                         Intent intent = new Intent(this, Home.class);
                         startActivity(intent);
                         return true;
+                    }
+                    else if (mSection != null){
+                        if (newSection.equals(mSection)){
+                            Intent intent = new Intent(this, Home.class);
+                            startActivity(intent);
+                            return true;
+                        }
                     }
 
                     Toast toast = Toast.makeText(getApplicationContext(), getString(R.string.toast_section_already_exists), Toast.LENGTH_SHORT);
@@ -249,10 +257,10 @@ public class AddClassSectionActivity extends AppCompatActivity implements Confir
     }
 
     public void setTime(View view) {
-        final TextView displayDate = (TextView) view;
-        int mHour = 0, mMinute = 0;
         InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        final TextView displayDate = (TextView) view;
+        int mHour = 0, mMinute = 0;
         TimePickerDialog tpd = new TimePickerDialog(this,
                 new TimePickerDialog.OnTimeSetListener() {
 
@@ -602,7 +610,8 @@ public class AddClassSectionActivity extends AppCompatActivity implements Confir
             }
 
             if (myClass == null){
-                classUpdated = true;//TODO: this is broken if this activity is refactored to be used in all class adding situations
+                classUpdated = true;
+                updatedClass.setColor(ClassLoader.getNextAvailableColor(this, ClassLoader.CURR_SCHEDULE)); //TODO: this is broken if this activity is refactored to be used in all class adding situations
                 myClass = updatedClass;
             }
             else if (!updatedClass.equals(myClass)){
@@ -721,13 +730,10 @@ public class AddClassSectionActivity extends AppCompatActivity implements Confir
             newSection = new Section(times, professor, sectionNumber, notes, myClass);
         }
         if (ClassLoader.loadCurrentSchedule(this).isCompatible(newSection, mSection) || mode == SAVE_INSTANCE_STATE || where == ClassLoader.DESIRED_CLASSES){
-            if (!updatedClass.isColorSet()) {
-                updatedClass.setColor(ClassLoader.getNextAvailableColor(this, ClassLoader.CURR_SCHEDULE));
-                newSection.setContainingClass(updatedClass);
-            }
             return newSection;
         }
         else {
+            ClassLoader.releaseColor(updatedClass.getColor(), ClassLoader.CURR_SCHEDULE);
             String text = getString(R.string.toast_other_sections_conflict);
             Toast toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT);
             toast.show();

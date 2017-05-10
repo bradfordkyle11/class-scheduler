@@ -227,7 +227,7 @@ public class ClassLoader {
                 else {
                     currentSchedule.getSections().set(index, updatedSection);
                 }
-
+                currentScheduleChanged = true;
                 setCurrentSchedule(context, currentSchedule);
                 return true;
             case DESIRED_CLASSES:
@@ -900,7 +900,7 @@ public class ClassLoader {
      * @param which which color list to release from
      */
 
-    private static void releaseColor(int color, int which){
+    public static void releaseColor(int color, int which){
         switch (which){
             case DESIRED_CLASSES:
                 if (!availableColors.contains(color)){
