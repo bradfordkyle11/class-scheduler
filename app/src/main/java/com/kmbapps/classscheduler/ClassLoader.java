@@ -217,6 +217,9 @@ public class ClassLoader {
         switch (where){
             case CURR_SCHEDULE:
                 useColor(containingClass.getColor(), where);
+                if (currentSchedule == null){
+                    currentSchedule = new Schedule();
+                }
                 index = currentSchedule.getSections().indexOf(originalSection);
                 if (index < 0){
                     currentSchedule.getSections().add(updatedSection);
@@ -582,7 +585,7 @@ public class ClassLoader {
         }
         scheduleLoaded = true;
         if (currentSchedule==null){
-            return new Schedule();
+            currentSchedule = new Schedule();
         }
         return currentSchedule;
     }

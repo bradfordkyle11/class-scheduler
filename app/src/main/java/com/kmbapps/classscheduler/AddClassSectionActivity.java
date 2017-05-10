@@ -217,7 +217,6 @@ public class AddClassSectionActivity extends AppCompatActivity implements Confir
 //                    if (mSection == null) {
 //                        myClass.addSection(newSection);
 //                    }
-
                     if(ClassLoader.saveSection(this, newSection, mSection, myClass, where) || newSection.equals(mSection)){
                         Intent intent = new Intent(this, Home.class);
                         startActivity(intent);
@@ -600,8 +599,7 @@ public class AddClassSectionActivity extends AppCompatActivity implements Confir
             }
 
             if (myClass == null){
-                classUpdated = true;
-                updatedClass.setColor(ClassLoader.getNextAvailableColor(this, ClassLoader.CURR_SCHEDULE)); //TODO: this is broken if this activity is refactored to be used in all class adding situations
+                classUpdated = true;//TODO: this is broken if this activity is refactored to be used in all class adding situations
                 myClass = updatedClass;
             }
             else if (!updatedClass.equals(myClass)){
@@ -720,6 +718,10 @@ public class AddClassSectionActivity extends AppCompatActivity implements Confir
             newSection = new Section(times, professor, sectionNumber, notes, myClass);
         }
         if (ClassLoader.loadCurrentSchedule(this).isCompatible(newSection, mSection) || mode == SAVE_INSTANCE_STATE || where == ClassLoader.DESIRED_CLASSES){
+            if (!updatedClass.isColorSet()) {
+                updatedClass.setColor(ClassLoader.getNextAvailableColor(this, ClassLoader.CURR_SCHEDULE));
+                newSection.setContainingClass(updatedClass);
+            }
             return newSection;
         }
         else {

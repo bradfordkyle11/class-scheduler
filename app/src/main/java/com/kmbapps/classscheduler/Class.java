@@ -35,6 +35,7 @@ public class Class implements Serializable {
     private int priority;
     private List<Section> sections;
     private int color;
+    private boolean colorSet = false;
     private static final long serialVersionUID = 1000000;
 
     public UUID getId() {
@@ -199,6 +200,11 @@ public class Class implements Serializable {
     }
 
     public void setColor(int color) {
+        colorSet = true;
         this.color = color;
+    }
+
+    public boolean isColorSet(){
+        return colorSet;
     }
 }
