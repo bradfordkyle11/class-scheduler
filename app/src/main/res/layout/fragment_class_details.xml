@@ -1,11 +1,16 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.kmbapps.classscheduler.ClassDetailsFragment"
+    android:background="@color/app_background">
+
+
+<LinearLayout
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
     android:orientation="vertical"
     android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:background="@color/app_background">
+    android:paddingRight="@dimen/activity_horizontal_margin">
 
     <TextView
         android:layout_width="wrap_content"
@@ -60,16 +65,14 @@
         android:text="@string/text_other_info"
         android:textStyle="bold"
         android:textColor="@android:color/primary_text_light"/>
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/otherInfo"
-            android:gravity="center_vertical"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/otherInfo"
+        android:gravity="center_vertical"
+        android:textColor="@android:color/primary_text_light"/>
 
-        </ScrollView>
 
 
 </LinearLayout>
+</ScrollView>
