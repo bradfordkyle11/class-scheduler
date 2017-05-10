@@ -292,15 +292,21 @@ public class MyTime implements Serializable {
     public static int getTotalDeadTime (List<MyTime> times){
         int totalDeadTime = 0;
         Collections.sort(times, START_TIME);
-        for (int i = 0; i < times.size() - 1; i++){
-            for (int j = i + 1; j < times.size(); j++){
-                int numDaysInCommon = sameDays(times.get(i), times.get(j));
-                if (numDaysInCommon != 0) {
-                    totalDeadTime += numDaysInCommon * timeBetween(times.get(i), times.get(j));
+        String[] days = {"Su", "M", "Tu", "W", "Th", "F", "Sa"};
+        for (String day : days){
+            for (int i = 0; i < times.size() - 1; i++){
+                if (times.get(i).getDays().contains(day)) {
+                    for (int j = i + 1; j < times.size(); j++) {
+                        if (times.get(j).getDays().contains(day)) {
+                            totalDeadTime += timeBetween(times.get(i), times.get(j));
+                            break;
+                        }
+                    }
                 }
             }
         }
         return totalDeadTime;
+
     }
 
     public static int toMinutes(int hour, int minute){
