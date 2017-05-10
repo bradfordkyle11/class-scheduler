@@ -120,7 +120,8 @@ public class DesiredClassesFragment extends Fragment implements ConfirmationDial
             else {
                 textview.setVisibility(View.GONE);
             }
-            desiredClasses = ClassLoader.loadClasses(getActivity());
+            desiredClasses = new ArrayList<Class>();
+            desiredClasses.addAll(classes);
 
             //layout that will contain list of classes and sections
             classesAndSections = (LinearLayout) view.findViewById(R.id.classes_and_sections);

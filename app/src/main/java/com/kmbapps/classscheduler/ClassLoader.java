@@ -20,13 +20,13 @@ import java.util.concurrent.ConcurrentLinkedDeque;
  * Created by Kyle on 9/23/2014.
  */
 public class ClassLoader {
-    private static ArrayList<Class> myClasses;
+    private static List<Class> myClasses/* = Collections.synchronizedList(new ArrayList<Class>())*/;
     private static boolean classesLoaded = false;
     private static boolean classesChanged = false;
 
-    private static List<Schedule> schedules;
+    private static List<Schedule> schedules/* = Collections.synchronizedList(new ArrayList<Schedule>())*/;
     private static boolean schedulesChange = false;
-    private static List<Schedule> selectSchedules;
+    private static List<Schedule> selectSchedules/* = Collections.synchronizedList(new ArrayList<Schedule>())*/;
     private static boolean selectSchedulesChanged = false;
     private static boolean schedulesChanged = false;
     private static boolean schedulesLoaded = false;
@@ -71,7 +71,7 @@ public class ClassLoader {
         //saveSchedules(context);
     }
 
-    public static ArrayList<Class> loadClasses(Context context) {
+    public static List<Class> loadClasses(Context context) {
         if(!classesLoaded) {
             try {
                 FileInputStream fis = context.openFileInput(savedClassesFile);
@@ -931,7 +931,7 @@ public class ClassLoader {
         }
     }
 
-    public static ArrayList<Class> getMyClasses() {
+    public static List<Class> getMyClasses() {
         return myClasses;
     }
 
