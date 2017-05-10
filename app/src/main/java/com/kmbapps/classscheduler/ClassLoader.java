@@ -12,6 +12,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Deque;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.concurrent.ConcurrentLinkedDeque;
@@ -20,13 +21,13 @@ import java.util.concurrent.ConcurrentLinkedDeque;
  * Created by Kyle on 9/23/2014.
  */
 public class ClassLoader {
-    private static List<Class> myClasses/* = Collections.synchronizedList(new ArrayList<Class>())*/;
+    private static List<Class> myClasses = (List<Class>) Collections.synchronizedList(new ArrayList<Class>());
     private static boolean classesLoaded = false;
     private static boolean classesChanged = false;
 
-    private static List<Schedule> schedules/* = Collections.synchronizedList(new ArrayList<Schedule>())*/;
+    private static List<Schedule> schedules = (List<Schedule>) Collections.synchronizedList(new ArrayList<Schedule>());
     private static boolean schedulesChange = false;
-    private static List<Schedule> selectSchedules/* = Collections.synchronizedList(new ArrayList<Schedule>())*/;
+    private static List<Schedule> selectSchedules = (List<Schedule>) Collections.synchronizedList(new ArrayList<Schedule>());
     private static boolean selectSchedulesChanged = false;
     private static boolean schedulesChanged = false;
     private static boolean schedulesLoaded = false;
@@ -48,8 +49,8 @@ public class ClassLoader {
     private static boolean notebooksChanged = false;
     private static boolean notebooksLoaded = false;
 
-    private static ConcurrentLinkedDeque<Integer> availableColors;
-    private static ConcurrentLinkedDeque<Integer> currScheduleAvailableColors;
+    private static Deque<Integer> availableColors;
+    private static Deque<Integer> currScheduleAvailableColors;
 
     private static int minCreditHours = Integer.MIN_VALUE;
     private static int maxCreditHours = Integer.MAX_VALUE;
@@ -77,7 +78,7 @@ public class ClassLoader {
                 FileInputStream fis = context.openFileInput(savedClassesFile);
                 ObjectInputStream is = new ObjectInputStream(fis);
                 System.out.println(is.toString());
-                myClasses = (ArrayList<Class>) is.readObject();
+                myClasses = (List<Class>) is.readObject();
 
                 is.close();
                 if (fis != null){
@@ -216,7 +217,7 @@ public class ClassLoader {
         int index;
         switch (where){
             case CURR_SCHEDULE:
-                useColor(containingClass.getColor(), where);
+                useColor(context, where,containingClass.getColor());
                 if (currentSchedule == null){
                     currentSchedule = new Schedule();
                 }
@@ -916,14 +917,20 @@ public class ClassLoader {
 
     }
 
-    private static void useColor(int color, int which){
+    private static void useColor(Context context, int which, int color){
         switch (which){
             case DESIRED_CLASSES:
+                if (availableColors == null){
+                    loadColors(context, which);
+                }
                 if (availableColors.contains(color)){
                     availableColors.remove(color);
                 }
                 break;
             case CURR_SCHEDULE:
+                if (currScheduleAvailableColors == null){
+                    loadColors(context, which);
+                }
                 if (currScheduleAvailableColors.contains(color)){
                     currScheduleAvailableColors.remove(color);
                 }

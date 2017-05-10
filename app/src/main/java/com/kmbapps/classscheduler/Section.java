@@ -50,7 +50,7 @@ public class Section implements Serializable {
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder(17, 31). // two randomly chosen prime numbers
+        return new HashCodeBuilder(19, 127). // two randomly chosen prime numbers
                 // if deriving: appendSuper(super.hashCode()).
                 append(times).
                 append(professor).

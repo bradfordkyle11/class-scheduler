@@ -106,6 +106,9 @@ public class Class implements Serializable {
 
     public void setSections(List<Section> sections) {
         this.sections = sections;
+        for (Section s : sections){
+            s.setContainingClass(this);
+        }
     }
 
     @Override

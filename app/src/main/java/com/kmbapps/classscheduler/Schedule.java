@@ -375,10 +375,15 @@ public class Schedule implements Serializable {
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder(17, 31). // two randomly chosen prime numbers
-                // if deriving: appendSuper(super.hashCode()).
-                append(sections.toArray()).
-                toHashCode();
+        int mHashCode = new HashCodeBuilder(17, 31).hashCode();
+        for (Section section : sections){
+            mHashCode += 31 * section.hashCode();
+        }
+        return mHashCode;
+//        return new HashCodeBuilder(17, 31). // two randomly chosen prime numbers
+//                // if deriving: appendSuper(super.hashCode()).
+//                append(sections.toArray()).
+//                toHashCode();
     }
 
     public void dropClass(Section classToDrop){
