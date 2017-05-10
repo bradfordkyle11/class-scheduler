@@ -499,6 +499,9 @@ public class AddClassSectionActivity extends AppCompatActivity implements Confir
     }
 
     public void showTimeAndLocation(View view) {
+        //hide the keyboard
+        InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
         //expands time selector rows if day is checked
         CheckBox checkbox = (CheckBox) view;
         View layout = (View) checkbox.getParent().getParent().getParent().getParent();

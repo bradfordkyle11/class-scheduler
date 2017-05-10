@@ -26,6 +26,7 @@ public class MyTime implements Serializable {
     private boolean startTimeSet = true;
     private boolean endTimeSet = true;
     private static final long serialVersionUID = 55556;
+    private static String[] dayAbbrevs = new String[7];
 
     static final Comparator<MyTime> START_TIME = new Comparator<MyTime>(){
         public int compare(MyTime t1, MyTime t2){
@@ -139,9 +140,6 @@ public class MyTime implements Serializable {
 
     public String getFormattedDays(){
         String result = days;
-        result = result.replace("u", "");
-        //result = result.replace("u", "");
-        result = result.replace("a", "");
         return result;
     }
 
@@ -149,7 +147,9 @@ public class MyTime implements Serializable {
         this.days = "";
         for (int i = 0; i < days.size(); i++){
 
-            this.days +=  intToWeekDay(days.get(i));
+            if (days.get(i) < dayAbbrevs.length) {
+                this.days += dayAbbrevs[days.get(i)];
+            }
         }
     }
 
@@ -188,40 +188,46 @@ public class MyTime implements Serializable {
             MyTime schedule1 = schedules.get(i);
             for(int j = i + 1; j < schedules.size(); j++){
                 MyTime schedule2 = schedules.get(j);
-                if(schedule1.getDays().contains("Su") && schedule2.getDays().contains("Su")){
-                    noConflicts = !timeOverlap(schedule1, schedule2);
-                    if(!noConflicts){return false;}//return false if there are conflicts
+                for (String day : dayAbbrevs){
+                    if (schedule1.getDays().contains(day) && schedule2.getDays().contains(day)){
+                        noConflicts = !timeOverlap(schedule1, schedule2);
+                        if(!noConflicts){return false;}//return false if there are conflicts
+                    }
                 }
-
-                if(schedule1.getDays().contains("M") && schedule2.getDays().contains("M")){
-                    noConflicts = !timeOverlap(schedule1, schedule2);
-                    if(!noConflicts){return false;}//return false if there are conflicts
-                }
-
-                if(schedule1.getDays().contains("Tu") && schedule2.getDays().contains("Tu")){
-                    noConflicts = !timeOverlap(schedule1, schedule2);
-                    if(!noConflicts){return false;}//return false if there are conflicts
-                }
-
-                if(schedule1.getDays().contains("W") && schedule2.getDays().contains("W")){
-                    noConflicts = !timeOverlap(schedule1, schedule2);
-                    if(!noConflicts){return false;}//return false if there are conflicts
-                }
-
-                if(schedule1.getDays().contains("Th") && schedule2.getDays().contains("Th")){
-                    noConflicts = !timeOverlap(schedule1, schedule2);
-                    if(!noConflicts){return false;}//return false if there are conflicts
-                }
-
-                if(schedule1.getDays().contains("F") && schedule2.getDays().contains("F")){
-                    noConflicts = !timeOverlap(schedule1, schedule2);
-                    if(!noConflicts){return false;}//return false if there are conflicts
-                }
-
-                if(schedule1.getDays().contains("Sa") && schedule2.getDays().contains("Sa")){
-                    noConflicts = !timeOverlap(schedule1, schedule2);
-                    if(!noConflicts){return false;}//return false if there are conflicts
-                }
+//                if(schedule1.getDays().contains("Su") && schedule2.getDays().contains("Su")){
+//                    noConflicts = !timeOverlap(schedule1, schedule2);
+//                    if(!noConflicts){return false;}//return false if there are conflicts
+//                }
+//
+//                if(schedule1.getDays().contains("M") && schedule2.getDays().contains("M")){
+//                    noConflicts = !timeOverlap(schedule1, schedule2);
+//                    if(!noConflicts){return false;}//return false if there are conflicts
+//                }
+//
+//                if(schedule1.getDays().contains("Tu") && schedule2.getDays().contains("Tu")){
+//                    noConflicts = !timeOverlap(schedule1, schedule2);
+//                    if(!noConflicts){return false;}//return false if there are conflicts
+//                }
+//
+//                if(schedule1.getDays().contains("W") && schedule2.getDays().contains("W")){
+//                    noConflicts = !timeOverlap(schedule1, schedule2);
+//                    if(!noConflicts){return false;}//return false if there are conflicts
+//                }
+//
+//                if(schedule1.getDays().contains("Th") && schedule2.getDays().contains("Th")){
+//                    noConflicts = !timeOverlap(schedule1, schedule2);
+//                    if(!noConflicts){return false;}//return false if there are conflicts
+//                }
+//
+//                if(schedule1.getDays().contains("F") && schedule2.getDays().contains("F")){
+//                    noConflicts = !timeOverlap(schedule1, schedule2);
+//                    if(!noConflicts){return false;}//return false if there are conflicts
+//                }
+//
+//                if(schedule1.getDays().contains("Sa") && schedule2.getDays().contains("Sa")){
+//                    noConflicts = !timeOverlap(schedule1, schedule2);
+//                    if(!noConflicts){return false;}//return false if there are conflicts
+//                }
             }
         }
         return true;
@@ -365,7 +371,7 @@ public class MyTime implements Serializable {
         return result;
     }
 
-
-
-
+    public static void setDayAbbrevs(String[] dayAbbrevs) {
+        MyTime.dayAbbrevs = dayAbbrevs;
+    }
 }

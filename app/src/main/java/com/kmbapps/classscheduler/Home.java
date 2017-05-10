@@ -52,6 +52,7 @@ public class Home extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        MyTime.setDayAbbrevs(getResources().getStringArray(R.array.day_abbreviation_array));
         if(savedInstanceState!=null){
             mCurrentPage = savedInstanceState.getInt(CURRENT_PAGE);
         }
